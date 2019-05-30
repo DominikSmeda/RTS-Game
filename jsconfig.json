@@ -1,0 +1,9 @@
+{
+    "typeAcquisition": {
+      "include": [
+        "static/js/*",
+        "static/libs/*",
+        "server_js/*"
+      ]
+    }
+  }
