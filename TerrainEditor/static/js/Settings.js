@@ -1,7 +1,0 @@
-
-var Settings = {
-
-    variables: {
-
-    }
-}
