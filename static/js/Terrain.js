@@ -1,5 +1,5 @@
 //Klasa odpowiadająca za teren
-
+//TODO: ACTIVE SELECTION IF IN SELECT AREA AND ADJUSTHEIGHT...()
 
 class Terrain extends THREE.Mesh {
     static getTerrainGeometry(width, heigt, wSegments, hSegments) {
@@ -30,22 +30,27 @@ class Terrain extends THREE.Mesh {
         this.brushSize = 3;
 
         this.castShadow = true;
-        this.receiveShadow = true;
+        this.receiveShadow = true; // czy widac podswietlenie obszaru
 
-        this.selectAreaMesh = new THREE.Mesh(new THREE.Geometry(), new THREE.MeshBasicMaterial({
-            color: 0x0000ff,
-            wireframe: false,
-            transparent: true,
-            opacity: 0.5
-        }));//obszar pokazujacy gdzie zmienimy wysokosc terenu
+        // this.selectAreaMesh = new THREE.Mesh(new THREE.Geometry(), new THREE.MeshBasicMaterial({
+        //     color: 0x0000ff,
+        //     wireframe: false,
+        //     transparent: true,
+        //     opacity: 0.5
+        // }));//obszar pokazujacy gdzie zmienimy wysokosc terenu
+
         this.brushIndex = 0;//ktory z tablicy brushesNames
         this.brushesNames = ["Circle", "Rectangle", "Ring", "Mountain"];
-        this.select = new THREE.Mesh(Terrain.getTerrainGeometry(50, 50, 300, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-        scene.add(this.select)
+        this.selectAreaMesh = new THREE.Mesh(Terrain.getTerrainGeometry(50, 50, 300, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        this.scene.add(this.selectAreaMesh)
+
+        this.activeSelection;
         this.init()
     }
 
     init() {
+        // this.selectAreaMesh.visible = false
+        this.activeSelection = false;
 
         this.showUISettings()
     }
@@ -69,7 +74,10 @@ class Terrain extends THREE.Mesh {
     }
 
 
-    selectArea(placeVec) {//mozna uzyc podczas mousemove argument to intersects[0].point
+    selectArea(placeVec) {
+
+        this.activeSelection = true;
+        //mozna uzyc podczas mousemove argument to intersects[0].point
         this.parent.updateMatrixWorld();//trzeba updatować inaczej nie działą
         let point = this.worldToLocal(placeVec);//konwertuje pozycje z swiata do lokalnego odpowiedznika tego samego miejsca
 
@@ -79,28 +87,28 @@ class Terrain extends THREE.Mesh {
             vertices.push(vert);
         }
 
-        for (let i = 0; i < this.select.geometry.vertices.length; i++) {
+        for (let i = 0; i < this.selectAreaMesh.geometry.vertices.length; i++) {
 
             if (this.isVertexInArea(vertices[i], point)) {
-                this.select.geometry.vertices[i].copy(vertices[i]);
+                this.selectAreaMesh.geometry.vertices[i].copy(vertices[i]);
             }
             else {
-                this.select.geometry.vertices[i].set(point.x, 0, point.z)
+                this.selectAreaMesh.geometry.vertices[i].set(point.x, 0, point.z)
             }
         }
 
-        this.select.geometry.verticesNeedUpdate = true;
+        this.selectAreaMesh.geometry.verticesNeedUpdate = true;
 
-        this.select.position.y = 0.1;
+        this.selectAreaMesh.position.y = 0.1;
 
-        this.select.material = new THREE.MeshBasicMaterial({
+        this.selectAreaMesh.material = new THREE.MeshBasicMaterial({
             color: 0x0000ff,
             wireframe: false,
             transparent: true,
             opacity: 0.5
         })
 
-        this.select.geometry.dispose()//podobno zwalnia troche RAMU.
+        this.selectAreaMesh.geometry.dispose()//podobno zwalnia troche RAMU.
 
     }
 
@@ -161,5 +169,11 @@ class Terrain extends THREE.Mesh {
 
     }
 
+    set activeSelection(bool) {
+        this.selectAreaMesh.visible = bool;
+    }
 
+    get activeSelection() {
+        return this.selectAreaMesh.visible;
+    }
 }

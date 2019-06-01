@@ -14,7 +14,8 @@ class GameManager {
         this.objects = {//TO MOGLIBYSMY UMIESCIC W KLASIE Scene
             characters: [],
             lights: [],
-            obsticles: []
+            obsticles: [],
+            terrains: []
         }
 
         this.init();
@@ -40,6 +41,7 @@ class GameManager {
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         this.terrain = new Terrain(this.scene);
         this.scene.add();
@@ -49,6 +51,16 @@ class GameManager {
         // this.scene.add(new Terrain(this.scene))
         this.mouseEvents();
 >>>>>>> ac3ea2e5cdb06f944647e7e142f6b442346e543a
+=======
+        let mainTerrain = new Terrain(this.scene);
+        this.objects.terrains.push(mainTerrain);
+        this.scene.add(mainTerrain);
+
+        this.mouseEvents();
+        this.resize();
+
+
+>>>>>>> 930e53fb69eab344c9e2bdd2773704a96a6bc80a
         this.render();
     }
 
@@ -75,12 +87,16 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects(this.scene.children, true);
+            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
             if (intersects.length > 0) {
-
+                if (intersects[0].object instanceof Terrain) {
+                    intersects[0].object.adjustHeightByPoint(intersects[0].point);
+                }
 
             }
+
+
             this.isPressed.mousedown(e);
             this.cameraControl.mousedown(e);
         })
@@ -96,12 +112,14 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            //var intersects = raycaster.intersectObjects([this.terrain], true);
+            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
-            //if (intersects.length > 0) {
+            if (intersects.length > 0) {
+                if (intersects[0].object instanceof Terrain) {
+                    intersects[0].object.selectArea(intersects[0].point);
+                }
 
-
-            //}
+            }
             this.cameraControl.mousemove(e);
         })
         $(window).on('keydown', (e) => {
@@ -118,5 +136,12 @@ class GameManager {
         })
     }
 
+    resize() {
+        //Pioterk dopasuj proszę resize do twojej klasy kamery
+        // camera.aspect = window.innerWidth / window.innerHeight;
+        // camera.updateProjectionMatrix();
+
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
 }
