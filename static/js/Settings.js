@@ -4,12 +4,12 @@
 // var MODELS={}
 var SETTINGS = {
     texturesSrc: {
-        terrain1: "texture.jpg"
+        terrain1: "assets/textures/terrain1.jpg"
     },
     materials: {
         terrain1: new THREE.MeshPhongMaterial({
             wireframe: false,
-            map: getTexture("texture.jpg", 50, 50)
+            map: getTexture("assets/textures/terrain1.jpg", 50, 50)
         })
     }
 }

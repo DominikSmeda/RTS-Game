@@ -39,11 +39,16 @@ class GameManager {
         this.scene.add(spotLight);
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+<<<<<<< HEAD
 
         this.terrain = new Terrain(this.scene);
         this.scene.add();
 
         this.events();
+=======
+        // this.scene.add(new Terrain(this.scene))
+        this.mouseEvents();
+>>>>>>> ac3ea2e5cdb06f944647e7e142f6b442346e543a
         this.render();
     }
 
