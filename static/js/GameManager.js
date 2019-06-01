@@ -129,14 +129,10 @@ class GameManager {
             this.cameraControl.wheel(e);
             //console.log(e);
         })
-    }
-
-    resize() {
-        //Pioterk dopasuj proszę resize do twojej klasy kamery
-        // camera.aspect = window.innerWidth / window.innerHeight;
-        // camera.updateProjectionMatrix();
-
-        // this.renderer.setSize(window.innerWidth, window.innerHeight);
+        $(window).on('resize', (e) => {
+            this.cameraControl.resizeCamera(window.innerWidth, window.innerHeight - 4)
+            this.scene.renderer.setSize(window.innerWidth, window.innerHeight - 4);
+        })
     }
 
 }

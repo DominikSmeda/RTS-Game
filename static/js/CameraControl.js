@@ -57,4 +57,9 @@ class CameraControl {
         this.camera.lookAt(this.pointPos[0], 0, this.pointPos[1]);
         this.axesHelper.position.set(this.pointPos[0], 0, this.pointPos[1])
     }
+
+    resizeCamera(x, y) {
+        this.camera.aspect = x / y;
+        this.camera.updateProjectionMatrix();
+    }
 }
