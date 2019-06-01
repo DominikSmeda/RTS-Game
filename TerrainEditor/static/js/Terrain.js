@@ -125,28 +125,42 @@ class Terrain extends THREE.Mesh {
         // this.updateMatrix();
         // let mesh = this.clone();
         // this.select.geometry.applyMatrix(this.geometry);
-        this.select.updateMatrix();
+        // this.select.updateMatrix();
 
         // this.select.matrixAutoUpdate = false;
 
         var newMat = new THREE.Matrix4();
         // console.log(this.matrix.elements
         // output: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-        newMat = newMat.copy(this.matrix);
+        // newMat = newMat.copy(this.matrix);
         // console.log(newMat);
-        this.select.geometry.applyMatrix(newMat);
 
-        for (let vert of this.select.geometry.vertices) {
-            if (Math.sqrt(Math.pow(vert.x - point.x, 2) + Math.pow(vert.z - point.z, 2)) <= this.adjustTerrainRadius) {
-                // vert.set(0, 0, 0);
 
+        for (let vert of this.geometry.vertices) {
+
+            vertices.push(vert);
+
+            // }
+        }
+
+        for (let i = 0; i < this.select.geometry.vertices.length; i++) {
+            // select.geometry.vertices[i].copy(vertices[i]);
+            // if (i < vertices.length) {
+            if (Math.sqrt(Math.pow(vertices[i].x - point.x, 2) + Math.pow(vertices[i].z - point.z, 2)) <= this.adjustTerrainRadius) {
+                this.select.geometry.vertices[i].copy(vertices[i]);
+                // }
+            }
+            else {
+                this.select.geometry.vertices[i].set(point.x, 0, point.z)
             }
         }
+
         this.select.geometry.verticesNeedUpdate = true;
-        this.select.position.x = point.x;
-        this.select.position.z = point.z;
+        // this.select.geometry.computeFaceNormals();
+        // this.select.position.x = point.x;
+        // this.select.position.z = point.z;
         this.select.position.y = 0.1;
-        this.select.updateMatrix();
+        // this.select.updateMatrix();
 
 
 
