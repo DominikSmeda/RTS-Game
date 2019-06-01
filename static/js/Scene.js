@@ -12,7 +12,7 @@ class Scene extends THREE.Scene {
     */
     constructor(width, height) {
         super();
-        console.log(this);
+        console.log("class Scene():", this);
 
         //kamera
         this.camera = new THREE.PerspectiveCamera(
@@ -21,15 +21,18 @@ class Scene extends THREE.Scene {
             0.1,    // minimalna renderowana odległość
             10000    // maxymalna renderowana odległość od kamery 
         );
-        this.camera.position.set(100, 100, 100);
+        this.add(this.camera)
+        //this.camera.position.set(100, 100, 100);
 
         //renderer
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setClearColor(0xeeeeee); //lekko szary na początek
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(width, height - 3);
+        this.renderer.setClearColor(0x87CEFA);
+        this.renderer.shadowMap.enabled = true
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         //rozpocznij renderowanie
-        this.startRender();
+        //this.startRender();
 
         return this;
     }
@@ -47,6 +50,5 @@ class Scene extends THREE.Scene {
 
     render() {
         this.renderer.render(this, this.camera);
-        requestAnimationFrame(this.render.bind(this));
     }
 }
