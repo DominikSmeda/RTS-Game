@@ -45,6 +45,9 @@ class GameManager {
         this.scene.add(mainTerrain);
 
         this.mouseEvents();
+        this.resize();
+
+
         this.render();
     }
 
@@ -115,5 +118,12 @@ class GameManager {
         })
     }
 
+    resize() {
+        //Pioterk dopasuj proszę resize do twojej klasy kamery
+        // camera.aspect = window.innerWidth / window.innerHeight;
+        // camera.updateProjectionMatrix();
+
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
 }
