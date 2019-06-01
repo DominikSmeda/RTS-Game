@@ -6,13 +6,21 @@
     podziału na klasy.
 */
 
-f = {
-    // funkcja inicjująca wszystko
-    init(){
-        //stwórz scenę i dodaj canvas do strony
-        f.scene = new Scene($('#canvas').width(),$('#canvas').height());
-        console.log(f.scene.canvas)
-        $('#canvas').append(f.scene.canvas);
-    }
-}
-addEventListener("DOMContentLoaded", f.init);
+// f = {
+//     // funkcja inicjująca wszystko
+//     init() {
+//         //stwórz scenę i dodaj canvas do strony
+//         f.scene = new Scene($('#canvas').width(), $('#canvas').height());
+//         console.log(f.scene.canvas)
+//         $('#canvas').append(f.scene.canvas);
+//     }
+// }
+
+
+// addEventListener("DOMContentLoaded", f.init);
+
+var game;
+
+$(document).ready(() => {
+    game = new GameManager();
+})
