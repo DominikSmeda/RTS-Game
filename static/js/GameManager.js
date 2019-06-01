@@ -40,27 +40,19 @@ class GameManager {
         this.scene.add(spotLight);
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         this.terrain = new Terrain(this.scene);
         this.scene.add();
 
         this.events();
-=======
         // this.scene.add(new Terrain(this.scene))
-        this.mouseEvents();
->>>>>>> ac3ea2e5cdb06f944647e7e142f6b442346e543a
-=======
+
         let mainTerrain = new Terrain(this.scene);
         this.objects.terrains.push(mainTerrain);
         this.scene.add(mainTerrain);
 
-        this.mouseEvents();
         this.resize();
 
-
->>>>>>> 930e53fb69eab344c9e2bdd2773704a96a6bc80a
         this.render();
     }
 
@@ -80,24 +72,27 @@ class GameManager {
     events() {
 
         $(window).on('mousedown', (e) => {
-            var raycaster = new THREE.Raycaster();
-            var mouseVector = new THREE.Vector2();
+            this.isPressed.mousedown(e);
 
-            mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
-            mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
-            raycaster.setFromCamera(mouseVector, this.camera);
+            if (this.isPressed.lmb) {
+                var raycaster = new THREE.Raycaster();
+                var mouseVector = new THREE.Vector2();
 
-            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
+                mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
+                mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
+                raycaster.setFromCamera(mouseVector, this.camera);
 
-            if (intersects.length > 0) {
-                if (intersects[0].object instanceof Terrain) {
-                    intersects[0].object.adjustHeightByPoint(intersects[0].point);
+                var intersects = raycaster.intersectObjects(this.objects.terrains, true);
+
+                if (intersects.length > 0) {
+                    if (intersects[0].object instanceof Terrain) {
+                        intersects[0].object.adjustHeightByPoint(intersects[0].point);
+                    }
+
                 }
-
             }
 
 
-            this.isPressed.mousedown(e);
             this.cameraControl.mousedown(e);
         })
         $(window).on('mouseup', (e) => {
