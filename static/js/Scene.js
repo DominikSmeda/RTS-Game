@@ -26,7 +26,7 @@ class Scene extends THREE.Scene {
 
         //renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setSize(width, height - 3);
+        this.renderer.setSize(width, height - 4);
         this.renderer.setClearColor(0x87CEFA);
         this.renderer.shadowMap.enabled = true
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
