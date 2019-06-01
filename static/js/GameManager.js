@@ -14,7 +14,8 @@ class GameManager {
         this.objects = {//TO MOGLIBYSMY UMIESCIC W KLASIE Scene
             characters: [],
             lights: [],
-            obsticles: []
+            obsticles: [],
+            terrains: []
         }
 
         this.init();
@@ -39,7 +40,10 @@ class GameManager {
         this.scene.add(spotLight);
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        // this.scene.add(new Terrain(this.scene))
+        let mainTerrain = new Terrain(this.scene);
+        this.objects.terrains.push(mainTerrain);
+        this.scene.add(mainTerrain);
+
         this.mouseEvents();
         this.render();
     }
@@ -68,12 +72,16 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects(this.scene.children, true);
+            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
             if (intersects.length > 0) {
-
+                if (intersects[0].object instanceof Terrain) {
+                    intersects[0].object.adjustHeightByPoint(intersects[0].point);
+                }
 
             }
+
+
             this.isPressed.mousedown(e);
             this.cameraControl.mousedown(e);
         })
@@ -89,12 +97,14 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            //var intersects = raycaster.intersectObjects([this.terrain], true);
+            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
-            //if (intersects.length > 0) {
+            if (intersects.length > 0) {
+                if (intersects[0].object instanceof Terrain) {
+                    intersects[0].object.selectArea(intersects[0].point);
+                }
 
-
-            //}
+            }
             this.cameraControl.mousemove(e);
         })
         $(window).on('keydown', (e) => {
