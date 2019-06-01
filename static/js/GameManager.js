@@ -123,7 +123,7 @@ class GameManager {
         // camera.aspect = window.innerWidth / window.innerHeight;
         // camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
 }
