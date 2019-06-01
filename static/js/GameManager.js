@@ -51,8 +51,6 @@ class GameManager {
         this.objects.terrains.push(mainTerrain);
         this.scene.add(mainTerrain);
 
-        this.resize();
-
         this.render();
     }
 
