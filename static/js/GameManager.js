@@ -35,7 +35,7 @@ class GameManager {
         this.scene.add(spotLight);
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-
+        // this.scene.add(new Terrain(this.scene))
         this.mouseEvents();
         this.render();
     }
