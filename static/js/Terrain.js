@@ -130,7 +130,7 @@ class Terrain extends THREE.Mesh {
     }
 
     showUISettings() {
-        let div = $('<div class="ui-settings">');
+        let div = $('<div class="terrainEditor">');
         div.html(`
         <input type="range" id="brush-size" value="1" min="1" max="20">Size</br>
         `)
