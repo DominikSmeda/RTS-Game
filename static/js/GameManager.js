@@ -8,6 +8,9 @@ class GameManager {
 
         this.clock = new THREE.Clock();
 
+        // sprawdza, czy trzymany jest dany przycisk
+        this.isPressed = new ClickRegister();
+
         this.objects = {//TO MOGLIBYSMY UMIESCIC W KLASIE Scene
             characters: [],
             lights: [],
@@ -20,7 +23,8 @@ class GameManager {
     init() {
         this.scene = new Scene(window.innerWidth, window.innerHeight);
         this.camera = this.scene.camera;
-        this.cameraControl = new CameraControl(this.camera);
+        this.cameraControl = new CameraControl(this);
+        this.cameraControl.refreshCamera();
         document.getElementById('canvas').appendChild(this.scene.canvas);
 
         var axesHelper = new THREE.AxesHelper(1000);
@@ -70,11 +74,11 @@ class GameManager {
 
 
             }
+            this.isPressed.mousedown(e);
             this.cameraControl.mousedown(e);
         })
         $(window).on('mouseup', (e) => {
-            console.log(e)
-            this.cameraControl.mouseup(e);
+            this.isPressed.mouseup(e);
         })
 
         $(window).on('mousemove', (e) => {
@@ -92,6 +96,12 @@ class GameManager {
 
             //}
             this.cameraControl.mousemove(e);
+        })
+        $(window).on('keydown', (e) => {
+            this.isPressed.keydown(e);
+        })
+        $(window).on('keyup', (e) => {
+            this.isPressed.keyup(e);
         })
     }
 
