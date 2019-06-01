@@ -1,0 +1,8 @@
+
+.terrainEditorUI{
+    position: fixed;
+    top:0;
+    width:200px;
+    padding:10px;
+    background: rgba(231, 226, 226, 0.863);
+}
