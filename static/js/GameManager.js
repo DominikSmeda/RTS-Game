@@ -40,9 +40,10 @@ class GameManager {
 
         // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
+        this.terrain = new Terrain(this.scene);
+        this.scene.add();
 
-
-        this.mouseEvents();
+        this.events();
         this.render();
     }
 
@@ -59,10 +60,9 @@ class GameManager {
 
     }
 
-    mouseEvents() {
+    events() {
 
         $(window).on('mousedown', (e) => {
-            console.log(e)
             var raycaster = new THREE.Raycaster();
             var mouseVector = new THREE.Vector2();
 
@@ -104,6 +104,12 @@ class GameManager {
         })
         $(window).on('keyup', (e) => {
             this.isPressed.keyup(e);
+        })
+        $(window).on('wheel', (e) => {
+            //blokada zoomu - niestety nie działa
+            event.stopPropagation();
+            this.cameraControl.wheel(e);
+            //console.log(e);
         })
     }
 

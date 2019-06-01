@@ -2,11 +2,12 @@ class ClickRegister {
 
     //Wywołanie: [object].ctrl, [object].lpm, itp.
 
-    mouse = [false, false, false] //przyciski wciśnięte: lewy, środkowy, prawy myszki
-    special = [false, false, false] //ctrl, alt, shift
+    //przyciski wciśnięte: lewy, środkowy, prawy myszki
+    //ctrl, alt, shift
 
     constructor() {
-
+        this.mouse = [false, false, false];
+        this.special = [false, false, false];
     }
     mousedown(e) {
         switch (e.button) {
