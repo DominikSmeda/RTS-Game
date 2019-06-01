@@ -18,20 +18,15 @@ class GameManager {
     }
 
     init() {
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor(0x87CEFA);
-        this.renderer.shadowMap.enabled = true
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.getElementById('root').appendChild(this.renderer.domElement);
+        this.scene = new Scene(window.innerWidth, window.innerHeight);
+        this.camera = this.scene.camera;
+        this.cameraControl = new CameraControl(this.camera);
+        document.getElementById('canvas').appendChild(this.scene.canvas);
 
         var axesHelper = new THREE.AxesHelper(1000);
         this.scene.add(axesHelper);
-        this.camera.position.set(0, 50, 40)
+        this.camera.position.set(0, 500, 40)
         this.camera.lookAt(this.scene.position);
-        this.scene.add(this.camera)
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
         let spotLight = new THREE.SpotLight(0xffffff, 1);
@@ -47,10 +42,10 @@ class GameManager {
 
 
     render() {
-        requestAnimationFrame(this.render.bind(this));
         this.update();
 
-        this.renderer.render(this.scene, this.camera);
+        this.scene.render();
+        requestAnimationFrame(this.render.bind(this));
     }
 
     update() {
@@ -61,7 +56,7 @@ class GameManager {
     mouseEvents() {
 
         $(window).on('mousedown', (e) => {
-
+            console.log(e)
             var raycaster = new THREE.Raycaster();
             var mouseVector = new THREE.Vector2();
 
@@ -75,7 +70,11 @@ class GameManager {
 
 
             }
-
+            this.cameraControl.mousedown(e);
+        })
+        $(window).on('mouseup', (e) => {
+            console.log(e)
+            this.cameraControl.mouseup(e);
         })
 
         $(window).on('mousemove', (e) => {
@@ -86,13 +85,13 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects([this.terrain], true);
+            //var intersects = raycaster.intersectObjects([this.terrain], true);
 
-            if (intersects.length > 0) {
+            //if (intersects.length > 0) {
 
 
-            }
-
+            //}
+            this.cameraControl.mousemove(e);
         })
     }
 
