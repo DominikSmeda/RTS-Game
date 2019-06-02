@@ -12,9 +12,9 @@ var MODELS = {
     },
     tree1: {
         type: 'OBJ_MTL',
-        obj: MODELS_PATH + 'Tree_01.obj',
-        mtl: MODELS_PATH + 'Tree_01.mtl',
-        mesh: null
+        obj: MODELS_PATH + 'Oak_Green_01.obj',
+        mtl: MODELS_PATH + 'Oak_Green_01.mtl',
+        mesh: null,
     },
     rock1: {
         type: 'OBJ_MTL',
@@ -47,40 +47,45 @@ for (let _key in MODELS) {
 
             objLoader.load(MODELS[key].obj, (mesh) => {
 
-                mesh.traverse((node) => {
-                    if (node instanceof THREE.Mesh) {
-                        if ('castShadow' in MODELS[key])
-                            node.castShadow = MODELS[key].castShadow;
-                        else
-                            node.castShadow = true;
-                        if ('receiveShadow' in MODELS[key])
-                            node.receiveShadow = MODELS[key].receiveShadow;
-                        else
-                            node.receiveShadow = true;
-                    }
-                })
+                // mesh.traverse((node) => {
+                //     if (node instanceof THREE.Mesh) {
+                //         if ('castShadow' in MODELS[key])
+                //             node.castShadow = MODELS[key].castShadow;
+                //         else
+                //             node.castShadow = true;
+                //         if ('receiveShadow' in MODELS[key])
+                //             node.receiveShadow = MODELS[key].receiveShadow;
+                //         else
+                //             node.receiveShadow = true;
+                //     }
+                // })
 
                 MODELS[key].mesh = mesh;
+
             })
             // });
         })
-        // });
-
     })(_key);
 }
+
+
+
 
 for (let _key in MODELS) {
     if (MODELS[_key].type != 'json') continue;
 
     (function (key) {
 
-        // let loader = new THREE.ObjectLoader();
+        // let loader = new THREE.ObjectLoader(loadingManager);
 
         // loader.load(MODELS[key].json,
         //     (obj) => {
-        //         MODELS[key].mesh = obj;
         //         console.log(obj);
-        //         game.scene.add(obj)
+        //         let m = new THREE.Mesh(obj)
+        //         console.log(m);
+
+        //         MODELS[key].mesh = obj;
+        //         // game.scene.add(obj)
 
         //     },
         //     (xhr) => {
@@ -108,7 +113,7 @@ for (let _key in MODELS) {
             // game.scene.add(mesh)
             let mesh = new THREE.Mesh(geometry);
             MODELS[key].mesh = mesh;
-            console.log(mesh);
+            // console.log(mesh);
 
         });
 

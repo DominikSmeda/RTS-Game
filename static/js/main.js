@@ -23,5 +23,6 @@ var game;
 
 $(document).ready(() => {
     game = new GameManager();
+
 })
 

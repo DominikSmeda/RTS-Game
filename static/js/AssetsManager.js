@@ -29,7 +29,7 @@ class Item {
         renderer.setClearColor(0xcecece);
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        camera.position.set(20, 10, 0);
+        camera.position.set(6, 0, 0);
         camera.lookAt(scene.position)
         var axesHelper = new THREE.AxesHelper(1000);
         scene.add(axesHelper);
@@ -37,9 +37,12 @@ class Item {
         this.canvasElement = renderer.domElement;
         let mesh = new this.className();
         scene.add(mesh);
-        game.scene.add(mesh.clone())
 
         renderer.render(scene, camera);
+
+        this.canvasElement.onclick = (e) => {
+            game.mainTerrain.startAddObjectFunction(new this.className());
+        }
 
     }
 }
@@ -70,6 +73,7 @@ class AssetsManager {
         this.createUI();
 
         this.addItemToCategory(new Item(Tree), 'Bulidings');
+        this.addItemToCategory(new Item(Rock), 'Bulidings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)

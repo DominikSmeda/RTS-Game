@@ -20,9 +20,9 @@ class TerrainEditor extends THREE.Mesh {
     }
 
 
-    constructor(scene) {
+    constructor(scene, width = 50, heigt = 50, wSegments = 300, hSegments = 300) {
         let material = SETTINGS.materials.terrain1;
-        let geometry = TerrainEditor.getTerrainGeometry(50, 50, 300, 300)
+        let geometry = TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments)
 
         super(geometry, material);
 
@@ -41,10 +41,12 @@ class TerrainEditor extends THREE.Mesh {
 
         this.brushIndex = 0;//ktory z tablicy brushesNames
         this.brushesNames = ["Circle", "Rectangle", "Ring", "Mountain"];
-        this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(50, 50, 300, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-        this.scene.add(this.selectAreaMesh)
+        this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        this.scene.add(this.selectAreaMesh);
 
+        this.addedObject = null;
         this.activeSelection;
+        this.currentFunction;
         this.init()
     }
 
@@ -53,6 +55,41 @@ class TerrainEditor extends THREE.Mesh {
         this.activeSelection = false;
 
         this.showUISettings()
+    }
+
+    startEditTerrainFunction() {
+        this.currentFunction = "EditTerrain";
+    }
+
+    startAddObjectFunction(object) {
+        if (this.addedObject) {
+            this.scene.remove(this.addedObject)
+        }
+        this.currentFunction = "AddWorldObject";
+        this.addedObject = object;
+        this.scene.add(this.addedObject)
+    }
+
+    mouseClick(positionVec) {
+        if (this.currentFunction == "EditTerrain") {
+            this.adjustHeightByPoint(positionVec);
+            this.selectArea(positionVec);
+        }
+        if (this.currentFunction == "AddWorldObject") {
+            this.addObjectToTerrain();
+        }
+    }
+
+    mouseMove(positionVec) {
+        if (this.currentFunction == "EditTerrain") {
+            console.log(positionVec);
+
+            this.selectArea(positionVec);
+        }
+        if (this.currentFunction == "AddWorldObject") {
+            this.selectArea(positionVec, this.addedObject.brushName, this.addedObject.brushSize);
+            this.setObjectOnArea(positionVec);
+        }
     }
 
     adjustHeightByPoint(centerVec) {//mozna uzyc podczas klikniecia argument to intersects[0].point
@@ -154,6 +191,7 @@ class TerrainEditor extends THREE.Mesh {
         $('body').on('input', '#brush-size', (e) => {
             console.log(e.target.value);
             this.brushSize = e.target.value;
+            this.startEditTerrainFunction();
         })
         $('body').on('input', '#brush-name', (e) => {
             console.log(e.target.value);
@@ -182,7 +220,17 @@ class TerrainEditor extends THREE.Mesh {
 
     }
 
-    addObjectToTerrain(object) {
 
+    addObjectToTerrain() {
+        this.currentFunction = "None"
+        this.addedObject = null;
+        this.activeSelection = false;
     }
+
+    setObjectOnArea(positionVec) {
+        console.log(positionVec);
+
+        this.addedObject.position.copy(positionVec);
+    }
+
 }

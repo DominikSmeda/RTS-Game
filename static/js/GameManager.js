@@ -15,10 +15,9 @@ class GameManager {
             characters: [],
             lights: [],
             obsticles: [],
-            terrains: []
         }
 
-
+        this.mainTerrain;
         this.assetsManager;
 
     }
@@ -45,9 +44,9 @@ class GameManager {
         spotLight.castShadow = true;
         this.scene.add(spotLight);
 
-        let mainTerrain = new TerrainEditor(this.scene);
-        this.objects.terrains.push(mainTerrain);
-        this.scene.add(mainTerrain);
+        this.mainTerrain = new TerrainEditor(this.scene);
+        this.scene.add(this.mainTerrain);
+
 
         this.assetsManager = new AssetsManager();
         this.events();
@@ -80,12 +79,12 @@ class GameManager {
                 mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, this.camera);
 
-                var intersects = raycaster.intersectObjects(this.objects.terrains, true);
+                var intersects = raycaster.intersectObjects([this.mainTerrain], true);
 
                 if (intersects.length > 0) {
                     if (intersects[0].object instanceof TerrainEditor) {
-                        intersects[0].object.adjustHeightByPoint(intersects[0].point);
-                        intersects[0].object.selectArea(intersects[0].point);
+                        intersects[0].object.mouseClick(intersects[0].point);
+
                     }
 
                 }
@@ -106,11 +105,11 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects(this.objects.terrains, true);
+            var intersects = raycaster.intersectObjects([this.mainTerrain], true);
 
             if (intersects.length > 0) {
                 if (intersects[0].object instanceof TerrainEditor) {
-                    intersects[0].object.selectArea(intersects[0].point);
+                    intersects[0].object.mouseMove(intersects[0].point);
                 }
 
             }

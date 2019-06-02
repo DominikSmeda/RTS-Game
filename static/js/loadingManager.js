@@ -22,9 +22,13 @@ loadingManager.onError = function (item) {
 
 loadingManager.onLoad = () => {
     RESOURCES_LOADED = true;
-    console.log('LOADED');
-
-    game.resourcesLoaded();
+    // console.log('LOADED');
+    try {
+        game.resourcesLoaded();
+    }
+    catch{
+        window.location.reload(true);
+    }
     $('#loadingScreen').fadeOut();
 }
 
