@@ -1,7 +1,17 @@
 
 //KLASA z której dziedziczą np. drzewa kamienie itd.
 class NatureElement extends WorldObject {
-    constructor() {
+    constructor(modelName) {
+        super(modelName);
+
+        this.init();
+    }
+
+    init() {
 
     }
+
+
+
+
 }

@@ -22,7 +22,13 @@ var MODELS = {
         mtl: MODELS_PATH + 'Rock_1_01.mtl',
         mesh: null
     },
+    treeJSON: {
+        type: 'json',
+        json: MODELS_PATH + 'King.json',
+        mesh: null
+    }
 }
+
 
 
 for (let _key in MODELS) {
@@ -59,3 +65,35 @@ for (let _key in MODELS) {
     })(_key);
 }
 
+for (let _key in MODELS) {
+    if (MODELS[_key].type != 'json') continue;
+
+    (function (key) {
+
+        // let loader = new THREE.ObjectLoader();
+
+        // loader.load(MODELS[key].json,
+        //     (obj) => {
+        //         MODELS[key].mesh = obj;
+        //         console.log(obj);
+        //         game.scene.add(obj)
+
+        //     },
+        //     (xhr) => {
+        //         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        //     },
+        //     (err) => {
+        //         console.error('An error happened', err);
+        //     });
+
+        let loader = new THREE.JSONLoader(loadingManager);
+
+        loader.load(MODELS[key].json, (geometry) => {
+            let mesh = new THREE.Mesh(geometry);
+            // game.scene.add(mesh)
+            MODELS[key].mesh = mesh;
+            console.log(mesh);
+
+        })
+    })(_key);
+}

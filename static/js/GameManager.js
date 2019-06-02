@@ -19,7 +19,7 @@ class GameManager {
         }
 
 
-        this.assetsManager = new AssetsManager();
+        this.assetsManager;
 
     }
 
@@ -49,6 +49,7 @@ class GameManager {
         this.objects.terrains.push(mainTerrain);
         this.scene.add(mainTerrain);
 
+        this.assetsManager = new AssetsManager();
         this.events();
 
         this.render();

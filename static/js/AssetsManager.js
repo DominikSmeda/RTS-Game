@@ -1,7 +1,7 @@
 
 class Item {
-    constructor(name) {
-        this.class = Scene;
+    constructor(className) {
+        this.className = className;
         this.info = {
             name: name
         }
@@ -35,7 +35,8 @@ class Item {
         scene.add(axesHelper);
         renderer.domElement.classList.add('item');
         this.canvasElement = renderer.domElement;
-        scene.add(new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2)))
+        scene.add(new this.className());
+
         renderer.render(scene, camera);
 
     }
@@ -66,8 +67,8 @@ class AssetsManager {
     init() {
         this.createUI();
 
-        this.addItemToCategory(new Item('Tree'), 'Bulidings');
-        this.addItemToCategory(new Item('Tree2'), 'Bulidings');
+        this.addItemToCategory(new Item(Tree), 'Bulidings');
+        // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)
     }
