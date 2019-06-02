@@ -30,7 +30,10 @@ module.exports = function (game, client) {
             }
             for (let i = 0; i < data.spawn.length; i++) {
                 var el = data.spawn[i];
-                if (!this.map[el.type]) this.map[el.type] = [];
+                if (!this.map[el.type]) {
+                    this.map[el.type] = [];
+                    this.map._.push(el.type);
+                }
                 else {
                     var flag = false;
                     for (let j = 0; j < this.map[el.type].length; j++) {

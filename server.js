@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
 var game = {
     //players: [],
     map: {
+        _: ['characters'],
         characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
     },
 };

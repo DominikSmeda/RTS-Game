@@ -19,7 +19,6 @@ class GameManager {
 
         this.mainTerrain;
         this.assetsManager;
-
     }
 
     resourcesLoaded() {//po załadowaniu assetów rozpoczynamy inicjalizacje gry
@@ -34,6 +33,7 @@ class GameManager {
         document.getElementById('canvas').appendChild(this.scene.canvas);
 
         var axesHelper = new THREE.AxesHelper(1000);
+
         this.scene.add(axesHelper);
         this.camera.position.set(0, 500, 40)
         this.camera.lookAt(this.scene.position);
@@ -50,7 +50,6 @@ class GameManager {
 
         this.assetsManager = new AssetsManager();
         this.events();
-
         this.render();
 
         this.net = new Net(this);
@@ -67,6 +66,50 @@ class GameManager {
         const dt = this.clock.getDelta();
 
     }
+
+    // aktualizuje mapę
+    recalculateMap(map) {
+        for (let i = 0; i < map._.length; i++) {
+            const type = map._[i]; //typ kontenera
+            if (!this.objects[type]) this.objects[type] = [];
+            for (let j = 0; j < map[type].length; j++) {
+                const el = map[type][j]; //obiekt z mapy
+                var flag = true;
+                for (let k = 0; k < this.objects[type].length; k++) {
+                    if (this.objects[type][k].id == el.id) {
+                        this.objects[type][k].netUpdate(el);
+                        flag = false;
+                        break;
+                    };
+                }
+                if (flag && el.deleted != true) this.createObjectFromNet(el);
+            }
+        }
+
+    }
+    // !!! Podajesz stringa do klasy !!!
+    createObject(className = "WorldObject", modelName = "tree1") {
+        //Tutaj tworzymy obiekt, który jest zupełnie nowy, nie pobrany z serwera
+        try {
+            var n = eval('new ' + className + '("' + modelName + '")');
+            this.net.spawn(n.netData);
+        }
+        catch (e) {
+            console.warn("Error in generating object from inside: " + e);
+        }
+    }
+    createObjectFromNet(data) {
+        try {
+            var n = eval('new ' + data.className + '("' + data.modelName + '")');
+            this.objects[n.type].push(n);
+            this.scene.add(n);
+            n.netUpdate = data;
+        }
+        catch (e) {
+            console.warn("Error in generating object from server: " + e);
+        }
+    }
+
 
     events() {
 

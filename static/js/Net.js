@@ -1,5 +1,6 @@
 class Net {
-    constructor() {
+    constructor(parent) {
+        this.parent = parent;
         this.toSend = false;
         this._move = [];
         this._spawn = [];
@@ -16,12 +17,15 @@ class Net {
             console.log(JSON.stringify(data));
             /*
             dane obierasz w takiej strukturze
-            {
-                characters: [{ id: 0, position: [0, 0], destination: [0, 0], speed: 10 }], // okrojone, konieczne informacje
-                typ_dodany_przez_ciebie:[{obiekt_1},{obiekt_2}],
+            data = {
+                spawned: [], - nowo dodane obiekty
+                map: {
+                    characters: [{ id: 0, position: [0, 0], destination: [0, 0], speed: 10 }], // okrojone, konieczne informacje
+                    typ_dodany_przez_ciebie:[{obiekt_1},{obiekt_2}],
+                }
             }
             */
-            //game.recalculateMap()
+            this.parent.recalculateMap(data);
 
             this.send();
         });
