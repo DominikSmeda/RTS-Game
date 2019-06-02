@@ -24,38 +24,41 @@ var MODELS = {
     },
 }
 
+// Owinięto w document ready, gdyż czasem wyrzucało błąd 
+// "Uncaught ReferenceError: game is not defined" (w loadingManager.js) 
+// lub podobny
+$(document).ready(() => {
+    for (let _key in MODELS) {
+        if (MODELS[_key].type != 'OBJ_MTL') continue;
 
-for (let _key in MODELS) {
-    if (MODELS[_key].type != 'OBJ_MTL') continue;
+        (function (key) {
 
-    (function (key) {
+            var mtlLoader = new THREE.MTLLoader(loadingManager);
+            mtlLoader.load(MODELS[key].mtl, (materials) => {
+                materials.preload();
 
-        var mtlLoader = new THREE.MTLLoader(loadingManager);
-        mtlLoader.load(MODELS[key].mtl, (materials) => {
-            materials.preload();
+                let objLoader = new THREE.OBJLoader(loadingManager);
+                objLoader.setMaterials(materials);
 
-            let objLoader = new THREE.OBJLoader(loadingManager);
-            objLoader.setMaterials(materials);
+                objLoader.load(MODELS[key].obj, (mesh) => {
 
-            objLoader.load(MODELS[key].obj, (mesh) => {
+                    mesh.traverse((node) => {
+                        if (node instanceof THREE.Mesh) {
+                            if ('castShadow' in MODELS[key])
+                                node.castShadow = MODELS[key].castShadow;
+                            else
+                                node.castShadow = true;
+                            if ('receiveShadow' in MODELS[key])
+                                node.receiveShadow = MODELS[key].receiveShadow;
+                            else
+                                node.receiveShadow = true;
+                        }
+                    })
 
-                mesh.traverse((node) => {
-                    if (node instanceof THREE.Mesh) {
-                        if ('castShadow' in MODELS[key])
-                            node.castShadow = MODELS[key].castShadow;
-                        else
-                            node.castShadow = true;
-                        if ('receiveShadow' in MODELS[key])
-                            node.receiveShadow = MODELS[key].receiveShadow;
-                        else
-                            node.receiveShadow = true;
-                    }
+                    MODELS[key].mesh = mesh;
                 })
-
-                MODELS[key].mesh = mesh;
+                // });
             })
-            // });
-        })
-    })(_key);
-}
-
+        })(_key);
+    }
+});
