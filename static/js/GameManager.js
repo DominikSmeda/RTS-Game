@@ -52,6 +52,8 @@ class GameManager {
         this.events();
 
         this.render();
+
+        this.net = new Net(this);
     }
 
     render() {
