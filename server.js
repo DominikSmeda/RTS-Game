@@ -1,10 +1,13 @@
-var http = require("http")
+var Player = require("./server_js/Player.js");
+//var http = require("http")
 var express = require("express")
 var app = express()
+var http = require('http').createServer(app);
 const PORT = 3000;
 const path = require('path');
 //const fs = require('fs');
 //const concat = require('concat');
+var socketio = require('socket.io')(http);
 
 // załatwia wszystkie sprawy dostępu do plików
 app.use(express.static('static'))
@@ -12,6 +15,48 @@ app.use(express.static('static'))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'static', 'index.html'))
 });
+
+var game = {
+    //players: [],
+    map: {
+        characters: [{ id: 0 }],
+        lights: [],
+        obsticles: [],
+        terrains: []
+    },
+};
+// Sokety
+socketio.on('connection', function (client) {
+    //game.players.push(new Player(game, client));
+    new Player(game, client)
+    console.log(game);
+    gameTick();
+});
+
+var inter = null;
+async function gameTick() {
+    if (!inter) inter = setInterval(function () {
+
+        // Wyślij dane
+
+        socketio.sockets.emit("gameTick", game.map);
+        /* for (let i = 0; i < game.players.length; i++) {
+            //console.log(i, game.players);
+            const el = game.players[i];
+            if (!el.connected) {
+                delete game.players.splice(i--, 1);
+                continue;
+            }
+            el.sendGameTickData();
+        } */
+    }, 1000);
+}
+
+
+http.listen(PORT, function () {
+    console.log("start serwera na porcie " + PORT)
+})
+
 
 /*
 // Zamiast dodawać wszystkie pliki js-a, złącz je w jeden plik i wyślij!
@@ -53,6 +98,3 @@ app.get('/merged.js', (req, res) => {
 */
 
 
-app.listen(PORT, function () {
-    console.log("start serwera na porcie " + PORT)
-})
