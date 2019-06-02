@@ -19,6 +19,8 @@ class GameManager {
         }
 
 
+        this.assetsManager = new AssetsManager();
+
     }
 
     resourcesLoaded() {//po załadowaniu assetów rozpoczynamy inicjalizacje gry

@@ -23,6 +23,5 @@ var game;
 
 $(document).ready(() => {
     game = new GameManager();
-    let assetsManager = new AssetsManager();
 })
 

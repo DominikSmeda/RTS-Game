@@ -1,13 +1,48 @@
 
-class Asset {
-    constructor() {
+class Item {
+    constructor(name) {
+        this.class = Scene;
+        this.info = {
+            name: name
+        }
+        this.canvasElement;
+        this.canvasSize = {
+            width: 150,
+            height: 150
+        }
+        this.init();
+    }
+
+    init() {
+        // let i = new this.class();
+        // console.log(i);
+
+        this.createItemCanvas();
+    }
+
+    createItemCanvas() {
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(80, this.canvasSize.width / this.canvasSize.height, 0.1, 10000);
+
+        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(this.canvasSize.width, this.canvasSize.height);
+        renderer.setClearColor(0xcecece);
+        // renderer.shadowMap.enabled = true
+        // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        camera.position.set(20, 10, 0);
+        camera.lookAt(scene.position)
+        var axesHelper = new THREE.AxesHelper(1000);
+        scene.add(axesHelper);
+        renderer.domElement.classList.add('item');
+        this.canvasElement = renderer.domElement;
+        scene.add(new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2)))
+        renderer.render(scene, camera);
 
     }
 }
 
 class AssetsManager {
     constructor() {
-
         this.categories = [
             {
                 name: 'Bulidings',
@@ -25,10 +60,23 @@ class AssetsManager {
         ]
 
         this.init();
+        this.clicks();
     }
 
     init() {
         this.createUI();
+
+        this.addItemToCategory(new Item('Tree'), 'Bulidings');
+        this.addItemToCategory(new Item('Tree2'), 'Bulidings');
+
+        this.updateItemsView(this.categories[0].name)
+    }
+
+    clicks() {
+        $('#assetsManager #categories-names').on('click', '.category-name', (e) => {
+            this.updateItemsView(e.target.innerText)
+
+        })
     }
 
     createCategory(name) {
@@ -50,22 +98,22 @@ class AssetsManager {
         <div id="categories-names"></div>
         <div id="categories-items"></div>`);
         $('#hud').append(mainDiv);
-        this.updateCategories();
+        this.updateCategoriesView();
 
     }
 
-    updateCategories() {
-        let catNameDiv = $('#assetsManager #categories-names');
-        catNameDiv.empty();
+    updateCategoriesView() {
+        let catNamesDiv = $('#assetsManager #categories-names');
+        catNamesDiv.empty();
         for (let category of this.categories) {
             let categoryDiv = $(`<div class="category-name">${category.name}</div>`);
-            catNameDiv.append(categoryDiv)
+            catNamesDiv.append(categoryDiv)
         }
-        catNameDiv.append($('<div style="clear:both">'));
+        catNamesDiv.append($('<div style="clear:both">'));
 
     }
 
-    updateItems(category) {
+    updateItemsView(category) {
         let items;
         for (let categ of this.categories) {
             if (categ.name == category) {
@@ -74,8 +122,11 @@ class AssetsManager {
             }
         }
 
-        for (let item of items) {
+        let catItemsDiv = $('#assetsManager #categories-items');
+        catItemsDiv.empty();
 
+        for (let item of items) {
+            catItemsDiv.append(item.canvasElement);
         }
 
 

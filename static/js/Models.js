@@ -27,10 +27,8 @@ var MODELS = {
 
 for (let _key in MODELS) {
     if (MODELS[_key].type != 'OBJ_MTL') continue;
-    console.log('ssssss');
 
     (function (key) {
-        console.log('s');
 
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load(MODELS[key].mtl, (materials) => {
