@@ -4,3 +4,4 @@ node_modules/
 # nie ma sensu wysyłać złączonego pliku - i tak 
 # jest nadpisywany przy starcie serwera
 static/merged/
+static/_socket-tests/
