@@ -9,6 +9,9 @@ const path = require('path');
 //const fs = require('fs');
 //const concat = require('concat');
 var socketio = require('socket.io')(http);
+var mongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
+var _db;
 
 // załatwia wszystkie sprawy dostępu do plików
 app.use(express.static('static'))
@@ -57,6 +60,14 @@ async function gameTick() {
         } */
     }, Sett.gameTickLength);
 }
+
+mongoClient.connect("mongodb://localhost/RTS", function (err, db) {
+    if (err) console.log(err)
+    else console.log("mongo podłączone!")
+    //tu można operować na utworzonej bazie danych db lub podstawić jej obiekt 
+    // pod zmienną widoczną na zewnątrz    
+    _db = db;
+})
 
 
 http.listen(PORT, function () {
