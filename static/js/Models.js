@@ -29,13 +29,15 @@ var MODELS = {
     }
 }
 
+// Owinięto w document ready, gdyż czasem wyrzucało błąd 
+// "Uncaught ReferenceError: game is not defined" (w loadingManager.js) 
+// lub podobny
+//EDIT: naprawiłem bład i juz nie potrzeba tej funkcji
 
 
 for (let _key in MODELS) {
     if (MODELS[_key].type != 'OBJ_MTL') continue;
-
     (function (key) {
-
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load(MODELS[key].mtl, (materials) => {
             materials.preload();
@@ -62,6 +64,8 @@ for (let _key in MODELS) {
             })
             // });
         })
+        // });
+
     })(_key);
 }
 
