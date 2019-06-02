@@ -35,7 +35,9 @@ class Item {
         scene.add(axesHelper);
         renderer.domElement.classList.add('item');
         this.canvasElement = renderer.domElement;
-        scene.add(new this.className());
+        let mesh = new this.className();
+        scene.add(mesh);
+        game.scene.add(mesh.clone())
 
         renderer.render(scene, camera);
 

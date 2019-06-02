@@ -24,7 +24,7 @@ var MODELS = {
     },
     treeJSON: {
         type: 'json',
-        json: MODELS_PATH + 'King.json',
+        json: MODELS_PATH + 'Tent_Poles_01.json',
         mesh: null
     }
 }
@@ -90,14 +90,28 @@ for (let _key in MODELS) {
         //         console.error('An error happened', err);
         //     });
 
-        let loader = new THREE.JSONLoader(loadingManager);
+        // let loader = new THREE.JSONLoader(loadingManager);
 
-        loader.load(MODELS[key].json, (geometry) => {
-            let mesh = new THREE.Mesh(geometry);
+        // loader.load(MODELS[key].json, (geometry) => {
+        //     let mesh = new THREE.Mesh(geometry);
+        //     // game.scene.add(mesh)
+        //     MODELS[key].mesh = mesh;
+        //     console.log(mesh);
+
+        // })
+        var loader = new THREE.ObjectLoader(loadingManager);
+        loader.load(MODELS[key].json, (object) => {
+            var geometry;
+            object.traverse((node) => {
+                if (node.isMesh) geometry = node.geometry;
+            });
             // game.scene.add(mesh)
+            let mesh = new THREE.Mesh(geometry);
             MODELS[key].mesh = mesh;
             console.log(mesh);
 
-        })
+        });
+
     })(_key);
 }
+
