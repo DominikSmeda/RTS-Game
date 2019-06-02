@@ -31,13 +31,22 @@ module.exports = function (game, client) {
             for (let i = 0; i < data.spawn.length; i++) {
                 var el = data.spawn[i];
                 if (!this.map[el.type]) this.map[el.type] = [];
+                else {
+                    var flag = false;
+                    for (let j = 0; j < this.map[el.type].length; j++) {
+                        if (this.map[el.type][j].id == el.id) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) continue;
+                }
                 this.map[el.type].push(data.spawn[i]);
             }
             for (let i = 0; i < data.remove.length; i++) {
                 var el = data.remove[i];
-                console.log(el, this.map[el.type])
                 if (!this.map[el.type]) continue;
-                for (let j = 0; j < this.c.length; j++) {
+                for (let j = 0; j < this.map[el.type].length; j++) {
                     if (this.map[el.type][j].id == el.id) {
                         this.map[el.type][j].deleted = true;
                         this.map[el.type][j].ttl = 5;
