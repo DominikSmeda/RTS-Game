@@ -13,11 +13,11 @@ var SETTINGS = {
         })
     }
 }
-console.log(SETTINGS.texturesSrc.terrain1);
+
 function getTexture(path, repeatX, repeatY) {
 
     //bez tej funkcji nie da sie tak zrobic :(
-    let texture = new THREE.TextureLoader().load(path);
+    let texture = new THREE.TextureLoader(loadingManager).load(path);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(repeatX, repeatY);

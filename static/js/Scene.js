@@ -12,7 +12,7 @@ class Scene extends THREE.Scene {
     */
     constructor(width, height) {
         super();
-        console.log("class Scene():", this);
+        // console.log("class Scene():", this);
 
         //kamera
         this.camera = new THREE.PerspectiveCamera(
