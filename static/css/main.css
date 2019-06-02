@@ -1,7 +1,36 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 #canvas{
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+#loadingScreen{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.788);
+    z-index: 20;
+}
+
+#loadingScreen #status{
+    position: absolute;
+    color:white;   
+    width:330px;
+    padding: 20px;
+    height: 300px;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
 }

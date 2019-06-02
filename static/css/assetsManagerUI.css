@@ -1,0 +1,26 @@
+
+#assetsManager{
+    position: absolute;
+    bottom:0;
+    width: 100vw;
+    height: 20vh;
+    background: rgba(255, 255, 255, 0.849);
+    z-index: 10;
+}
+
+#assetsManager .category-name{
+    padding: 5px;
+    width:100px;
+    background: orange;
+    color:white;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+    margin:0 2.5px;
+}
+
+#assetsManager #categories-items .item{
+    border: 2px solid black;
+    margin:0 20px;
+    cursor: pointer;
+}

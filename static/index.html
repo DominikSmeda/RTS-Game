@@ -11,10 +11,36 @@
     <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="css/terrainEditorUI.css" />
     <!-- Inicjownie skryptów - teraz to jeden plik (patrz server.js)-->
-    <script src="merged.js"></script>
+    <!-- <script src="merged.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/assetsManagerUI.css" />
+    <!-- Inicjownie skryptów -->
+    <!-- Biblioteki -->
+    <script src="libs/jquery-3.4.1.min.js"></script>
+    <script src="libs/three_ver97.js"></script>
+    <script src="libs/MTLLoader.js"></script>
+    <script src="libs/OBJLoader.js"></script>
+
+    <!-- Nasze skrypty-->
+    <script src="js/loadingManager.js"></script>
+    <script src="js/Settings.js"></script>
+    <script src="js/Models.js"></script>
+    <script src="js/Scene.js"></script>
+    <script src="js/WorldObject.js"></script>
+    <script src="js/ClickRegister.js"></script>
+    <script src="js/CameraControl.js"></script>
+    <script src="js/TerrainEditor.js"></script>
+    <script src="js/AssetsManager.js"></script>
+    <script src="js/GameManager.js"></script>
+    <script src="js/main.js"></script>
 </head>
 
-<body>
+<body id="body">
+    <div id="loadingScreen">
+        <div id="status">
+            <b> LOADING GAME ... </b><br /><br />
+            <div id="info"></div>
+        </div>
+    </div>
     <!-- Osobne kontenery na canvasa z Three oraz na HUD -->
     <div id="canvas"></div>
     <div id="hud"></div>

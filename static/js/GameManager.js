@@ -18,6 +18,12 @@ class GameManager {
             terrains: []
         }
 
+
+        this.assetsManager = new AssetsManager();
+
+    }
+
+    resourcesLoaded() {//po załadowaniu assetów rozpoczynamy inicjalizacje gry
         this.init();
     }
 
@@ -39,21 +45,14 @@ class GameManager {
         spotLight.castShadow = true;
         this.scene.add(spotLight);
 
-        // var orbitControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-
-        this.terrain = new Terrain(this.scene);
-        this.scene.add();
-
-        this.events();
-        // this.scene.add(new Terrain(this.scene))
-
-        let mainTerrain = new Terrain(this.scene);
+        let mainTerrain = new TerrainEditor(this.scene);
         this.objects.terrains.push(mainTerrain);
         this.scene.add(mainTerrain);
 
+        this.events();
+
         this.render();
     }
-
 
     render() {
         this.update();
@@ -83,8 +82,9 @@ class GameManager {
                 var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
                 if (intersects.length > 0) {
-                    if (intersects[0].object instanceof Terrain) {
+                    if (intersects[0].object instanceof TerrainEditor) {
                         intersects[0].object.adjustHeightByPoint(intersects[0].point);
+                        intersects[0].object.selectArea(intersects[0].point);
                     }
 
                 }
@@ -108,7 +108,7 @@ class GameManager {
             var intersects = raycaster.intersectObjects(this.objects.terrains, true);
 
             if (intersects.length > 0) {
-                if (intersects[0].object instanceof Terrain) {
+                if (intersects[0].object instanceof TerrainEditor) {
                     intersects[0].object.selectArea(intersects[0].point);
                 }
 

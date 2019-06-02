@@ -1,7 +1,7 @@
 //Klasa odpowiadająca za teren
 //TODO: ACTIVE SELECTION IF IN SELECT AREA AND ADJUSTHEIGHT...()
 
-class Terrain extends THREE.Mesh {
+class TerrainEditor extends THREE.Mesh {
     static getTerrainGeometry(width, heigt, wSegments, hSegments) {
         //funkcja jest po to by zwrócic plane ale juz obróconego poprawnie
 
@@ -22,7 +22,7 @@ class Terrain extends THREE.Mesh {
 
     constructor(scene) {
         let material = SETTINGS.materials.terrain1;
-        let geometry = Terrain.getTerrainGeometry(50, 50, 300, 300)
+        let geometry = TerrainEditor.getTerrainGeometry(50, 50, 300, 300)
 
         super(geometry, material);
 
@@ -41,7 +41,7 @@ class Terrain extends THREE.Mesh {
 
         this.brushIndex = 0;//ktory z tablicy brushesNames
         this.brushesNames = ["Circle", "Rectangle", "Ring", "Mountain"];
-        this.selectAreaMesh = new THREE.Mesh(Terrain.getTerrainGeometry(50, 50, 300, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(50, 50, 300, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
         this.scene.add(this.selectAreaMesh)
 
         this.activeSelection;
@@ -55,9 +55,9 @@ class Terrain extends THREE.Mesh {
         this.showUISettings()
     }
 
-    adjustHeightByPoint(placeVec) {//mozna uzyc podczas klikniecia argument to intersects[0].point
+    adjustHeightByPoint(centerVec) {//mozna uzyc podczas klikniecia argument to intersects[0].point
         this.parent.updateMatrixWorld();//trzeba updatować inaczej nie działą
-        let point = this.worldToLocal(placeVec);//konwertuje pozycje z swiata do lokalnego odpowiedznika tego samego miejsca
+        let point = this.worldToLocal(centerVec);//konwertuje pozycje z swiata do lokalnego odpowiedznika tego samego miejsca
 
         for (let vert of this.geometry.vertices) {
 
@@ -74,12 +74,12 @@ class Terrain extends THREE.Mesh {
     }
 
 
-    selectArea(placeVec) {
+    selectArea(centerVec, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize) {
 
         this.activeSelection = true;
         //mozna uzyc podczas mousemove argument to intersects[0].point
         this.parent.updateMatrixWorld();//trzeba updatować inaczej nie działą
-        let point = this.worldToLocal(placeVec);//konwertuje pozycje z swiata do lokalnego odpowiedznika tego samego miejsca
+        let point = this.worldToLocal(centerVec);//konwertuje pozycje z swiata do lokalnego odpowiedznika tego samego miejsca
 
         let vertices = [];
 
@@ -89,7 +89,7 @@ class Terrain extends THREE.Mesh {
 
         for (let i = 0; i < this.selectAreaMesh.geometry.vertices.length; i++) {
 
-            if (this.isVertexInArea(vertices[i], point)) {
+            if (this.isVertexInArea(vertices[i], point, brushName, brushSize)) {
                 this.selectAreaMesh.geometry.vertices[i].copy(vertices[i]);
             }
             else {
@@ -112,21 +112,21 @@ class Terrain extends THREE.Mesh {
 
     }
 
-    isVertexInArea(vert, point) {
+    isVertexInArea(vert, point, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize) {
 
-        switch (this.brushesNames[this.brushIndex]) {
+        switch (brushName) {
             case 'Circle': {
-                if (Math.sqrt(Math.pow(vert.x - point.x, 2) + Math.pow(vert.z - point.z, 2)) <= this.brushSize / 2) {
+                if (Math.sqrt(Math.pow(vert.x - point.x, 2) + Math.pow(vert.z - point.z, 2)) <= brushSize / 2) {
                     return true;
                 }
                 break;
             }
 
             case 'Rectangle': {
-                if (point.x - this.brushSize / 2 < vert.x &&
-                    point.x + this.brushSize / 2 > vert.x &&
-                    point.z - this.brushSize / 2 < vert.z &&
-                    point.z + this.brushSize / 2 > vert.z) {
+                if (point.x - brushSize / 2 < vert.x &&
+                    point.x + brushSize / 2 > vert.x &&
+                    point.z - brushSize / 2 < vert.z &&
+                    point.z + brushSize / 2 > vert.z) {
                     return true;
                 }
 
@@ -166,7 +166,7 @@ class Terrain extends THREE.Mesh {
 
             }
         })
-
+        // div.draggable();
     }
 
     set activeSelection(bool) {
@@ -175,5 +175,14 @@ class Terrain extends THREE.Mesh {
 
     get activeSelection() {
         return this.selectAreaMesh.visible;
+    }
+
+    checkAreaHeightEquality(centerVec, brushName, brushSize) {
+
+
+    }
+
+    addObjectToTerrain(object) {
+
     }
 }
