@@ -1,4 +1,5 @@
 var Player = require("./server_js/Player.js");
+var Sett = require("./server_js/Settings.js");
 //var http = require("http")
 var express = require("express")
 var app = express()
@@ -19,17 +20,14 @@ app.get('/', (req, res) => {
 var game = {
     //players: [],
     map: {
-        characters: [{ id: 0 }],
-        lights: [],
-        obsticles: [],
-        terrains: []
+        characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
     },
 };
 // Sokety
 socketio.on('connection', function (client) {
     //game.players.push(new Player(game, client));
     new Player(game, client)
-    console.log(game);
+    //console.log(game);
     gameTick();
 });
 
@@ -37,8 +35,16 @@ var inter = null;
 async function gameTick() {
     if (!inter) inter = setInterval(function () {
 
+        for (let i = 0; i < game.map.characters.length; i++) {
+            const el = game.map.characters[i];
+            if (el.deleted && (el.ttl--) < 1) {
+                delete game.map.characters.splice(i--, 1);
+                continue;
+            }
+            el.position[0] += (Math.abs(el.destination[0] - el.position[0])) > el.speed * Sett.unitSpeed ? Math.sign(el.destination[0] - el.position[0]) * el.speed * Sett.unitSpeed : (el.destination[0] - el.position[0]);
+            el.position[1] += (Math.abs(el.destination[1] - el.position[1])) > el.speed * Sett.unitSpeed ? Math.sign(el.destination[1] - el.position[1]) * el.speed * Sett.unitSpeed : (el.destination[1] - el.position[1]);
+        }
         // Wyślij dane
-
         socketio.sockets.emit("gameTick", game.map);
         /* for (let i = 0; i < game.players.length; i++) {
             //console.log(i, game.players);
@@ -49,7 +55,7 @@ async function gameTick() {
             }
             el.sendGameTickData();
         } */
-    }, 1000);
+    }, Sett.gameTickLength);
 }
 
 

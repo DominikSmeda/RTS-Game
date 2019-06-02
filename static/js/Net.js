@@ -10,12 +10,10 @@ class Net {
             // tu są odbierane dane mapy
             console.log(data.t);
             /*
-            dane obierasz w takiej samej strukturze, jak są zapisane w GameManager na górze
+            dane obierasz w takiej strukturze
             {
-                characters: [{id:, position:[x, z]}], // okrojone, konieczne informacje
-                lights: [],
-                obsticles: [],
-                terrains: []
+                characters: [{ id: 0, position: [0, 0], destination: [0, 0], speed: 10 }], // okrojone, konieczne informacje
+                typ_dodany_przez_ciebie:[{obiekt_1},{obiekt_2}],
             }
             */
         });
@@ -27,7 +25,11 @@ class Net {
                 id: 'ajdi',
                 destination: ['coordX', 'coordZ'],
             }],
-            build: [],
+            spawn: [{ type: 'characters (lub inny)',/* to samo co w całym obiekcie, musi być zainicjowane */ }],
+            // budowanie jest obsłużone przez spawn:[{type:'obsticles (lub inne)', ...}]
+            // spawn po prostu dodaje do mapy tabelę o nowej nazwie (jeśli nie istnieje) i dodaje do niej obiekty
+            remove: [{ type: 'characters (lub inny)', id: 'ajdi' }],
+            // po usunięciu obiekt dostaje właściwość deleted: true, a nie znika od razu z serwera (przez to klient ma szansę go usunąć)
             // etc.
         })
     }
