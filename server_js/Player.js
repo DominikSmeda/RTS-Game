@@ -32,7 +32,7 @@ module.exports = function (game, client) {
                 var el = data.spawn[i];
                 if (!this.map[el.type]) {
                     this.map[el.type] = [];
-                    this.map._.push(el.type);
+                    //this.map._.push(el.type);
                 }
                 else {
                     var flag = false;
@@ -46,6 +46,16 @@ module.exports = function (game, client) {
                 }
                 this.map[el.type].push(data.spawn[i]);
             }
+            /*  for (let i = 0; i < data.update.length; i++) {
+                 var el = data.update[i];
+                 if (!this.map[el.type]) continue;
+                 for (let j = 0; j < this.map[el.type].length; j++) {
+                     if (this.map[el.type][j].id == el.id) {
+                         this.map[el.type][j] = el;
+                         break;
+                     }
+                 }
+             } */
             for (let i = 0; i < data.remove.length; i++) {
                 var el = data.remove[i];
                 if (!this.map[el.type]) continue;

@@ -1,0 +1,29 @@
+Schemat działania:
+
+Zmiana sposobu dodawania danych wysyłanych do serwera:
+teraz wystarczy dodać pola do obiektu this.net w WorldObject
+
+Tworzenie obiektu
+ - Tworzysz obiekt WorldObject BEZ MODELU
+ - (jeśli i tak masz model, bo np. jest na scenie, to potem usuń go ze sceny)
+ - zmieniasz w nim dane wysyłane na serwer (nie poprzez netData)
+ - przekazujesz jako argument do game.createObject(obj)
+ - koniec
+
+Odczytywanie mapy z serwera
+ - jeśli obiekt nie istnieje, jest tworzony z modelem podanym w modelName
+ - jeśli zaszły zmiany, to wywoływany jest setter netData
+ - po wprowadzeniu zmian wywoływana jest funkcja onDataUpdate() (przelicza jednorazowo np. pozycję mesha)
+ - koniec
+
+Zmiany ciągłe (animacje, pozycje jednostek)
+ - funkcja onRender(delta) wykonuje się co klatkę
+
+Zmiany danych wysyłane na serwer
+ - nie zmieniamy!
+ - tylko specjalne funkcje, np. poruszenie jednostką (to sam zrobię)
+
+move - poruszanie
+ - wypakowujesz z obiektu netData
+ - zmieniasz data.destination
+ - wysyłasz w game.net.move(data)

@@ -64,20 +64,23 @@ class GameManager {
 
     update() {
         const dt = this.clock.getDelta();
-
+        for (let i = 0; i < this.objects.characters.length; i++) {
+            this.objects.characters[i].onRender(dt);
+        }
     }
 
     // aktualizuje mapę
     recalculateMap(map) {
-        for (let i = 0; i < map._.length; i++) {
-            const type = map._[i]; //typ kontenera
+        for (let i = 0; i < Object.keys(map).length; i++) {
+            const type = Object.keys(map)[i]; //typ kontenera
             if (!this.objects[type]) this.objects[type] = [];
             for (let j = 0; j < map[type].length; j++) {
                 const el = map[type][j]; //obiekt z mapy
                 var flag = true;
                 for (let k = 0; k < this.objects[type].length; k++) {
-                    if (this.objects[type][k].id == el.id) {
-                        this.objects[type][k].netUpdate(el);
+                    if (this.objects[type][k].net.id == el.id) {
+                        this.objects[type][k].netData = el;
+                        this.objects[type][k].onDataUpdate();
                         flag = false;
                         break;
                     };
@@ -87,12 +90,21 @@ class GameManager {
         }
 
     }
+
+    // Podajesz obiekt, któremu zmieniłeś właściwości
+    // Wystarczy zmienić właściwości wysłane na serwer
+    // Zmieniasz coś -> updateObject() -> Klient odbiera zmiany -> onNetUpdate()
+    updateObject(obj) {
+        this.net.update(obj.netData);
+    }
+
     // !!! Podajesz stringa do klasy !!!
-    createObject(className = "WorldObject", modelName = "tree1") {
+    //createObject(className = "WorldObject", modelName = "tree1") {
+    createObject(obj) {
         //Tutaj tworzymy obiekt, który jest zupełnie nowy, nie pobrany z serwera
         try {
-            var n = eval('new ' + className + '("' + modelName + '")');
-            this.net.spawn(n.netData);
+            //var obj = eval('new ' + className + '("' + modelName + '")');
+            this.net.spawn(obj.netData);
         }
         catch (e) {
             console.warn("Error in generating object from inside: " + e);
@@ -101,9 +113,11 @@ class GameManager {
     createObjectFromNet(data) {
         try {
             var n = eval('new ' + data.className + '("' + data.modelName + '")');
-            this.objects[n.type].push(n);
+            this.objects[data.type].push(n);
             this.scene.add(n);
-            n.netUpdate = data;
+            n.netData = data;
+            n.onDataUpdate();
+            n.justCreated = false;
         }
         catch (e) {
             console.warn("Error in generating object from server: " + e);

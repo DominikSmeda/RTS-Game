@@ -11,7 +11,8 @@ var SETTINGS = {
             wireframe: false,
             map: getTexture("assets/textures/terrain1.jpg", 50, 50)
         })
-    }
+    },
+    unitSpeed: 0.01 /* * 100 - bez ticków! */, //ma być takie samo na serwerze
 }
 
 function getTexture(path, repeatX, repeatY) {

@@ -9,41 +9,55 @@ class WorldObject extends THREE.Object3D {
         return MODELS[modelName].mesh.clone();
     }
 
-    constructor(modelName) {
-        let mesh = WorldObject.getMeshModel(modelName);
+    constructor(modelName = null) {
         super();
-        this.add(mesh)
-        this.modelName = modelName;
+        if (modelName) {
+            let mesh = WorldObject.getMeshModel(modelName);
+            this.add(mesh);
+            this.modelName = modelName;
+        }
+        else this.modelName = 'tree1';
 
-        // pozycja w grze
-        this._netPosition = [0, 0];
-        this.netId = this.uuid;
-        this.type = 'WorldObject';
-        this.className = this.constructor.toString().split(' ', 2)[1];
+        this.justCreated = true;
+        // dane do serwera
+        this.net = {
+            position: [0, 0],
+            id: this.uuid,
+            type: 'WorldObject',
+            className: this.constructor.toString().split(' ', 2)[1],
+            modelName: this.modelName,
+        }
+        /*  this._netPosition = [0, 0];
+         this.netId = this.uuid;
+         this.type = 'WorldObject';
+         this.className = this.constructor.toString().split(' ', 2)[1]; */
     }
     get netPosition() {
-        return this._netPosition;
+        return this.net.position;
     }
     set netPosition(v) {
-        this._netPosition[0] = v[0];
-        this._netPosition[1] = v[1];
+        this.net.position[0] = v[0];
+        this.net.position[1] = v[1];
     }
 
     get netData() {
-        return {
-            position: this.netPosition,
-            type: this.type,
-            id: this.netId,
-            className: this.className,
-            modelName: this.modelName,
-        }
+        return this.net;
     }
     set netData(data) {
-        this.netPosition = data.position;
-        this.type = data.type;
-        this.netId = data.id;
+        this.net = data;
     }
 
+    // eventy: jednorazowy i przy renderze
+    onDataUpdate() {
+        this.calculatePosition();
+    }
+
+    onRender() { }
+
+    calculatePosition() {
+        this.position.x = this.netPosition[0];
+        this.position.z = this.netPosition[1];
+    }
 
     setMeshModel(modelName) {
         let mesh = MODELS[modelName].mesh.clone();
