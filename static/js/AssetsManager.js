@@ -71,7 +71,6 @@ class AssetsManager {
 
     init() {
         this.createUI();
-
         this.addItemToCategory(new Item(Tree), 'Bulidings');
         this.addItemToCategory(new Item(Rock), 'Bulidings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
@@ -128,7 +127,6 @@ class AssetsManager {
                 break;
             }
         }
-
         let catItemsDiv = $('#assetsManager #categories-items');
         catItemsDiv.empty();
 

@@ -35,8 +35,8 @@ class GameManager {
         var axesHelper = new THREE.AxesHelper(1000);
 
         this.scene.add(axesHelper);
-        this.camera.position.set(0, 500, 40)
-        this.camera.lookAt(this.scene.position);
+        //this.camera.position.set(0, 500, 40)
+        //this.camera.lookAt(this.scene.position);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
         let spotLight = new THREE.SpotLight(0xffffff, 1);
@@ -44,11 +44,11 @@ class GameManager {
         spotLight.castShadow = true;
         this.scene.add(spotLight);
 
-        this.mainTerrain = new TerrainEditor(this.scene);
-        this.scene.add(this.mainTerrain);
+        //this.mainTerrain = new TerrainEditor(this.scene);
+        //this.scene.add(this.mainTerrain);
 
 
-        this.assetsManager = new AssetsManager();
+        //this.assetsManager = new AssetsManager();
         this.events();
         this.render();
 
@@ -71,6 +71,9 @@ class GameManager {
 
     // aktualizuje mapę
     recalculateMap(map) {
+        // przy bardzo dużych obciążeniach odrzuca pakiety, gdy jeszcze nie przetworzył poprzedniego
+        if (this.working) return;
+        this.working = true;
         for (let i = 0; i < Object.keys(map).length; i++) {
             const type = Object.keys(map)[i]; //typ kontenera
             if (!this.objects[type]) this.objects[type] = [];
@@ -88,15 +91,17 @@ class GameManager {
                 if (flag && el.deleted != true) this.createObjectFromNet(el);
             }
         }
-
+        this.working = false;
+        if (this.isPressed.rmb) this.cameraControl.issueMove(this.isPressed.lastEvent);
     }
 
+    // USUNIĘTO
     // Podajesz obiekt, któremu zmieniłeś właściwości
     // Wystarczy zmienić właściwości wysłane na serwer
     // Zmieniasz coś -> updateObject() -> Klient odbiera zmiany -> onNetUpdate()
-    updateObject(obj) {
+    /* updateObject(obj) {
         this.net.update(obj.netData);
-    }
+    } */
 
     // !!! Podajesz stringa do klasy !!!
     //createObject(className = "WorldObject", modelName = "tree1") {
@@ -126,8 +131,11 @@ class GameManager {
 
 
     events() {
-
-        $(window).on('mousedown', (e) => {
+        $(document).on('contextmenu', (e) => {
+            e.preventDefault();
+        })
+        $('#canvas').on('mousedown', (e) => {
+            e.preventDefault();
             this.isPressed.mousedown(e);
 
             if (this.isPressed.lmb) {
@@ -138,11 +146,11 @@ class GameManager {
                 mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, this.camera);
 
-                var intersects = raycaster.intersectObjects([this.mainTerrain], true);
+                var intersects = []//raycaster.intersectObjects([this.mainTerrain], true);
 
                 if (intersects.length > 0) {
                     if (intersects[0].object instanceof TerrainEditor) {
-                        intersects[0].object.mouseClick(intersects[0].point);
+                        //intersects[0].object.mouseClick(intersects[0].point);
 
                     }
 
@@ -152,11 +160,13 @@ class GameManager {
 
             this.cameraControl.mousedown(e);
         })
-        $(window).on('mouseup', (e) => {
+        $('#canvas').on('mouseup', (e) => {
             this.isPressed.mouseup(e);
+            this.cameraControl.mouseup(e);
         })
 
-        $(window).on('mousemove', (e) => {
+        $('#canvas').on('mousemove', (e) => {
+            this.isPressed.mouseup(e);
             var raycaster = new THREE.Raycaster();
             var mouseVector = new THREE.Vector2();
 
@@ -164,11 +174,11 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects([this.mainTerrain], true);
+            var intersects = []//raycaster.intersectObjects([this.mainTerrain], true);
 
             if (intersects.length > 0) {
                 if (intersects[0].object instanceof TerrainEditor) {
-                    intersects[0].object.mouseMove(intersects[0].point);
+                    //intersects[0].object.mouseMove(intersects[0].point);
                 }
 
             }
@@ -180,7 +190,7 @@ class GameManager {
         $(window).on('keyup', (e) => {
             this.isPressed.keyup(e);
         })
-        $(window).on('wheel', (e) => {
+        $('#canvas').on('wheel', (e) => {
             //blokada zoomu - niestety nie działa
             event.stopPropagation();
             this.cameraControl.wheel(e);

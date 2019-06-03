@@ -8,8 +8,10 @@ class ClickRegister {
     constructor() {
         this.mouse = [false, false, false];
         this.special = [false, false, false];
+        this.lastEvent = null;
     }
     mousedown(e) {
+        this.lastEvent = e;
         switch (e.button) {
             case 0: //LPM
                 this.mouse[0] = true;
@@ -23,7 +25,11 @@ class ClickRegister {
                 break;
         }
     }
+    mousemove(e) {
+        this.lastEvent = e;
+    }
     mouseup(e) {
+        this.lastEvent = e;
         e.preventDefault();
         switch (e.button) {
             case 0: //LPM
@@ -38,6 +44,7 @@ class ClickRegister {
         }
     }
     keydown(e) {
+        this.lastEvent = e;
         switch (e.key) {
             case "Control":
                 this.special[0] = true;
@@ -51,6 +58,7 @@ class ClickRegister {
         }
     }
     keyup(e) {
+        this.lastEvent = e;
         switch (e.key) {
             case "Control":
                 this.special[0] = false;

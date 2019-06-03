@@ -3,6 +3,7 @@ module.exports = function (game, client) {
     this.game = game;
     console.log(client.id + ": connected");
     this.client = client;
+    this.id = client.id;
 
     this.client.emit("onconnect", {
         clientName: client.id
@@ -23,6 +24,7 @@ module.exports = function (game, client) {
             for (let i = 0; i < data.move.length; i++) {
                 for (let j = 0; j < this.c.length; j++) {
                     if (this.c[j].id == data.move[i].id) {
+                        //if (this.c[j].owner == data.move[i].owner) - zabezpieczenie przedruchem czegoś nie swojego
                         this.c[j].destination = data.move[i].destination;
                         break;
                     }
@@ -32,7 +34,6 @@ module.exports = function (game, client) {
                 var el = data.spawn[i];
                 if (!this.map[el.type]) {
                     this.map[el.type] = [];
-                    //this.map._.push(el.type);
                 }
                 else {
                     var flag = false;
@@ -44,6 +45,7 @@ module.exports = function (game, client) {
                     }
                     if (flag) continue;
                 }
+                if (data.spawn[i].owner != 'ambient') data.spawn[i].owner = this.id;
                 this.map[el.type].push(data.spawn[i]);
             }
             /*  for (let i = 0; i < data.update.length; i++) {

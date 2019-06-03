@@ -5,7 +5,7 @@ class Character extends WorldObject {
         super(model)
 
         // dane do serwera
-        this.net.speed = 10; //piksele na tick
+        this.net.speed = 4; //piksele na tick
         this.net.type = 'characters';
         this.net.destination = [0, 0];
     }
@@ -15,13 +15,15 @@ class Character extends WorldObject {
         //console.log(delta)
         if (!delta) { // kompatybilność z wywołaniem funkcji w onDataUpdate
             if (this.justCreated) {
-                this.netPosition.x = this.net.position[0];
-                this.netPosition.z = this.net.position[1];
+                super.calculatePosition();
             }
             return;
         }
-        this.position.x += (Math.abs(this.net.position[0] - this.position.x)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[0] - this.position.x) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[0] - this.position.x);
-        this.position.z += (Math.abs(this.net.position[1] - this.position.z)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[1] - this.position.z) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[1] - this.position.z);
+        //this.position.x += (Math.abs(this.net.position[0] - this.position.x)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[0] - this.position.x) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[0] - this.position.x);
+        //this.position.z += (Math.abs(this.net.position[1] - this.position.z)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[1] - this.position.z) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[1] - this.position.z);
+        var r = Math.sqrt(Math.pow(this.net.position[0] - this.position.x, 2) + Math.pow(this.net.position[1] - this.position.z, 2)) / (this.net.speed * SETTINGS.unitSpeed * delta * 1000);
+        this.position.x += r > 1 ? (this.net.position[0] - this.position.x) / r : (this.net.position[0] - this.position.x);
+        this.position.z += r > 1 ? (this.net.position[1] - this.position.z) / r : (this.net.position[1] - this.position.z);
     }
 
     //wylicz aktualną pozycję mesha

@@ -26,6 +26,7 @@ class WorldObject extends THREE.Object3D {
             type: 'WorldObject',
             className: this.constructor.toString().split(' ', 2)[1],
             modelName: this.modelName,
+            owner: 'ambient',
         }
         /*  this._netPosition = [0, 0];
          this.netId = this.uuid;

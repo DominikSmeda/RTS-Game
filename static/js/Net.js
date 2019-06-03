@@ -14,7 +14,7 @@ class Net {
         // co 100ms serwer będzie wysyłał info ze zmianami
         this.client.on("gameTick", (data) => {
             // tu są odbierane dane mapy
-            console.log(JSON.stringify(data));
+            //console.log(JSON.stringify(data));
             /*
             dane obierasz w takiej strukturze
             data = {
@@ -47,7 +47,7 @@ class Net {
             // po usunięciu obiekt dostaje właściwość deleted: true, a nie znika od razu z serwera (przez to klient ma szansę go usunąć)
             // etc.
         })*/
-        console.log(this._spawn)
+        //console.log(this._spawn)
         this.client.emit('action', {
             move: this._move,
             spawn: this._spawn,

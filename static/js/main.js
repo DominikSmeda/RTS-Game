@@ -24,5 +24,20 @@ var game;
 $(document).ready(() => {
     game = new GameManager();
 
-})
+});
+
+function addTestObject(count = 1) {
+    for (let i = 0; i < count; i++) {
+        var obj = new Test();
+        game.createObject(obj);
+    }
+}
+var plane;
+function addTestPlane() {
+    var geometry = new THREE.PlaneGeometry(100, 100, 1);
+    var material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+    plane = new THREE.Mesh(geometry, material);
+    plane.rotation.set(Math.PI / 2, 0, 0);
+    game.scene.add(plane);
+}
 

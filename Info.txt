@@ -27,3 +27,6 @@ move - poruszanie
  - wypakowujesz z obiektu netData
  - zmieniasz data.destination
  - wysyłasz w game.net.move(data)
+ - od teraz można poruszać tylko obiekty stworzone przez siebie, 
+      które nie są WorldObject.net.owner = 'ambient';
+      (nie będzie można poruszać czyimiś jednostkami czy modyfikować teren)
