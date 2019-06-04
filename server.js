@@ -65,7 +65,7 @@ async function gameTick() {
 
             //usuwanie
             if (el.deleted && (el.ttl--) < 1) {
-                delete game.map.characters.splice(i--, 1);
+                delete game.map.characters.splice(x--, 1);
                 continue;
             }
             var stop = 0;
@@ -97,12 +97,12 @@ async function gameTick() {
         for (let x = 0; x < game.map.characters.length; x++) {
             //atak
             const el = game.map.characters[x];
-            if (el.attackDest) {
+            if (el.attackDest && !el.deleted) {
                 if (el.attackAnimTime <= 0)
                     for (let j = 0; j < game.map.characters.length; j++) {
                         const el2 = game.map.characters[j];
                         //console.log(el2.id, el.destination)
-                        if (el2.id == el.attackDest) {
+                        if (!el2.deleted && el2.id == el.attackDest) {
                             //console.log(Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2)))
                             if (el.attackCooldownCounter < 0 &&
                                 el.range > Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2))) {
@@ -110,6 +110,10 @@ async function gameTick() {
                                 console.log('hp: ' + el2.hp);
                                 el.attackCooldownCounter = el.attackCooldown;
                                 el.attackAnimTime = el.attackAnimLength;
+                                if (el2.hp <= 0) {
+                                    el2.deleted = true;
+                                    el2.ttl = 10;
+                                }
                             }
                             break;
                         }

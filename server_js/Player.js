@@ -82,7 +82,7 @@ class Player {
                     for (let j = 0; j < this.map[el.type].length; j++) {
                         if (this.map[el.type][j].id == el.id) {
                             this.map[el.type][j].deleted = true;
-                            this.map[el.type][j].ttl = 5;
+                            if (!this.map[el.type][j].ttl) this.map[el.type][j].ttl = 5;
                             break;
                         }
                     }

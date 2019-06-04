@@ -1,4 +1,3 @@
-
 //Klasa z której dziedziczą wszystkie Elementy które mozna umiescic na Terrain 
 //Taka struktura ze np. Characters extends WordObject przyda mi się do pozycjonowania na terenie i w AssetsManagerze
 class WorldObject extends THREE.Object3D {
@@ -17,6 +16,8 @@ class WorldObject extends THREE.Object3D {
         // else this.modelName = 'tree1';
 
         this.justCreated = true;
+        this.dead = false;
+        this.mine = false;
 
         // dane do serwera
         // UWAGA: przy edycji zmień this.edited na true!
@@ -63,11 +64,20 @@ class WorldObject extends THREE.Object3D {
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
+            if (this.net.owner == game.playerID) this.mine = true;
             this.setMainModel();
+        }
+        if (this.net.hp <= 0 && !this.dead) {
+            this.dead = true;
+            this.onDeath();
         }
     }
     onRender() { } //co klatkę obrazu
 
+    onDeath() { //raz przy śmierci
+        console.log(this.net.id + ' zginął');
+        game.scene.remove(this);
+    }
 
 
     calculatePosition() {

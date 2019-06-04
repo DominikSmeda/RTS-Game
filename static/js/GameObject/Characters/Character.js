@@ -26,7 +26,7 @@ class Character extends GameObject {
         }
         //this.position.x += (Math.abs(this.net.position[0] - this.position.x)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[0] - this.position.x) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[0] - this.position.x);
         //this.position.z += (Math.abs(this.net.position[1] - this.position.z)) > this.net.speed * SETTINGS.unitSpeed * delta * 1000 ? Math.sign(this.net.position[1] - this.position.z) * this.net.speed * SETTINGS.unitSpeed * delta * 1000 : (this.net.position[1] - this.position.z);
-        var r = Math.sqrt(Math.pow(this.net.position[0] - this.position.x, 2) + Math.pow(this.net.position[1] - this.position.z, 2)) / (this.net.speed * SETTINGS.unitSpeed * delta);
+        var r = this.moving = Math.sqrt(Math.pow(this.net.position[0] - this.position.x, 2) + Math.pow(this.net.position[1] - this.position.z, 2)) / (this.net.speed * SETTINGS.unitSpeed * delta);
         this.position.x += r > 1 ? (this.net.position[0] - this.position.x) / r : (this.net.position[0] - this.position.x);
         this.position.z += r > 1 ? (this.net.position[1] - this.position.z) / r : (this.net.position[1] - this.position.z);
     }

@@ -224,6 +224,7 @@ class CameraControl {
         var off = (l - 1) / 2 * this.spacing + 0;
         for (let i = 0; i < this.selected.length; i++) {
             //this.parent.net.move(
+            this.selected[i].edited = true;
             this.selected[i].move(
                 pos[0] + i % l * this.spacing - off - 0.5,
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5

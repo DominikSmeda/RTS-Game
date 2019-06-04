@@ -7,6 +7,8 @@ class GameObject extends WorldObject {
         this.net.owner = game.playerID;
         this.net.color = game.playerColor;
 
+        this.moving = 0;
+
         //walka
         //wszelkie czasy podano w sekundach
         this.net.attackDest = null; //cel ataku (net.id)
@@ -18,5 +20,30 @@ class GameObject extends WorldObject {
         this.net.attackAnimLength = 0.7;//długość stania w miejscu w czasie wykonywania ataku (by skończyć animację)
         this.net.attackAnimTime = 0;//aktualny pozostały czas stania w miejscu przeliczany przez serwer
         //hp jest w klasie wyżej
+        this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
+    }
+
+    onDataUpdate() {
+        super.onDataUpdate();
+        //console.log(Math.random() * 4 % 4);
+        if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest)
+            this.findEnemyInRange();
+    }
+
+    //Po pierwszym zabójstwie zacina się - trzeba zresetować net.attackDest
+    findEnemyInRange() {
+        if (!this.mine) return;
+        var toSearch = ['characters', 'buildings'];
+        for (var x = 0; x < toSearch.length; x++) {
+            for (let i = 0; i < game.objects[toSearch[x]].length; i++) {
+                const el = game.objects[toSearch[x]][i];
+                if (el.mine || el.dead) continue;
+                if (Math.sqrt(Math.pow(this.net.position[0] - el.net.position[0], 2) + Math.pow(this.net.position[1] - el.net.position[1], 2)) < this.net.sightRange) {
+                    this.edited = true;
+                    this.net.attackDest = el.net.id;
+                    this.net.destination = el.net.id;
+                }
+            }
+        }
     }
 }

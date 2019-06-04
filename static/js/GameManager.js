@@ -13,8 +13,7 @@ class GameManager {
 
         this.objects = {//TO MOGLIBYSMY UMIESCIC W KLASIE Scene
             characters: [],
-            lights: [],
-            obsticles: [],
+            buildings: [],
         }
 
         this.mainTerrain;
@@ -79,6 +78,10 @@ class GameManager {
             if (!this.objects[type]) this.objects[type] = [];
             for (let j = 0; j < map[type].length; j++) {
                 const el = map[type][j]; //obiekt z mapy
+                if (el.dead) {
+                    map[type].splice(j--, 1);
+                    continue;
+                }
                 var flag = true;
                 for (let k = 0; k < this.objects[type].length; k++) {
                     if (this.objects[type][k].net.id == el.id) {
