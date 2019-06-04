@@ -70,7 +70,6 @@ class TerrainEditor extends THREE.Mesh {
         this.addedObject = object;
         this.addedObject.setMainModel();
         this.addedObject.selected(true);
-        this.scene.add(this.addedObject)
     }
 
     mouseClick(positionVec) {
@@ -94,6 +93,7 @@ class TerrainEditor extends THREE.Mesh {
         if (this.currentFunction == "AddWorldObject") {
             this.selectArea(positionVec, this.addedObject.brushName, this.addedObject.brushSize);
             this.setObjectOnArea(positionVec);
+            this.scene.add(this.addedObject)
         }
     }
 

@@ -29,15 +29,18 @@ class Item {
         renderer.setClearColor(0xcecece);
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        camera.position.set(6, 0, 0);
+        camera.position.set(3, 0.1, 0);
         camera.lookAt(scene.position)
-        var axesHelper = new THREE.AxesHelper(1000);
-        scene.add(axesHelper);
+        // var axesHelper = new THREE.AxesHelper(1000);
+        // scene.add(axesHelper);
+
         renderer.domElement.classList.add('item');
         this.canvasElement = renderer.domElement;
         let mesh = new this.className();
+        mesh.meshInitScale = mesh.assetsManagerInitScale;
         mesh.setMainModel()
         scene.add(mesh);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8))
 
         renderer.render(scene, camera);
 
