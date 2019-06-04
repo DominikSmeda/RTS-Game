@@ -36,12 +36,12 @@ ZAZNACZANIE OBSZARU:
  - Czy jesteś w stanei przesyłać mi aktualną pozycje startu zaznaczenia i obecną ozyche myszki czyli endPosition na bieżąco (mousemove)?
  - jestem - podaj tylko do jakiej funkcji mam to przesyłać (i czy mam przesyłać pozycję ze sceny czy z canvasa)
       będziesz robić pokazanie prostokąta zaznaczenia na scenie?
-
+     tak bee robił zaznaczenie prostokata na scenie biorac pod uwage wysokosc terenu.
+     funkcja game.mainTerrain.selectMouseArea(startx, startz , endx, endz) !parametry funkcji mozesz mi
+      przeslac w iny sposob jak jest Ci wygodniej  !Pozycja ze sceny, Dzięki :)
 
 
 
 
  ----------------------------------------------------------
  Aktualności:
- Robię select WorldObject juz prawie gotowy
- Zabieram sie teraz za FBX loader zeby ładowac modele i animacje z MIXAMO + zmienie dzewka i kamienie na wycentrowane

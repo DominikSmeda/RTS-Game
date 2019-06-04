@@ -246,7 +246,7 @@ class TerrainEditor extends THREE.Mesh {
 
     }
 
-    selecAreaMouse(startX, startZ, endX, endZ) {
+    selecMouseArea(startX, startZ, endX, endZ) {
         //tutaj moge zrobic pokazanie na terenie gdy ktoś zaznacza jednostki myszka
     }
 
