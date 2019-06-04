@@ -30,3 +30,17 @@ move - poruszanie
  - od teraz można poruszać tylko obiekty stworzone przez siebie, 
       które nie są WorldObject.net.owner = 'ambient';
       (nie będzie można poruszać czyimiś jednostkami czy modyfikować teren)
+
+
+ZAZNACZANIE OBSZARU:
+ - Czy jesteś w stanei przesyłać mi aktualną pozycje startu zaznaczenia i obecną ozyche myszki czyli endPosition na bieżąco (mousemove)?
+
+
+
+
+
+
+ ----------------------------------------------------------
+ Aktualności:
+ Robię select WorldObject juz prawie gotowy
+ Zabieram sie teraz za FBX loader zeby ładowac modele i animacje z MIXAMO + zmienie dzewka i kamienie na wycentrowane

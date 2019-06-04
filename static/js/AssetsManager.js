@@ -36,6 +36,7 @@ class Item {
         renderer.domElement.classList.add('item');
         this.canvasElement = renderer.domElement;
         let mesh = new this.className();
+        mesh.setMainModel()
         scene.add(mesh);
 
         renderer.render(scene, camera);
@@ -104,6 +105,7 @@ class AssetsManager {
         <div id="categories-names"></div>
         <div id="categories-items"></div>`);
         $('#hud').append(mainDiv);
+        mainDiv.css({ display: 'none' })
         this.updateCategoriesView();
 
     }

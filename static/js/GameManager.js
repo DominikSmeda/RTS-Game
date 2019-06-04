@@ -44,11 +44,11 @@ class GameManager {
         spotLight.castShadow = true;
         this.scene.add(spotLight);
 
-        //this.mainTerrain = new TerrainEditor(this.scene);
-        //this.scene.add(this.mainTerrain);
+        this.mainTerrain = new TerrainEditor(this.scene);
+        this.scene.add(this.mainTerrain);
 
 
-        //this.assetsManager = new AssetsManager();
+        this.assetsManager = new AssetsManager();
         this.events();
         this.render();
 
@@ -148,11 +148,11 @@ class GameManager {
                 mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, this.camera);
 
-                var intersects = []//raycaster.intersectObjects([this.mainTerrain], true);
+                var intersects = raycaster.intersectObjects([this.mainTerrain], true);
 
                 if (intersects.length > 0) {
                     if (intersects[0].object instanceof TerrainEditor) {
-                        //intersects[0].object.mouseClick(intersects[0].point);
+                        intersects[0].object.mouseClick(intersects[0].point);
 
                     }
 
@@ -176,11 +176,11 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = []//raycaster.intersectObjects([this.mainTerrain], true);
+            var intersects = raycaster.intersectObjects([this.mainTerrain], true);
 
             if (intersects.length > 0) {
                 if (intersects[0].object instanceof TerrainEditor) {
-                    //intersects[0].object.mouseMove(intersects[0].point);
+                    intersects[0].object.mouseMove(intersects[0].point);
                 }
 
             }

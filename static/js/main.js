@@ -26,6 +26,9 @@ $(document).ready(() => {
 
 });
 
+//Funkcje developerskie :3
+
+
 function addTestObject(count = 1) {
     for (let i = 0; i < count; i++) {
         var obj = new Test();
@@ -39,5 +42,13 @@ function addTestPlane() {
     plane = new THREE.Mesh(geometry, material);
     plane.rotation.set(Math.PI / 2, 0, 0);
     game.scene.add(plane);
+}
+
+function showTerrainBrush() {
+    game.mainTerrain.showUISettings();
+}
+
+function showAssetsManager() {
+    $("#assetsManager").css({ display: 'block' });
 }
 

@@ -27,7 +27,7 @@ loadingManager.onLoad = () => {
         game.resourcesLoaded();
     }
     catch{
-        window.location.reload(true);
+        // window.location.reload(true);
     }
     $('#loadingScreen').fadeOut();
 }
