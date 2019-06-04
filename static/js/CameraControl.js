@@ -40,7 +40,7 @@ class CameraControl {
         if (e.button == 1)
             this.prevPos = [e.offsetX, e.offsetY];
         else if (e.button == 0) this.beginSelection(e);
-        else if (e.button == 2) this.issueMove(e);
+        else if (e.button == 2) this.issueAction(e);
     }
     mousemove(e) {
         //ruch kamery - środkowy przycisk myszy
@@ -98,7 +98,6 @@ class CameraControl {
     }
 
     canBeSelected(obj) {
-        console.log(obj.net.owner)
         if (!(obj instanceof GameObject) ||
             obj.net.owner != this.parent.playerID)
             return false;
@@ -192,8 +191,28 @@ class CameraControl {
     }
 
     spacing = 5;
-    issueMove(e) {
+    issueAction(e) {
         if (this.selected.length < 1) return;
+
+        // czy jest kliknięty wróg
+        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.raycaster.setFromCamera(this.mouseVector, this.camera);
+        var inter1 = this.raycaster.intersectObjects(this.parent.objects.characters, true);
+
+        if (inter1.length > 0) {
+            var el = inter1[0].object.parent;
+            if (el instanceof GameObject && el.net.owner != this.parent.playerID) {
+                for (let i = 0; i < this.selected.length; i++) {
+                    console.log('attack', el.net.owner, this.parent.playerID)
+                    this.selected[i].edited = true;
+                    this.selected[i].net.attackDest = el.net.id;
+                    this.selected[i].net.destination = el.net.id;
+                }
+                return;
+            }
+        }
+        // 
         this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
         this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
@@ -208,9 +227,11 @@ class CameraControl {
             this.selected[i].move(
                 pos[0] + i % l * this.spacing - off - 0.5,
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5
-            )
+            );
+            this.selected[i].net.attackDest = null;
             //);
         }
+
     }
 
 

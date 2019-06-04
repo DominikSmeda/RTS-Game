@@ -8,6 +8,7 @@ class Game {
     }
 
     gameTick() {
+        //NIE DZIAŁA
         var game = this;
         if (!this.inter) this.inter = setInterval(() => {
             for (let i = 0; i < game.map.characters.length; i++) {

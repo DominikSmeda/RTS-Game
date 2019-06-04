@@ -40,8 +40,7 @@ class Character extends GameObject {
     // prostsza funkcja do poruszania
     move(x, z) {
         this.edited = true;
-        this.net.destination[0] = x;
-        this.net.destination[1] = z;
+        this.net.destination = [x, z];
         // return this.net;
     }
 }

@@ -94,7 +94,7 @@ class GameManager {
             }
         }
         this.working = false;
-        if (this.isPressed.rmb) this.cameraControl.issueMove(this.isPressed.lastEvent);
+        if (this.isPressed.rmb) this.cameraControl.issueAction(this.isPressed.lastEvent);
     }
 
     // USUNIĘTO

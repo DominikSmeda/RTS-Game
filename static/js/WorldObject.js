@@ -29,6 +29,8 @@ class WorldObject extends THREE.Object3D {
             className: this.constructor.toString().split(' ', 2)[1],
             modelName: modelName,
             owner: 'ambient',//ambient -> neutralny obiekt
+            canBeDamaged: false,
+            hp: 100,
         }
 
         this.selectedMesh;//
@@ -42,8 +44,7 @@ class WorldObject extends THREE.Object3D {
         return this.net.position;
     }
     set netPosition(v) {
-        this.net.position[0] = v[0];
-        this.net.position[1] = v[1];
+        this.net.position = v;
     }
 
     get netData() {
@@ -127,6 +128,10 @@ class WorldObject extends THREE.Object3D {
         else {
             this.remove(this.selectedMesh);
         }
+    }
+
+    createHealthBar() {
+        //TODO
     }
 }
 
