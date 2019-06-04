@@ -3,6 +3,9 @@ const MODELS_PATH = "assets/models/";
 
 //TUTAJ BEDA WSZYSTKIE MODELE Zeby ZAOSZCZEDZIC MIEJSCE RAM
 //BEDZIEMY ROBILI np:  var new_tree1 = MODELS.tree1.mesh.clone() 
+
+//mesh tak naprawde czasem oznacza grupe ale juz tego nie bede zmienial
+//meshAnimations : animacje po załadowaniu.
 var MODELS = {
     tent: {
         type: 'OBJ_MTL',
@@ -26,6 +29,14 @@ var MODELS = {
         type: 'json',
         json: MODELS_PATH + 'Tent_Poles_01.json',
         mesh: null
+    },
+    Soldier1: {
+        type: 'FBX',
+        path: MODELS_PATH + 'characters/' + 'Soldier1', //<- !bez / 
+        mainModel: 'Soldier1',//model ma domyslna animacje stania w miejscu
+        animations: ['Soldier1', 'Attack1', 'Attack2', 'Running', 'Guarding', 'Dying'],
+        mesh: null,
+        meshAnimations: null
     }
 }
 
@@ -47,18 +58,18 @@ for (let _key in MODELS) {
 
             objLoader.load(MODELS[key].obj, (mesh) => {
 
-                // mesh.traverse((node) => {
-                //     if (node instanceof THREE.Mesh) {
-                //         if ('castShadow' in MODELS[key])
-                //             node.castShadow = MODELS[key].castShadow;
-                //         else
-                //             node.castShadow = true;
-                //         if ('receiveShadow' in MODELS[key])
-                //             node.receiveShadow = MODELS[key].receiveShadow;
-                //         else
-                //             node.receiveShadow = true;
-                //     }
-                // })
+                mesh.traverse((node) => {
+                    if (node instanceof THREE.Mesh) {
+                        if ('castShadow' in MODELS[key])
+                            node.castShadow = MODELS[key].castShadow;
+                        else
+                            node.castShadow = true;
+                        if ('receiveShadow' in MODELS[key])
+                            node.receiveShadow = MODELS[key].receiveShadow;
+                        else
+                            node.receiveShadow = true;
+                    }
+                })
 
                 MODELS[key].mesh = mesh.children[0];// <- mam nadzieje ze medzie dzialac dla innych modeli
                 //dzieki temu nie dostajemy grupy tylko mesha   w razie BŁEDU zmienic na:  = mesh;
@@ -121,3 +132,22 @@ for (let _key in MODELS) {
     })(_key);
 }
 
+for (let _key in MODELS) {
+    if (MODELS[_key].type != 'FBX') continue;
+    (function (key) {
+        let modelData = MODELS[key];
+        let info = {
+            mainModel: modelData.mainModel,
+            animations: modelData.animations,
+            path: modelData.path
+        };
+
+        FbxModelLoader.getReadyModel(info)
+            .then(({ model, animations, handContainer }) => {
+                model.scale.set(0.03, 0.03, 0.03)
+                MODELS[key].mesh = model;
+                MODELS[key].meshAnimations = animations;
+            })
+
+    })(_key);
+}
