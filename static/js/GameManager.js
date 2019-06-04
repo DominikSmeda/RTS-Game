@@ -168,7 +168,7 @@ class GameManager {
         })
 
         $('#canvas').on('mousemove', (e) => {
-            this.isPressed.mouseup(e);
+            this.isPressed.mousemove(e);
             var raycaster = new THREE.Raycaster();
             var mouseVector = new THREE.Vector2();
 

@@ -68,12 +68,33 @@ class CameraControl {
     // Wybieranie jednostek
     beginSelection(e) {
         //this.selected = [];
-        this.selBegin = [e.offsetX, e.offsetY];
-        console.log(this.selBegin)
+        this.c_selBegin = [e.offsetX, e.offsetY];
+
+        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.raycaster.setFromCamera(this.mouseVector, this.camera);
+        var inter1 = this.raycaster.intersectObject(this.clickPlane);
+        if (inter1.length < 1) return;
+        this.selBegin = [inter1[0].point.x, inter1[0].point.z];
+        //console.log(this.selBegin ? 1 : 0)
     }
 
     moveSelection(e) { // interaktywne zaznaczanie itp.
+        if (this.selBegin) {
+            this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
+            this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+            this.raycaster.setFromCamera(this.mouseVector, this.camera);
+            var inter2 = this.raycaster.intersectObject(this.clickPlane);
+            // console.log(inter2)
+            if (inter2.length < 1) return;
 
+            this.parent.mainTerrain.selectMouseArea(
+                this.selBegin[0],
+                this.selBegin[1],
+                inter2[0].point.x,
+                inter2[0].point.z
+            );
+        }
     }
 
     canBeSelected(obj) {
@@ -85,6 +106,9 @@ class CameraControl {
     }
 
     endSelection(e) {
+        if (!this.selBegin) return;
+        var endSel = this.selBegin;
+        this.selBegin = null;
         var add = true;
         var solo = false;
         if (!this.isPressed.shift) {
@@ -94,7 +118,7 @@ class CameraControl {
             add = false;
             this.selected = [];
         }
-        if (Math.abs(this.selBegin[0] - e.offsetX) < 3 && Math.abs(this.selBegin[1] - e.offsetY) < 3) {
+        if (Math.abs(this.c_selBegin[0] - e.offsetX) < 3 && Math.abs(this.c_selBegin[1] - e.offsetY) < 3) {
             //pojedyncze kliknięcie
             this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
             this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
@@ -109,11 +133,6 @@ class CameraControl {
             };
             return;
         }
-        this.mouseVector.x = (this.selBegin[0] / this.x) * 2 - 1;
-        this.mouseVector.y = -(this.selBegin[1] / this.y) * 2 + 1;
-        this.raycaster.setFromCamera(this.mouseVector, this.camera);
-        var inter1 = this.raycaster.intersectObject(this.clickPlane);
-        if (inter1.length < 1) return;
 
         this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
         this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
@@ -132,10 +151,10 @@ class CameraControl {
             var solo = true;
         }
         else */ var points = [
-            Math.min(inter1[0].point.x, inter2[0].point.x),
-            Math.min(inter1[0].point.z, inter2[0].point.z),
-            Math.max(inter1[0].point.x, inter2[0].point.x),
-            Math.max(inter1[0].point.z, inter2[0].point.z),
+            Math.min(endSel[0], inter2[0].point.x),
+            Math.min(endSel[1], inter2[0].point.z),
+            Math.max(endSel[0], inter2[0].point.x),
+            Math.max(endSel[1], inter2[0].point.z),
         ];
         if (add) for (let i = 0; i < this.parent.objects.characters.length; i++) {
             const el = this.parent.objects.characters[i];
@@ -183,12 +202,12 @@ class CameraControl {
         var pos = [inter1[0].point.x, inter1[0].point.z]
 
         var l = Math.ceil(Math.sqrt(this.selected.length));
-        var off = (l - 1) / 2 * this.spacing;
+        var off = (l - 1) / 2 * this.spacing + 0;
         for (let i = 0; i < this.selected.length; i++) {
             //this.parent.net.move(
             this.selected[i].move(
-                pos[0] + i % l * this.spacing - off,
-                pos[1] + parseInt(i / l) * this.spacing - off
+                pos[0] + i % l * this.spacing - off - 0.5,
+                pos[1] + parseInt(i / l) * this.spacing - off + 0.5
             )
             //);
         }
