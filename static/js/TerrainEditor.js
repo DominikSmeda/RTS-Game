@@ -41,7 +41,7 @@ class TerrainEditor extends THREE.Mesh {
 
         this.brushIndex = 0;//ktory z tablicy brushesNames
         this.brushesNames = ["Circle", "Rectangle", "Ring", "Mountain"];
-        this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments));
         this.scene.add(this.selectAreaMesh);
 
         this.addedObject = null;
@@ -54,7 +54,8 @@ class TerrainEditor extends THREE.Mesh {
         // this.selectAreaMesh.visible = false
         this.activeSelection = false;
 
-        this.showUISettings()
+        // this.showUISettings() POTEM ODKOMENTOWAC
+        this.keyboard();
     }
 
     startEditTerrainFunction() {
@@ -67,10 +68,13 @@ class TerrainEditor extends THREE.Mesh {
         }
         this.currentFunction = "AddWorldObject";
         this.addedObject = object;
+        this.addedObject.setMainModel();
+        this.addedObject.selected(true);
         this.scene.add(this.addedObject)
     }
 
     mouseClick(positionVec) {
+        if (this.currentFunction == "None") return;
         if (this.currentFunction == "EditTerrain") {
             this.adjustHeightByPoint(positionVec);
             this.selectArea(positionVec);
@@ -81,8 +85,9 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     mouseMove(positionVec) {
+        if (this.currentFunction == "None") return;
         if (this.currentFunction == "EditTerrain") {
-            console.log(positionVec);
+            // console.log(positionVec);
 
             this.selectArea(positionVec);
         }
@@ -138,12 +143,7 @@ class TerrainEditor extends THREE.Mesh {
 
         this.selectAreaMesh.position.y = 0.1;
 
-        this.selectAreaMesh.material = new THREE.MeshBasicMaterial({
-            color: 0x0000ff,
-            wireframe: false,
-            transparent: true,
-            opacity: 0.5
-        })
+        this.selectAreaMesh.material = SETTINGS.materials.select;
 
         this.selectAreaMesh.geometry.dispose()//podobno zwalnia troche RAMU.
 
@@ -189,12 +189,12 @@ class TerrainEditor extends THREE.Mesh {
         $('body').append(div);
 
         $('body').on('input', '#brush-size', (e) => {
-            console.log(e.target.value);
+
             this.brushSize = e.target.value;
             this.startEditTerrainFunction();
         })
         $('body').on('input', '#brush-name', (e) => {
-            console.log(e.target.value);
+
             this.brushIndex = 0;
             for (let i = 0; i < this.brushesNames.length; i++) {
                 if (this.brushesNames[i] == e.target.value) {
@@ -228,9 +228,26 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     setObjectOnArea(positionVec) {
-        console.log(positionVec);
 
         this.addedObject.position.copy(positionVec);
+    }
+
+    keyboard() {
+
+        $(window).on('keydown', (e) => {
+            if (e.code == "Escape") {
+                this.currentFunction = "None";
+                this.activeSelection = false;
+                if (this.addedObject) {
+                    this.scene.remove(this.addedObject)
+                }
+            }
+        })
+
+    }
+
+    selecAreaMouse(startX, startZ, endX, endZ) {
+        //tutaj moge zrobic pokazanie na terenie gdy ktoś zaznacza jednostki myszka
     }
 
 }

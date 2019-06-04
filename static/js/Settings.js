@@ -10,7 +10,19 @@ var SETTINGS = {
         terrain1: new THREE.MeshPhongMaterial({
             wireframe: false,
             map: getTexture("assets/textures/terrain1.jpg", 50, 50)
-        })
+        }),
+        select: new THREE.MeshBasicMaterial({
+            color: 0x0000ff,
+            wireframe: false,
+            transparent: true,
+            opacity: 0.5
+        }),
+        selectedObject: new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: false,
+            transparent: true,
+            opacity: 0.3
+        }),
     },
     unitSpeed: 0.01 /* * 100 - bez ticków! */, //ma być takie samo na serwerze
 }

@@ -60,7 +60,8 @@ for (let _key in MODELS) {
                 //     }
                 // })
 
-                MODELS[key].mesh = mesh;
+                MODELS[key].mesh = mesh.children[0];// <- mam nadzieje ze medzie dzialac dla innych modeli
+                //dzieki temu nie dostajemy grupy tylko mesha   w razie BŁEDU zmienic na:  = mesh;
 
             })
             // });

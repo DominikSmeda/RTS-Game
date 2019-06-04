@@ -4,19 +4,17 @@
 class WorldObject extends THREE.Object3D {
 
     static getMeshModel(modelName) {
-
-
         return MODELS[modelName].mesh.clone();
     }
 
     constructor(modelName = null) {
         super();
-        if (modelName) {
-            let mesh = WorldObject.getMeshModel(modelName);
-            this.add(mesh);
-            this.modelName = modelName;
-        }
-        else this.modelName = 'tree1';
+        // if (modelName) {
+        //     let mesh = WorldObject.getMeshModel(modelName);
+        //     this.add(mesh);
+        //     this.modelName = modelName;
+        // }
+        // else this.modelName = 'tree1';
 
         this.justCreated = true;
         // dane do serwera
@@ -25,15 +23,18 @@ class WorldObject extends THREE.Object3D {
             id: this.uuid,
             type: 'WorldObject',
             className: this.constructor.toString().split(' ', 2)[1],
-            modelName: this.modelName,
-            owner: 'ambient',
+            modelName: modelName,
+            owner: 'ambient',//ambient -> neutralny obiekt
         }
+
+        this.selectedMesh;//
+        this.mainModel;//głowny model
         /*  this._netPosition = [0, 0];
          this.netId = this.uuid;
          this.type = 'WorldObject';
          this.className = this.constructor.toString().split(' ', 2)[1]; */
     }
-    get netPosition() {
+    get netPosition() {//
         return this.net.position;
     }
     set netPosition(v) {
@@ -46,11 +47,17 @@ class WorldObject extends THREE.Object3D {
     }
     set netData(data) {
         this.net = data;
+        //this.onDataUpdate()    <- Tutaj dałbym tak zeby nie powielac i nie zapomniec czasem tej funkcji
     }
 
     // eventy: jednorazowy i przy renderze
     onDataUpdate() {
         this.calculatePosition();
+        if (this.justCreated) {
+            this.setMainModel();
+        }
+
+
     }
 
     onRender() { }
@@ -60,11 +67,9 @@ class WorldObject extends THREE.Object3D {
         this.position.z = this.netPosition[1];
     }
 
-    setMeshModel(modelName) {
-        let mesh = MODELS[modelName].mesh.clone();
-        this.geometry = mesh.geometry;
-        this.material = mesh.material;
-        this.modelName = modelName;
+    setMainModel() {
+        this.mainModel = WorldObject.getMeshModel(this.net.modelName);
+        this.add(this.mainModel);
     }
 
     set meshInitScale(s) {
@@ -75,4 +80,22 @@ class WorldObject extends THREE.Object3D {
         return this.scale;
     }
 
+    selected(bool) {//pokazanie ze obiekt zostal zaznaczony 
+        if (bool) {
+            this.updateMatrix()
+            this.selectedMesh = this.mainModel.clone();
+            // this.selectedMesh = this.selectedMesh.children[0]
+            this.selectedMesh.scale.set(1.05, 1.05, 1.5);
+            //narazie nie równe ma pozycje ale to prowdopodobnie przez przsuniety model pracuje nad tym...
+            this.selectedMesh.material = SETTINGS.materials.selectedObject;
+            console.log(this.selectedMesh);
+
+            this.add(this.selectedMesh);
+        }
+        else {
+            this.remove(this.selectedMesh);
+        }
+    }
 }
+
+
