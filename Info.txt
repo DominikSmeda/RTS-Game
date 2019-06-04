@@ -45,3 +45,5 @@ ZAZNACZANIE OBSZARU:
 
  ----------------------------------------------------------
  Aktualności:
+ - do zrobienia: Mesh paska zdrowia z możliwością obsługi, 
+     (zabicie jednostki i jej usunięcie - ja robię)

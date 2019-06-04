@@ -1,5 +1,6 @@
 var Player = require("./server_js/Player.js");
 var Sett = require("./server_js/Settings.js");
+var Game = require("./server_js/Game.js");
 //var http = require("http")
 var express = require("express")
 var app = express()
@@ -22,18 +23,34 @@ app.use(express.static('static'))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'static', 'index.html'))
 });
-
-var game = {
-    //players: [],
+var rooms = [];
+/* var game = {
     map: {
         //_: ['characters'],
         characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
     },
-};
+}; */
+var game = new Game();
 // Sokety
 socketio.on('connection', function (client) {
+    client.emit("onconnect", {
+        clientName: client.id
+    });
+    client.on("con", (data) => {
+        if (data.playerID) {
+            for (let i = 0; i < game.players.length; i++) {
+                const el = game.players[i];
+                if (el.playerID == data.playerID) {
+                    el.reconnect(client);
+                    return;
+                }
+            }
+        }
+        game.players.push(new Player(game, client));
+
+    });
     //game.players.push(new Player(game, client));
-    new Player(game, client)
+    //new Player(game, client);
     //console.log(game);
     gameTick();
 });
@@ -41,35 +58,66 @@ socketio.on('connection', function (client) {
 var inter = null;
 async function gameTick() {
     if (!inter) inter = setInterval(function () {
+        for (let x = 0; x < game.map.characters.length; x++) {
+            const el = game.map.characters[x];
+            el.attackCooldownCounter -= Sett.gameTickLength / 1000;
+            el.attackAnimTime -= Sett.gameTickLength / 1000;
 
-        for (let i = 0; i < game.map.characters.length; i++) {
-            const el = game.map.characters[i];
+            //usuwanie
             if (el.deleted && (el.ttl--) < 1) {
                 delete game.map.characters.splice(i--, 1);
                 continue;
             }
-            //el.position[0] += (Math.abs(el.destination[0] - el.position[0])) > el.speed * Sett.unitSpeed ? Math.sign(el.destination[0] - el.position[0]) * el.speed * Sett.unitSpeed : (el.destination[0] - el.position[0]);
-            //el.position[1] += (Math.abs(el.destination[1] - el.position[1])) > el.speed * Sett.unitSpeed ? Math.sign(el.destination[1] - el.position[1]) * el.speed * Sett.unitSpeed : (el.destination[1] - el.position[1]);
+            var stop = 0;
 
-            //var r = Math.sqrt(Math.pow(el.destination[0] - el.position[0], 2) + Math.pow(el.destination[1] - el.position[1], 2))
-            //el.position[0] += r > el.speed * Sett.unitSpeed ? (el.destination[0] - el.position[0]) * el.speed * Sett.unitSpeed / r : (el.destination[0] - el.position[0]);
-            //el.position[1] += r > el.speed * Sett.unitSpeed ? (el.destination[1] - el.position[1]) * el.speed * Sett.unitSpeed / r : (el.destination[1] - el.position[1]);
-
-            var r = Math.sqrt(Math.pow(el.destination[0] - el.position[0], 2) + Math.pow(el.destination[1] - el.position[1], 2)) / (el.speed * Sett.unitSpeed)
-            el.position[0] += r > 1 ? (el.destination[0] - el.position[0]) / r : (el.destination[0] - el.position[0]);
-            el.position[1] += r > 1 ? (el.destination[1] - el.position[1]) / r : (el.destination[1] - el.position[1]);
+            //ruch do celu
+            if (el.attackAnimTime <= 0) { //gdy nie wykonuje ataku
+                if (typeof el.destination == 'string') {
+                    stop = el.range;
+                    var dest = el.position;
+                    for (let i = 0; i < game.map.characters.length; i++) {
+                        const el2 = game.map.characters[i];
+                        //console.log(el2.id, el.destination)
+                        if (el2.id == el.destination) {
+                            dest = el2.position;
+                            break;
+                        }
+                    }
+                } else
+                    var dest = el.destination;
+                //ruch
+                var r = (Math.sqrt(Math.pow(dest[0] - el.position[0], 2) + Math.pow(dest[1] - el.position[1], 2))); //od teraz px na sekundę
+                if (r - stop > 0) {
+                    r *= 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength);
+                    el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
+                    el.position[1] += r > 1 ? (dest[1] - el.position[1]) / r : (dest[1] - el.position[1]);
+                }
+            }
+        }
+        for (let x = 0; x < game.map.characters.length; x++) {
+            //atak
+            const el = game.map.characters[x];
+            if (el.attackDest) {
+                if (el.attackAnimTime <= 0)
+                    for (let j = 0; j < game.map.characters.length; j++) {
+                        const el2 = game.map.characters[j];
+                        //console.log(el2.id, el.destination)
+                        if (el2.id == el.attackDest) {
+                            //console.log(Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2)))
+                            if (el.attackCooldownCounter < 0 &&
+                                el.range > Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2))) {
+                                el2.hp -= el.damage;
+                                console.log('hp: ' + el2.hp);
+                                el.attackCooldownCounter = el.attackCooldown;
+                                el.attackAnimTime = el.attackAnimLength;
+                            }
+                            break;
+                        }
+                    }
+            }
         }
         // Wyślij dane
         socketio.sockets.emit("gameTick", game.map);
-        /* for (let i = 0; i < game.players.length; i++) {
-            //console.log(i, game.players);
-            const el = game.players[i];
-            if (!el.connected) {
-                delete game.players.splice(i--, 1);
-                continue;
-            }
-            el.sendGameTickData();
-        } */
     }, Sett.gameTickLength);
 }
 
