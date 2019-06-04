@@ -34,6 +34,8 @@ class WorldObject extends THREE.Object3D {
             hp: 100,
         }
 
+        this.meshInitScale = 1;//skala modelu w swiecie
+        this.assetsManagerInitScale = 1;//skala modelu w Ass
         this.selectedMesh;//
         this.mainModel;//głowny model
         /*  this._netPosition = [0, 0];
@@ -104,33 +106,30 @@ class WorldObject extends THREE.Object3D {
         this.edited = false;
     }
 
-    setMeshModel(modelName) {
-        let mesh = MODELS[modelName].mesh.clone();
-        this.geometry = mesh.geometry;
-        this.material = mesh.material;
-        this.modelName = modelName;
-    }
+
     setMainModel() {
         this.mainModel = WorldObject.getMeshModel(this.net.modelName);
         this.add(this.mainModel);
-    }
-
-    set meshInitScale(s) {
-        this.scale.set(s, s, s);
-    }
-
-    get meshInitScale() {
-        return this.scale;
+        this.mainModel.scale.set(this.meshInitScale, this.meshInitScale, this.meshInitScale)
     }
 
     selected(bool) {//pokazanie ze obiekt zostal zaznaczony 
         if (bool) {
-            this.updateMatrix()
-            this.selectedMesh = this.mainModel.clone();
-            // this.selectedMesh = this.selectedMesh.children[0]
-            this.selectedMesh.scale.set(1.05, 1.05, 1.5);
+            // this.updateMatrix()
+            // this.selectedMesh = this.mainModel.clone();
+            this.selectedMesh = this.mainModel.children[0].clone();
+            // this.selectedMesh.scale.set(1, 1, 1)
+            // console.log(this.selectedMesh);
+            // this.selectedMesh.scale.copy(this.selectedMesh.scale)
+            // this.selectedMesh.scale.set(1., 1.05, 1.5);
+            // this.selectedMesh.scale.set(this.meshInitScale, this.meshInitScale, this.meshInitScale)
             //narazie nie równe ma pozycje ale to prowdopodobnie przez przsuniety model pracuje nad tym...
             this.selectedMesh.material = SETTINGS.materials.selectedObject;
+            // console.log(this.selectedMesh.scale.copy(this.scale));
+            this.selectedMesh.scale.y += 0.0005;
+            this.selectedMesh.scale.x += 0.0005;
+            this.selectedMesh.scale.z += 0.0005;
+
             //console.log(this.selectedMesh);
 
             this.add(this.selectedMesh);

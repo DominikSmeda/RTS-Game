@@ -14,22 +14,26 @@ var MODELS = {
         mesh: null,
     },
     tree1: {
-        type: 'OBJ_MTL',
-        obj: MODELS_PATH + 'Oak_Green_01.obj',
-        mtl: MODELS_PATH + 'Oak_Green_01.mtl',
+        type: 'FBX',
+        mainModel: 'Bush_03',
+        path: MODELS_PATH,
+        animations: [],
         mesh: null,
+        meshAnimations: null
     },
     rock1: {
-        type: 'OBJ_MTL',
-        obj: MODELS_PATH + 'Rock_1_01.obj',
-        mtl: MODELS_PATH + 'Rock_1_01.mtl',
-        mesh: null
+        type: 'FBX',
+        mainModel: 'Rock_04',
+        path: MODELS_PATH,
+        animations: [],
+        mesh: null,
+        meshAnimations: null
     },
     treeJSON: {
         type: 'json',
         json: MODELS_PATH + 'Tent_Poles_01.json',
         mesh: null
-    },
+    },//Characters
     Soldier1: {
         type: 'FBX',
         path: MODELS_PATH + 'characters/' + 'Soldier1', //<- !bez / 
