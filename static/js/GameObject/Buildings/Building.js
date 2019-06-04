@@ -1,6 +1,6 @@
 
 //KLASA z której dziedziczą wszystkie budynki
-class Building extends WorldObject {
+class Building extends GameObject {
     constructor() {
         super()
     }

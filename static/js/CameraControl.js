@@ -77,26 +77,43 @@ class CameraControl {
     }
 
     endSelection(e) {
-        var add = true
+        var add = true;
+        var solo = false;
         if (!this.isPressed.shift) {
+            for (let i = 0; i < this.selected.length; i++) {
+                this.selected[i].selected(false);
+            }
             add = false;
             this.selected = [];
+        }
+        if (Math.abs(this.selBegin[0] - e.offsetX) < 3 && Math.abs(this.selBegin[1] - e.offsetY) < 3) {
+            //pojedyncze kliknięcie
+            this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
+            this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+            this.raycaster.setFromCamera(this.mouseVector, this.camera);
+            var inter3 = this.raycaster.intersectObjects(this.parent.objects.characters, true);
+            if (inter3.length < 1) return;
+            console.log(inter3[0].object.parent);
+            var el = inter3[0].object.parent
+            if (el instanceof WorldObject) {
+                el.selected(true);
+                this.selected.push(el);
+            };
+            return;
         }
         this.mouseVector.x = (this.selBegin[0] / this.x) * 2 - 1;
         this.mouseVector.y = -(this.selBegin[1] / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter1 = this.raycaster.intersectObject(this.clickPlane);
         if (inter1.length < 1) return;
-        //var begin = [inter[0].point.x, inter[0].point.z];
 
         this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
         this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter2 = this.raycaster.intersectObject(this.clickPlane);
         if (inter2.length < 1) return;
-        //var end = [inter[0].point.x, inter[0].point.z];
 
-        if (Math.abs(this.selBegin[0] - e.offsetX) < 3 && Math.abs(this.selBegin[1] - e.offsetY) < 3) {
+        /* if (Math.abs(this.selBegin[0] - e.offsetX) < 3 && Math.abs(this.selBegin[1] - e.offsetY) < 3) {
             //pojedyncze kliknięcie
             var points = [
                 inter2[0].point.x - 2,
@@ -106,7 +123,7 @@ class CameraControl {
             ];
             var solo = true;
         }
-        else var points = [
+        else */ var points = [
             Math.min(inter1[0].point.x, inter2[0].point.x),
             Math.min(inter1[0].point.z, inter2[0].point.z),
             Math.max(inter1[0].point.x, inter2[0].point.x),
@@ -125,7 +142,10 @@ class CameraControl {
                         break;
                     };
                 }
-                if (flag) this.selected.push(el);
+                if (flag) {
+                    el.selected(true);
+                    this.selected.push(el)
+                };
                 if (solo) break;
             }
         }
@@ -135,6 +155,7 @@ class CameraControl {
                 && el.position.x < points[2]
                 && el.position.z > points[1]
                 && el.position.z < points[3]) {
+                el.selected(true);
                 this.selected.push(el)
                 if (solo) break;
             }

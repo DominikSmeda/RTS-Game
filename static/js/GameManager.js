@@ -84,7 +84,7 @@ class GameManager {
                     if (this.objects[type][k].net.id == el.id) {
                         this.objects[type][k].sendEdit();
                         this.objects[type][k].netData = el;
-                        this.objects[type][k].onDataUpdate();
+                        // this.objects[type][k].onDataUpdate();
                         //this.objects[type][k].onGameTick();
                         flag = false;
                         break;

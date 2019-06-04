@@ -1,6 +1,6 @@
 
 //KLASA z której dziedziczą wszystkie postacie
-class Character extends WorldObject {
+class Character extends GameObject {
     constructor(model) {
         super(model)
 

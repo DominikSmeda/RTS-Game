@@ -52,7 +52,7 @@ class WorldObject extends THREE.Object3D {
     set netData(data) {
         this.lastNet = JSON.parse(JSON.stringify(data));
         this.net = data;
-        //this.onDataUpdate()    <- Tutaj dałbym tak zeby nie powielac i nie zapomniec czasem tej funkcji
+        this.onDataUpdate()
     }
 
     // eventy: 
@@ -64,8 +64,6 @@ class WorldObject extends THREE.Object3D {
         if (this.justCreated) {
             this.setMainModel();
         }
-
-
     }
     onRender() { } //co klatkę obrazu
 
@@ -122,7 +120,7 @@ class WorldObject extends THREE.Object3D {
             this.selectedMesh.scale.set(1.05, 1.05, 1.5);
             //narazie nie równe ma pozycje ale to prowdopodobnie przez przsuniety model pracuje nad tym...
             this.selectedMesh.material = SETTINGS.materials.selectedObject;
-            console.log(this.selectedMesh);
+            //console.log(this.selectedMesh);
 
             this.add(this.selectedMesh);
         }

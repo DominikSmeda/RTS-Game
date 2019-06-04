@@ -34,7 +34,8 @@ move - poruszanie
 
 ZAZNACZANIE OBSZARU:
  - Czy jesteś w stanei przesyłać mi aktualną pozycje startu zaznaczenia i obecną ozyche myszki czyli endPosition na bieżąco (mousemove)?
-
+ - jestem - podaj tylko do jakiej funkcji mam to przesyłać (i czy mam przesyłać pozycję ze sceny czy z canvasa)
+      będziesz robić pokazanie prostokąta zaznaczenia na scenie?
 
 
 
