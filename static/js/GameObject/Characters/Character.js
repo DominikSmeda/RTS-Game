@@ -8,6 +8,11 @@ class Character extends GameObject {
         this.net.speed = 4; //piksele na tick
         this.net.type = 'characters';
         this.net.destination = [0, 0];
+
+
+        this.mixer;
+        this.actions = [];
+
     }
 
     // override - inny sposób wyliczania pozycji mesha!

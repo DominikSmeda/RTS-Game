@@ -21957,7 +21957,7 @@
 
 	function WebGLRenderer( parameters ) {
 
-		console.log( 'THREE.WebGLRenderer', REVISION );
+		console.warn( 'THREE.WebGLRenderer', REVISION );
 
 		parameters = parameters || {};
 
