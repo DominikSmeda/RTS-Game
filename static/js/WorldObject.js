@@ -19,7 +19,11 @@ class WorldObject extends THREE.Object3D {
         else this.modelName = 'tree1';
 
         this.justCreated = true;
+
         // dane do serwera
+        // UWAGA: przy edycji zmień this.edited na true!
+        this.edited = false;
+        this.lastNet = null;
         this.net = {
             position: [0, 0],
             id: this.uuid,
@@ -28,10 +32,6 @@ class WorldObject extends THREE.Object3D {
             modelName: this.modelName,
             owner: 'ambient',
         }
-        /*  this._netPosition = [0, 0];
-         this.netId = this.uuid;
-         this.type = 'WorldObject';
-         this.className = this.constructor.toString().split(' ', 2)[1]; */
     }
     get netPosition() {
         return this.net.position;
@@ -45,19 +45,43 @@ class WorldObject extends THREE.Object3D {
         return this.net;
     }
     set netData(data) {
+        this.lastNet = JSON.parse(JSON.stringify(data));
         this.net = data;
     }
 
-    // eventy: jednorazowy i przy renderze
-    onDataUpdate() {
+    // eventy: 
+    /*  onGameTick() { //z każdym tickiem od serwera
+         nieobsługiwany
+     } */
+    onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
     }
+    onRender() { } //co klatkę obrazu
 
-    onRender() { }
+
 
     calculatePosition() {
         this.position.x = this.netPosition[0];
         this.position.z = this.netPosition[1];
+    }
+
+    sendEdit() { // wyślij tylko wyedytowane dane
+        if (!this.edited) return;
+        var toSend = {
+            id: this.net.id,
+            type: this.net.type,
+        };
+        for (let i = 0; i < Object.keys(this.net).length; i++) {
+            const k = Object.keys(this.net)[i];
+            if (!this.lastNet[k]) toSend[k] = this.net[k];
+            else {
+                if (this.lastNet[k] == this.net[k]) continue;
+                if (JSON.stringify(this.lastNet[k]) == JSON.stringify(this.net[k])) continue;
+                toSend[k] = this.net[k];
+            }
+        }
+        if (Object.keys(toSend).length > 2) game.net.update(toSend);
+        this.edited = false;
     }
 
     setMeshModel(modelName) {

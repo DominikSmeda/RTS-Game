@@ -48,16 +48,20 @@ module.exports = function (game, client) {
                 if (data.spawn[i].owner != 'ambient') data.spawn[i].owner = this.id;
                 this.map[el.type].push(data.spawn[i]);
             }
-            /*  for (let i = 0; i < data.update.length; i++) {
-                 var el = data.update[i];
-                 if (!this.map[el.type]) continue;
-                 for (let j = 0; j < this.map[el.type].length; j++) {
-                     if (this.map[el.type][j].id == el.id) {
-                         this.map[el.type][j] = el;
-                         break;
-                     }
-                 }
-             } */
+            for (let i = 0; i < data.update.length; i++) {
+                var el = data.update[i];
+                if (!this.map[el.type]) continue;
+                for (let j = 0; j < this.map[el.type].length; j++) {
+                    if (this.map[el.type][j].id == el.id) {
+                        var mapel = this.map[el.type][j];
+                        for (let i = 0; i < Object.keys(el).length; i++) {
+                            var k = Object.keys(el)[i];
+                            mapel[k] = el[k];
+                        }
+                        break;
+                    }
+                }
+            }
             for (let i = 0; i < data.remove.length; i++) {
                 var el = data.remove[i];
                 if (!this.map[el.type]) continue;
@@ -70,7 +74,7 @@ module.exports = function (game, client) {
                 }
             }
         }
-        catch (e) { console.log('Internal error: ' + e) }
+        catch (e) { console.warn('Internal error: ' + e) }
     });
 
     this.client.on("fullMap", () => {

@@ -154,12 +154,12 @@ class CameraControl {
         var l = Math.ceil(Math.sqrt(this.selected.length));
         var off = (l - 1) / 2 * this.spacing;
         for (let i = 0; i < this.selected.length; i++) {
-            this.parent.net.move(
-                this.selected[i].move(
-                    pos[0] + i % l * this.spacing - off,
-                    pos[1] + parseInt(i / l) * this.spacing - off
-                )
-            );
+            //this.parent.net.move(
+            this.selected[i].move(
+                pos[0] + i % l * this.spacing - off,
+                pos[1] + parseInt(i / l) * this.spacing - off
+            )
+            //);
         }
     }
 

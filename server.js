@@ -13,6 +13,9 @@ var mongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var _db;
 
+// !!! USUWA LOGOWANIE W KONSOLI !!!
+if (Sett.suppressConsoleLog) console.log = function () { }
+
 // załatwia wszystkie sprawy dostępu do plików
 app.use(express.static('static'))
 

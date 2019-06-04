@@ -34,8 +34,9 @@ class Character extends WorldObject {
 
     // prostsza funkcja do poruszania
     move(x, z) {
+        this.edited = true;
         this.net.destination[0] = x;
         this.net.destination[1] = z;
-        return this.net;
+        // return this.net;
     }
 }

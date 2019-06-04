@@ -5,6 +5,7 @@ class Net {
         this._move = [];
         this._spawn = [];
         this._remove = [];
+        this._update = [];
 
         this.client = io();
         this.client.on("onconnect", function (data) {
@@ -13,18 +14,6 @@ class Net {
 
         // co 100ms serwer będzie wysyłał info ze zmianami
         this.client.on("gameTick", (data) => {
-            // tu są odbierane dane mapy
-            //console.log(JSON.stringify(data));
-            /*
-            dane obierasz w takiej strukturze
-            data = {
-                spawned: [], - nowo dodane obiekty
-                map: {
-                    characters: [{ id: 0, position: [0, 0], destination: [0, 0], speed: 10 }], // okrojone, konieczne informacje
-                    typ_dodany_przez_ciebie:[{obiekt_1},{obiekt_2}],
-                }
-            }
-            */
             this.parent.recalculateMap(data);
 
             this.send();
@@ -34,28 +23,16 @@ class Net {
     // zmiana częstotliwości odpowiedzi serwera: patrz ./server_js/Settings.js
     send() {
         if (!this.toSend) return;
-        /*
-        this.client.emit('action', {
-            move: [{  // tablica z identyfikatorami obiektów, które mają się zmienić
-                id: 'ajdi',
-                destination: ['coordX', 'coordZ'],
-            }],
-            spawn: [{ type: 'characters (lub inny)',/* to samo co w całym obiekcie, musi być zainicjowane * / }],
-            // budowanie jest obsłużone przez spawn:[{type:'obsticles (lub inne)', ...}]
-            // spawn po prostu dodaje do mapy tabelę o nowej nazwie (jeśli nie istnieje) i dodaje do niej obiekty
-            remove: [{ type: 'characters (lub inny)', id: 'ajdi' }],
-            // po usunięciu obiekt dostaje właściwość deleted: true, a nie znika od razu z serwera (przez to klient ma szansę go usunąć)
-            // etc.
-        })*/
-        //console.log(this._spawn)
         this.client.emit('action', {
             move: this._move,
             spawn: this._spawn,
-            remove: this._remove
+            remove: this._remove,
+            update: this._update,
         });
         this._move = [];
         this._spawn = [];
         this._remove = [];
+        this._update = [];
         this.toSend = false;
     }
 
@@ -93,5 +70,15 @@ class Net {
         }
         this.toSend = true;
         this._move.push(data);
+    }
+    update(data) {
+        for (let i = 0; i < this._update.length; i++) {
+            if (this._update[i].id == data.id) {
+                this._update[i] = data;
+                return;
+            }
+        }
+        this.toSend = true;
+        this._update.push(data);
     }
 }
