@@ -3,5 +3,8 @@ class GameObject extends WorldObject {
     // elementami rozgrywki (budynki, jednostki)
     constructor(modelName = null) {
         super(modelName);
+
+        this.net.owner = game.playerID;
+        this.net.color = game.playerColor;
     }
 }

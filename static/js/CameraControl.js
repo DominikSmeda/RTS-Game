@@ -76,6 +76,14 @@ class CameraControl {
 
     }
 
+    canBeSelected(obj) {
+        console.log(obj.net.owner)
+        if (!(obj instanceof GameObject) ||
+            obj.net.owner != this.parent.playerID)
+            return false;
+        return true;
+    }
+
     endSelection(e) {
         var add = true;
         var solo = false;
@@ -95,7 +103,7 @@ class CameraControl {
             if (inter3.length < 1) return;
             console.log(inter3[0].object.parent);
             var el = inter3[0].object.parent
-            if (el instanceof WorldObject) {
+            if (/* el instanceof WorldObject &&  */this.canBeSelected(el)) {
                 el.selected(true);
                 this.selected.push(el);
             };
@@ -135,6 +143,7 @@ class CameraControl {
                 && el.position.x < points[2]
                 && el.position.z > points[1]
                 && el.position.z < points[3]) {
+                if (!this.canBeSelected(el)) continue;
                 var flag = true;
                 for (let i = 0; i < this.selected.length; i++) {
                     if (this.selected[i].net.id == el.net.id) {
@@ -155,6 +164,7 @@ class CameraControl {
                 && el.position.x < points[2]
                 && el.position.z > points[1]
                 && el.position.z < points[3]) {
+                if (!this.canBeSelected(el)) continue;
                 el.selected(true);
                 this.selected.push(el)
                 if (solo) break;

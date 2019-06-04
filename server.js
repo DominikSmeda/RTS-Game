@@ -1,5 +1,6 @@
 var Player = require("./server_js/Player.js");
 var Sett = require("./server_js/Settings.js");
+var Game = require("./server_js/Game.js");
 //var http = require("http")
 var express = require("express")
 var app = express()
@@ -22,18 +23,34 @@ app.use(express.static('static'))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'static', 'index.html'))
 });
-
-var game = {
-    //players: [],
+var rooms = [];
+/* var game = {
     map: {
         //_: ['characters'],
         characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
     },
-};
+}; */
+var game = new Game();
 // Sokety
 socketio.on('connection', function (client) {
+    client.emit("onconnect", {
+        clientName: client.id
+    });
+    client.on("con", (data) => {
+        if (data.playerID) {
+            for (let i = 0; i < game.players.length; i++) {
+                const el = game.players[i];
+                if (el.playerID == data.playerID) {
+                    el.reconnect(client);
+                    return;
+                }
+            }
+        }
+        game.players.push(new Player(game, client));
+
+    });
     //game.players.push(new Player(game, client));
-    new Player(game, client)
+    //new Player(game, client);
     //console.log(game);
     gameTick();
 });
@@ -55,7 +72,7 @@ async function gameTick() {
             //el.position[0] += r > el.speed * Sett.unitSpeed ? (el.destination[0] - el.position[0]) * el.speed * Sett.unitSpeed / r : (el.destination[0] - el.position[0]);
             //el.position[1] += r > el.speed * Sett.unitSpeed ? (el.destination[1] - el.position[1]) * el.speed * Sett.unitSpeed / r : (el.destination[1] - el.position[1]);
 
-            var r = Math.sqrt(Math.pow(el.destination[0] - el.position[0], 2) + Math.pow(el.destination[1] - el.position[1], 2)) / (el.speed * Sett.unitSpeed)
+            var r = Math.sqrt(Math.pow(el.destination[0] - el.position[0], 2) + Math.pow(el.destination[1] - el.position[1], 2)) * 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength); //od teraz px na sekundę
             el.position[0] += r > 1 ? (el.destination[0] - el.position[0]) / r : (el.destination[0] - el.position[0]);
             el.position[1] += r > 1 ? (el.destination[1] - el.position[1]) / r : (el.destination[1] - el.position[1]);
         }

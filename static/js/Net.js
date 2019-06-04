@@ -1,6 +1,8 @@
 class Net {
     constructor(parent) {
         this.parent = parent;
+        this.playerID = parent.playerID ? parent.playerID : (Cookies.get('playerID') ? Cookies.get('playerID') : null);
+
         this.toSend = false;
         this._move = [];
         this._spawn = [];
@@ -8,14 +10,23 @@ class Net {
         this._update = [];
 
         this.client = io();
-        this.client.on("onconnect", function (data) {
-            console.log("Connected to socket, id: " + data.clientName)
+        this.client.on("onconnect", (data) => {
+            console.log(data, this.playerID);
+            console.log("Connected to socket, id: " + data.clientName);
+            this.client.emit('con', {
+                playerID: this.playerID
+            });
+        });
+        this.client.on("con", (data, err) => {
+            console.log(data, err)
+            this.playerID = this.parent.playerID = data.playerID;
+            Cookies.set('playerID', data.playerID, { path: '/' });
+            this.parent.playerColor = data.playerColor;
         });
 
         // co 100ms serwer będzie wysyłał info ze zmianami
         this.client.on("gameTick", (data) => {
             this.parent.recalculateMap(data);
-
             this.send();
         });
     }
