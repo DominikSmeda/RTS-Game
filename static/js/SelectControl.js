@@ -1,50 +1,41 @@
-class CameraControl {
-
+class SelectControl {
     constructor(parent) {
-        // this.raycaster = new THREE.Raycaster();
-        // this.mouseVector = new THREE.Vector2();
-
-        this.x = parent.scene.canvas.width;
-        this.y = parent.scene.canvas.height;
         this.parent = parent;
-
-        this.prevPos = null;
-        this.selBegin = null;
-        this.selected = [];
-
-        this.pointPos = [0, 0];
-        this.R = 100;
-        this.initR = 400;
-        this.angleV = Math.PI / 3;
-        this.angleH = 0;
-
-        // prędkość przesuwania planszy
-        this.moveSpeed = 1;
-
         this.camera = parent.camera;
         this.isPressed = parent.isPressed;
 
-        this.axesHelper = new THREE.AxesHelper(10);
-        parent.scene.add(this.axesHelper);
+        this.raycaster = new THREE.Raycaster();
+        this.mouseVector = new THREE.Vector2();
 
-        // płaszczyzna wykrywania kliknięcia
-        /* this.clickPlane = new THREE.Mesh(
+        this.c_selBegin = null;
+        this.selBegin = null;
+        this.selected = [];
+
+        this.clickPlane = new THREE.Mesh(
             new THREE.PlaneGeometry(10000, 10000, 1),
             new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0 })
         );
         this.clickPlane.rotation.set(Math.PI / 2, 0, 0);
-        parent.scene.add(this.clickPlane); */
-        this.refreshCamera();
+        this.parent.scene.add(this.clickPlane);
+
+        // this.x = parent.scene.canvas.width;
+        // this.y = parent.scene.canvas.height;
     }
+    get x() {
+        return this.parent.scene.canvas.width;
+    }
+    get y() {
+        return this.parent.scene.canvas.height;
+    }
+
+    //eventy
     mousedown(e) {
-        if (e.button == 1)
-            this.prevPos = [e.offsetX, e.offsetY];
-        //else if (e.button == 0) this.beginSelection(e);
-        //else if (e.button == 2) this.issueAction(e);
+        if (e.button == 0) this.beginSelection(e);
+        else if (e.button == 2) this.issueAction(e);
     }
     mousemove(e) {
         //ruch kamery - środkowy przycisk myszy
-        if (this.isPressed.mmb) {
+        /* if (this.isPressed.mmb) {
             if (this.isPressed.alt) {
                 this.angleH -= 0.005 * this.moveSpeed * (e.offsetX - this.prevPos[0]);
                 this.angleV += 0.005 * this.moveSpeed * (e.offsetY - this.prevPos[1]);
@@ -58,39 +49,15 @@ class CameraControl {
             this.prevPos[0] = e.offsetX;
             this.prevPos[1] = e.offsetY;
             this.refreshCamera();
-        }
-        //if (this.isPressed.lmb) this.moveSelection(e);
+        } */
+        if (this.isPressed.lmb) this.moveSelection(e);
     }
     mouseup(e) {
-        //if (e.button == 0) this.endSelection(e);
-    }
-
-
-
-
-    wheel(e) {
-        e.originalEvent.deltaY > 0 ?
-            this.R *= e.originalEvent.deltaY * 0.012 * this.moveSpeed :
-            this.R /= e.originalEvent.deltaY * -0.012 * this.moveSpeed;
-        this.refreshCamera();
-    }
-    refreshCamera() {
-        this.camera.position.x = this.R * Math.cos(this.angleV) * Math.sin(this.angleH) + this.pointPos[0];
-        this.camera.position.y = this.R * Math.sin(this.angleV);
-        this.camera.position.z = this.R * Math.cos(this.angleV) * Math.cos(this.angleH) + this.pointPos[1];
-        this.camera.lookAt(this.pointPos[0], 0, this.pointPos[1]);
-        this.axesHelper.position.set(this.pointPos[0], 0, this.pointPos[1])
-    }
-
-    resizeCamera(x, y) {
-        this.x = x;
-        this.y = y;
-        this.camera.aspect = x / y;
-        this.camera.updateProjectionMatrix();
+        if (e.button == 0) this.endSelection(e);
     }
 
     // Wybieranie jednostek
-    /* beginSelection(e) {
+    beginSelection(e) {
         //this.selected = [];
         this.c_selBegin = [e.offsetX, e.offsetY];
 
@@ -151,7 +118,7 @@ class CameraControl {
             var el = inter3[0].object.parent
             if (!(el instanceof WorldObject)) el = el.parent;
             console.log(el);
-            if (/* el instanceof WorldObject &&  * /this.canBeSelected(el)) {
+            if (/* el instanceof WorldObject &&  */this.canBeSelected(el)) {
                 el.selected(true);
                 this.selected.push(el);
             };
@@ -174,7 +141,7 @@ class CameraControl {
             ];
             var solo = true;
         }
-        else * / var points = [
+        else */ var points = [
             Math.min(endSel[0], inter2[0].point.x),
             Math.min(endSel[1], inter2[0].point.z),
             Math.max(endSel[0], inter2[0].point.x),
@@ -260,5 +227,5 @@ class CameraControl {
             //);
         }
 
-    } */
+    }
 }

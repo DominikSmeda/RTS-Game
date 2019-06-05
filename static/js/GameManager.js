@@ -29,6 +29,7 @@ class GameManager {
         this.camera = this.scene.camera;
         this.cameraControl = new CameraControl(this);
         this.cameraControl.refreshCamera();
+        this.selectControl = new SelectControl(this);
         document.getElementById('canvas').appendChild(this.scene.canvas);
 
         var axesHelper = new THREE.AxesHelper(1000);
@@ -96,7 +97,7 @@ class GameManager {
             }
         }
         this.working = false;
-        if (this.isPressed.rmb) this.cameraControl.issueAction(this.isPressed.lastEvent);
+        if (this.isPressed.rmb) this.selectControl.issueAction(this.isPressed.lastEvent);
     }
 
     // USUNIĘTO
@@ -163,10 +164,12 @@ class GameManager {
 
 
             this.cameraControl.mousedown(e);
+            this.selectControl.mousedown(e);
         })
         $('#canvas').on('mouseup', (e) => {
             this.isPressed.mouseup(e);
             this.cameraControl.mouseup(e);
+            this.selectControl.mouseup(e);
         })
 
         $('#canvas').on('mousemove', (e) => {
@@ -187,6 +190,7 @@ class GameManager {
 
             }
             this.cameraControl.mousemove(e);
+            this.selectControl.mousemove(e);
         })
         $(window).on('keydown', (e) => {
             this.isPressed.keydown(e);

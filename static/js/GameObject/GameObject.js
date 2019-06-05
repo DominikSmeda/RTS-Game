@@ -28,7 +28,7 @@ class GameObject extends WorldObject {
     onDataUpdate() {
         super.onDataUpdate();
         //console.log(Math.random() * 4 % 4);
-        if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest)
+        if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest && !this.net.attackMove)
             this.findEnemyInRange();
     }
 
