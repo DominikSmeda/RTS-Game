@@ -21,6 +21,9 @@ class GameObject extends WorldObject {
         this.net.attackAnimTime = 0;//aktualny pozostały czas stania w miejscu przeliczany przez serwer
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
+
+        this.imgSrc = "assets/thumbnails/default.jpg"; //Źródło pliku obrazu, który będzie wyświetlany jako miniaturka
+        this.shopjQuery = null;
     }
 
     onDataUpdate() {
@@ -52,10 +55,30 @@ class GameObject extends WorldObject {
     buy() {
         if (game.gold > this.cost) {
             game.gold -= this.cost;
-            game.net.update({ id: game.playerID, type: 'gold', cost: this.cost })
+            game.net.update({
+                id: game.playerID,
+                type: 'gold',
+                cost: this.cost,
+                className: this.className,
+            })
             var obj = eval('new ' + this.net.className + '()');
             obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
             game.createObject(obj);
         }
+    }
+    getShopjQueryElement() {
+        if (this.shopjQuery) return this.shopjQuery;
+        var mainDiv = this.shopjQuery = $('<div class="tile">');
+
+        var name = $('<div class="name">');
+        name.text(this.name);
+        var img = $('<img src="' + this.imgSrc + '">');
+        var cost = $('<div class="cost">');
+        cost.text(this.cost + 'g');
+
+        mainDiv.append(img)
+            .append(name)
+            .append(cost);
+        return mainDiv;
     }
 }

@@ -15,9 +15,9 @@ class WorldObject extends THREE.Object3D {
         // }
         // else this.modelName = 'tree1';
 
-        this.justCreated = true;
+        this.justCreated = false;
         this.dead = false;
-        this.mine = false;
+        //this.mine = false; // zmieniono na gettera
 
         // dane do serwera
         // UWAGA: przy edycji zmień this.edited na true!
@@ -63,6 +63,10 @@ class WorldObject extends THREE.Object3D {
         this.onDataUpdate()
     }
 
+    get mine() {
+        return this.net.owner == game.playerID;
+    }
+
     /**
      * @param {Number} v
      */
@@ -76,7 +80,7 @@ class WorldObject extends THREE.Object3D {
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
-            if (this.net.owner == game.playerID) this.mine = true;
+            //if (this.net.owner == game.playerID) this.mine = true;
             this.createHealthBar();
             this.setMainModel();
         }

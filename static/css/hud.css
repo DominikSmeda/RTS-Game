@@ -1,5 +1,6 @@
 .hud * {
     position: absolute;
+    --hud-vOffset: 4px;
 }
 
 /* SELECT */
@@ -13,13 +14,59 @@
 
 .hud .shop {
     --hud-shopBackground: yellow;
-    right: 0;
-    bottom: 0;
+    --hud-shopPadding: 10px;
+    --hud-shopHeight: 80px;
+    /* left: 0; */
+    /* bottom: calc(var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding)); */
 }
 
 .hud .shop .container {
+    position: fixed;
+    left: 0;
+    /* bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding))); */
+    bottom: var(--hud-vOffset);
     background: var(--hud-shopBackground);
-    padding: 10px;
+    height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding));
+    padding: var(--hud-shopPadding);
+    /* overflow: hidden; */
+}
+
+.hud .shop .container .tile {
+    position: relative;
+    /* display: inline-block; */
+    float: left;
+    width: var(--hud-shopHeight);
+    height: var(--hud-shopHeight);
+}
+
+.hud .shop .container .tile img {
+    width: var(--hud-shopHeight);
+    height: var(--hud-shopHeight);
+}
+
+.hud .shop .container .tile .name {
+    top: 2px;
+    left: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
+}
+
+.hud .shop .container .tile .cost {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
+}
+
+.hud .shop .gold {
+    position: fixed;
+    background: #cccccc;
+    /* height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding)); */
+    padding: var(--hud-shopPadding);
+    /* overflow: hidden; */
+    left: 0;
+    bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding)));
 }
 
 /* INFO */

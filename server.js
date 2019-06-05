@@ -13,6 +13,7 @@ var socketio = require('socket.io')(http);
 var mongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var _db;
+var _statsCollection;
 
 // !!! USUWA LOGOWANIE W KONSOLI !!!
 if (Sett.suppressConsoleLog) console.log = function () { }
@@ -58,7 +59,9 @@ socketio.on('connection', function (client) {
 var inter = null;
 async function gameTick() {
     if (!inter) inter = setInterval(function () {
+        game.length += Sett.gameTickLength / 1000;
         //złoto
+        game.totalGold += Sett.gameTickLength / 1000;
         for (let i = 0; i < Object.keys(game.map.gold).length; i++) {
             game.map.gold[Object.keys(game.map.gold)[i]] += Sett.gameTickLength / 1000;
         }
@@ -115,7 +118,18 @@ async function gameTick() {
                                 //console.log('hp: ' + el2.hp);
                                 el.attackCooldownCounter = el.attackCooldown;
                                 el.attackAnimTime = el.attackAnimLength;
+                                // jednostka nie żyje
                                 if (el2.hp <= 0) {
+                                    // dodanie do statystyki
+                                    for (let k = 0; k < game.players.length; k++) {
+                                        let p = game.players[k];
+                                        if (p.playerID == el.owner) {
+                                            p.stats.unitsKilled._total++;
+                                            if (!p.stats.unitsKilled[el2.className]) p.stats.unitsKilled[el2.className] = 1;
+                                            else p.stats.unitsKilled[el2.className]++;
+                                            break;
+                                        }
+                                    }
                                     el2.deleted = true;
                                     el2.ttl = 10;
                                     for (let k = 0; k < game.map.characters.length; k++) {
@@ -138,12 +152,35 @@ async function gameTick() {
 }
 
 mongoClient.connect("mongodb://localhost/RTS", function (err, db) {
-    if (err) console.log(err)
+    if (err) {
+        console.log(err);
+        return;
+    }
     else console.log("mongo podłączone!")
     //tu można operować na utworzonej bazie danych db lub podstawić jej obiekt 
     // pod zmienną widoczną na zewnątrz    
     _db = db;
-})
+    _statsCollection = _db.collection("statistics");
+    if (!_statsCollection)
+        _db.createCollection("statistics", function (err, coll) {
+            if (err) console.log(err);
+            _statsCollection = coll;
+        })
+});
+function insertStats(data) {
+    if (!_statsCollection) return;
+    _statsCollection.insert(data, function (err, result) {
+        console.log(result)
+    });
+}
+function getStats(callback) {
+    if (!_statsCollection) callback({ error: 'Database not connected' });
+    else
+        _statsCollection.find({}).toArray((err, items) => {
+            console.log(err, items);
+            callback(items);
+        });
+}
 
 
 http.listen(PORT, function () {

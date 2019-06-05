@@ -15,6 +15,7 @@ class GameManager {
             characters: [],
             buildings: [],
         }
+
         this.playerID;
         this.playerColor;
         this.gold = 0;
@@ -28,6 +29,13 @@ class GameManager {
     }
 
     init() {
+        this.shop = [//postacie możliwe do kupienia przez gracza
+            new Test(),
+            new Test(),
+        ]
+        this.hud = new HUD(this);
+        $('#canvas').append(this.hud.jQueryElement);
+
         this.scene = new Scene(window.innerWidth, window.innerHeight);
         this.camera = this.scene.camera;
         this.cameraControl = new CameraControl(this);
@@ -79,6 +87,7 @@ class GameManager {
         this.working = true;
         //złoto
         this.gold = map.gold[this.playerID];
+        this.hud.updateGold();
         //console.log(this.gold)
         //Analizowanie mapy
         for (let i = 0; i < Object.keys(map).length; i++) {
@@ -132,6 +141,7 @@ class GameManager {
             var n = eval('new ' + data.className + '("' + data.modelName + '")');
             this.objects[data.type].push(n);
             this.scene.add(n);
+            n.justCreated = true;
             n.netData = data;
             n.onGameTick();
             n.justCreated = false;

@@ -9,6 +9,17 @@ class Player {
         this.playerID = client.id;
         this.playerColor = this.colors[game.players.length % this.colors.length];
 
+        // Statystyki danej gry
+        this.stats = {
+            unitsKilled: { _total: 0 }, // 'className':0, _total:0
+            unitsBought: { _total: 0 }, // 'className':0, _total:0
+            moneySpent: 0, // wydana kasa
+            moneySaved: 0, // oszczędzona kasa pod koniec gry
+            moneyGained: 0, // zdobyta kasa łącznie
+            duration: 0, // czas gry
+            won: false, //czy wygrał
+        }
+
         this.c = this.game.map.characters;
         this.map = this.game.map;
         this.defineSocket();
@@ -30,6 +41,23 @@ class Player {
             this.connected = false;
             console.log(this.client.id + ": disconnected");
             //delete this;
+        });
+
+        //API statystyk
+        this.client.on('myStats', () => {
+            //wysyła statystyki gracza
+            this.client.emit("myStats", this.stats);
+        });
+        this.client.on('saveStats', (data) => {
+            //zapisuje statystyki gracza - trzeba przesłać nick gracza
+            this.stats.name = data.name;
+            insertStats(this.stats);
+        });
+        this.client.on('getStats', (data) => {
+            //wysyła wszystkie statystyki z bazy
+            getStats((data) => {
+                client.emit('getStats', data);
+            });
         });
 
         this.client.on("action", (data) => {
@@ -68,6 +96,17 @@ class Player {
                     if (!this.map[el.type]) continue;
                     if (el.type == 'gold') {
                         this.map.gold[el.id] -= el.cost;
+                        //statystyki: stworzenie jednostki
+                        for (let k = 0; k < this.game.players.length; k++) {
+                            const p = this.game.players[k];
+                            if (p.playerID == el.id) {
+                                p.stats.moneySpent += el.cost;
+                                p.stats.unitsBought._total++;
+                                if (!p.stats.unitsBought[el.className]) p.stats.unitsBought[el.className] = 1;
+                                else p.stats.unitsBought[el.className]++;
+                                break;
+                            }
+                        }
                     }
                     else for (let j = 0; j < this.map[el.type].length; j++) {
                         if (this.map[el.type][j].id == el.id) {
