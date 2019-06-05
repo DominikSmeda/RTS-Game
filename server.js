@@ -47,7 +47,7 @@ socketio.on('connection', function (client) {
                 }
             }
         }
-        game.players.push(new Player(game, client));
+        game.players.push(new Player(game, client, dbFunc));
         game.map.gold[client.id] = 0;
     });
     //game.players.push(new Player(game, client));
@@ -167,19 +167,22 @@ mongoClient.connect("mongodb://localhost/RTS", function (err, db) {
             _statsCollection = coll;
         })
 });
-function insertStats(data) {
-    if (!_statsCollection) return;
-    _statsCollection.insert(data, function (err, result) {
-        console.log(result)
-    });
-}
-function getStats(callback) {
-    if (!_statsCollection) callback({ error: 'Database not connected' });
-    else
-        _statsCollection.find({}).toArray((err, items) => {
-            console.log(err, items);
-            callback(items);
+var dbFunc = {
+    insertStats: function (data) {
+        console.log(data);
+        if (!_statsCollection) return;
+        _statsCollection.insert(JSON.parse(JSON.stringify(data)), function (err, result) {
+            console.log(err ? err : result)
         });
+    },
+    getStats: function (callback) {
+        if (!_statsCollection) callback({ error: 'Database not connected' });
+        else
+            _statsCollection.find({}).toArray((err, items) => {
+                console.log(err, items);
+                callback(items);
+            });
+    }
 }
 
 

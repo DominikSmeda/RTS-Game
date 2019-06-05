@@ -215,6 +215,7 @@ class GameManager {
             this.isPressed.keyup(e);
         })
         $('#canvas').on('wheel', (e) => {
+            //console.log(e)
             //blokada zoomu - niestety nie działa
             event.stopPropagation();
             this.cameraControl.wheel(e);
@@ -226,4 +227,20 @@ class GameManager {
         })
     }
 
+
+    showMyStats() {
+        this.net.getStats((data) => {
+            this.hud.showStatistics(data);
+        });
+        $('#overlay').css('display', 'block');
+    }
+    showAllStats() {
+        this.net.getAllStats((data) => {
+            this.hud.showAllStatistics(data);
+        });
+        $('#overlay').css('display', 'block');
+    }
+    saveStats(nick) {
+        this.net.saveStats(nick);
+    }
 }

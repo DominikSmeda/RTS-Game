@@ -3,6 +3,7 @@ class SelectControl {
         this.parent = parent;
         this.camera = parent.camera;
         this.isPressed = parent.isPressed;
+        this.spacing = 5;
 
         this.raycaster = new THREE.Raycaster();
         this.mouseVector = new THREE.Vector2();
@@ -160,7 +161,7 @@ class SelectControl {
         }
     }
 
-    spacing = 5;
+
     issueAction(e) {
         if (this.selected.length < 1) return;
 
