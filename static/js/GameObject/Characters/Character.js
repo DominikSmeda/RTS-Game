@@ -43,7 +43,7 @@ class Character extends GameObject {
 
     //wylicz aktualną pozycję mesha
     onRender(delta) {
-        super.onRender(); // gdyby coś się pojawiło
+        super.onRender(delta); // gdyby coś się pojawiło !JHHSDHSDFSDFHSDFHSD nie przekazałes deltyyyyyyyyyyyyyyyyyyyyyyyy!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         this.calculatePosition(delta);
     }
 

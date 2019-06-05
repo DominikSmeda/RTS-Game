@@ -7,151 +7,184 @@ const MODELS_PATH = "assets/models/";
 //mesh tak naprawde czasem oznacza grupe ale juz tego nie bede zmienial
 //meshAnimations : animacje po załadowaniu.
 var MODELS = {
-    tent: {
-        type: 'OBJ_MTL',
-        obj: MODELS_PATH + 'Tent_Poles_01.obj',
-        mtl: MODELS_PATH + 'Tent_Poles_01.mtl',
-        mesh: null,
-    },
     tree1: {
-        type: 'FBX',
-        mainModel: 'Bush_03',
+        type: 'fbx',
+        modelSrc: 'Bush_03',
         path: MODELS_PATH,
-        animations: [],
-        mesh: null,
-        meshAnimations: null
+        model: null,
+
     },
     rock1: {
-        type: 'FBX',
-        mainModel: 'Rock_04',
+        type: 'fbx',
+        modelSrc: 'Rock_04',
         path: MODELS_PATH,
-        animations: [],
-        mesh: null,
-        meshAnimations: null
+        model: null,
+
     },
-    treeJSON: {
-        type: 'json',
-        json: MODELS_PATH + 'Tent_Poles_01.json',
-        mesh: null
-    },//Characters
+    //Characters
+    //Ponizej wzorowy model kazdego modelu fbx
     Soldier1: {
-        type: 'FBX',
-        path: MODELS_PATH + 'characters/' + 'Soldier1', //<- !bez / 
-        mainModel: 'Soldier1',//model ma domyslna animacje stania w miejscu
-        animations: ['Soldier1', 'Attack1', 'Attack2', 'Running', 'Guarding', 'Dying'],
-        mesh: null,
-        meshAnimations: null
+        type: 'fbx',
+        skinned: true,
+        path: MODELS_PATH + 'characters/' + 'Soldier1/',
+        modelSrc: 'Soldier1',
+        animationsSrc: ['Walking', 'Attack1'],
+        model: null,
+        animations: null,
+        rawMesh: null
     }
 }
+
+//FBX---------------------------------------
+
+for (let model in MODELS) {
+    if (MODELS[model].type == "fbx") {
+        createModelByData(model);
+    }
+}
+
+function createModelByData(modelName) {
+
+    let model = MODELS[modelName];
+    const loader = new THREE.FBXLoader(loadingManager);
+
+    loader.load(model.path + model.modelSrc + '.fbx', (object) => {
+
+        model.model = object;
+        object.traverse((child) => {
+
+            if (child.isSkinnedMesh) {
+                model.rawMesh = child;
+            }
+        })
+    })
+
+    if (model.animationsSrc) {
+        model.animations = {}
+        for (let name of model.animationsSrc) {
+            ((animationName) => {
+                const loader = new THREE.FBXLoader(loadingManager);
+
+                loader.load(model.path + animationName + '.fbx', (animationGroup) => {
+                    model.animations[animationName] = animationGroup.animations[0];
+
+                })
+            })(name);
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Owinięto w document ready, gdyż czasem wyrzucało błąd 
 // "Uncaught ReferenceError: game is not defined" (w loadingManager.js) 
 // lub podobny
 //EDIT: naprawiłem bład i juz nie potrzeba tej funkcji
 
+//MTL  NARAZIE NIE UZYWAMY
+// for (let _key in MODELS) {
+//     if (MODELS[_key].type != 'OBJ_MTL') continue;
+//     (function (key) {
+//         var mtlLoader = new THREE.MTLLoader(loadingManager);
+//         mtlLoader.load(MODELS[key].mtl, (materials) => {
+//             materials.preload();
 
-for (let _key in MODELS) {
-    if (MODELS[_key].type != 'OBJ_MTL') continue;
-    (function (key) {
-        var mtlLoader = new THREE.MTLLoader(loadingManager);
-        mtlLoader.load(MODELS[key].mtl, (materials) => {
-            materials.preload();
+//             let objLoader = new THREE.OBJLoader(loadingManager);
+//             objLoader.setMaterials(materials);
 
-            let objLoader = new THREE.OBJLoader(loadingManager);
-            objLoader.setMaterials(materials);
+//             objLoader.load(MODELS[key].obj, (mesh) => {
 
-            objLoader.load(MODELS[key].obj, (mesh) => {
+//                 mesh.traverse((node) => {
+//                     if (node instanceof THREE.Mesh) {
+//                         if ('castShadow' in MODELS[key])
+//                             node.castShadow = MODELS[key].castShadow;
+//                         else
+//                             node.castShadow = true;
+//                         if ('receiveShadow' in MODELS[key])
+//                             node.receiveShadow = MODELS[key].receiveShadow;
+//                         else
+//                             node.receiveShadow = true;
+//                     }
+//                 })
 
-                mesh.traverse((node) => {
-                    if (node instanceof THREE.Mesh) {
-                        if ('castShadow' in MODELS[key])
-                            node.castShadow = MODELS[key].castShadow;
-                        else
-                            node.castShadow = true;
-                        if ('receiveShadow' in MODELS[key])
-                            node.receiveShadow = MODELS[key].receiveShadow;
-                        else
-                            node.receiveShadow = true;
-                    }
-                })
+//                 MODELS[key].mesh = mesh.children[0];// <- mam nadzieje ze medzie dzialac dla innych modeli
+//                 //dzieki temu nie dostajemy grupy tylko mesha   w razie BŁEDU zmienic na:  = mesh;
 
-                MODELS[key].mesh = mesh.children[0];// <- mam nadzieje ze medzie dzialac dla innych modeli
-                //dzieki temu nie dostajemy grupy tylko mesha   w razie BŁEDU zmienic na:  = mesh;
-
-            })
-            // });
-        })
-    })(_key);
-}
-
-
+//             })
+//             // });
+//         })
+//     })(_key);
+// }
 
 
-for (let _key in MODELS) {
-    if (MODELS[_key].type != 'json') continue;
+//JSON na razie nie uzywamy
 
-    (function (key) {
+// for (let _key in MODELS) {
+//     if (MODELS[_key].type != 'json') continue;
 
-        // let loader = new THREE.ObjectLoader(loadingManager);
+//     (function (key) {
 
-        // loader.load(MODELS[key].json,
-        //     (obj) => {
-        //         console.log(obj);
-        //         let m = new THREE.Mesh(obj)
-        //         console.log(m);
+//         // let loader = new THREE.ObjectLoader(loadingManager);
 
-        //         MODELS[key].mesh = obj;
-        //         // game.scene.add(obj)
+//         // loader.load(MODELS[key].json,
+//         //     (obj) => {
+//         //         console.log(obj);
+//         //         let m = new THREE.Mesh(obj)
+//         //         console.log(m);
 
-        //     },
-        //     (xhr) => {
-        //         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        //     },
-        //     (err) => {
-        //         console.error('An error happened', err);
-        //     });
+//         //         MODELS[key].mesh = obj;
+//         //         // game.scene.add(obj)
 
-        // let loader = new THREE.JSONLoader(loadingManager);
+//         //     },
+//         //     (xhr) => {
+//         //         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+//         //     },
+//         //     (err) => {
+//         //         console.error('An error happened', err);
+//         //     });
 
-        // loader.load(MODELS[key].json, (geometry) => {
-        //     let mesh = new THREE.Mesh(geometry);
-        //     // game.scene.add(mesh)
-        //     MODELS[key].mesh = mesh;
-        //     console.log(mesh);
+//         // let loader = new THREE.JSONLoader(loadingManager);
 
-        // })
-        var loader = new THREE.ObjectLoader(loadingManager);
-        loader.load(MODELS[key].json, (object) => {
-            var geometry;
-            object.traverse((node) => {
-                if (node.isMesh) geometry = node.geometry;
-            });
-            // game.scene.add(mesh)
-            let mesh = new THREE.Mesh(geometry);
-            MODELS[key].mesh = mesh;
-            // console.log(mesh);
+//         // loader.load(MODELS[key].json, (geometry) => {
+//         //     let mesh = new THREE.Mesh(geometry);
+//         //     // game.scene.add(mesh)
+//         //     MODELS[key].mesh = mesh;
+//         //     console.log(mesh);
 
-        });
+//         // })
+//         var loader = new THREE.ObjectLoader(loadingManager);
+//         loader.load(MODELS[key].json, (object) => {
+//             var geometry;
+//             object.traverse((node) => {
+//                 if (node.isMesh) geometry = node.geometry;
+//             });
+//             // game.scene.add(mesh)
+//             let mesh = new THREE.Mesh(geometry);
+//             MODELS[key].mesh = mesh;
+//             // console.log(mesh);
 
-    })(_key);
-}
+//         });
 
-for (let _key in MODELS) {
-    if (MODELS[_key].type != 'FBX') continue;
-    (function (key) {
-        let modelData = MODELS[key];
-        let info = {
-            mainModel: modelData.mainModel,
-            animations: modelData.animations,
-            path: modelData.path
-        };
+//     })(_key);
+// }
 
-        FbxModelLoader.getReadyModel(info)
-            .then(({ model, animations, handContainer }) => {
-                model.scale.set(0.03, 0.03, 0.03)
-                MODELS[key].mesh = model;
-                MODELS[key].meshAnimations = animations;
-            })
 
-    })(_key);
-}

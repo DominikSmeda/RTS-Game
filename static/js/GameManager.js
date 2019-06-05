@@ -58,6 +58,21 @@ class GameManager {
         this.mainTerrain = new TerrainEditor(this.scene);
         this.scene.add(this.mainTerrain);
 
+        console.log('-----------------------------------------');
+
+        setTimeout(() => {
+            let soldier = new Soldier();
+            soldier.setMainModel();
+            this.scene.add(soldier)
+            this.objects.characters.push(soldier)
+
+            let soldier2 = new Soldier();
+            soldier2.setMainModel();
+            this.scene.add(soldier2)
+            this.objects.characters.push(soldier2)
+            soldier2.position.x += 100
+
+        }, 2000)
 
         this.assetsManager = new AssetsManager();
         this.events();

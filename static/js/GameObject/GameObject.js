@@ -22,6 +22,14 @@ class GameObject extends WorldObject {
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
 
+
+
+        this.mixer;
+        this.actions = {};//wszystkie akcje postaci
+        this.currentAction;
+        //!ABY zmienic animacje this.action = NAZWA_ANIMACJI np. 'Walking' 
+
+
         this.imgSrc = "assets/thumbnails/default.jpg"; //Źródło pliku obrazu, który będzie wyświetlany jako miniaturka
         this.shopjQuery = null;
     }
@@ -66,6 +74,54 @@ class GameObject extends WorldObject {
             game.createObject(obj);
         }
     }
+
+    onRender(delta) {
+        super.onRender(delta);
+
+        if (this.mixer) this.mixer.update(delta);
+    }
+
+
+    //Cześc odpowiedzialna za animacje
+
+    set action(actionName) {
+        this.currentAction = this.actions[actionName];
+        this.mixer.stopAllAction();
+
+        this.currentAction.time = 0;
+
+
+        this.currentAction.fadeIn(0.5);
+        this.currentAction.play();
+    }
+
+    get action() {
+        return this.currentAction;
+    }
+
+    createActions() {
+        if (!MODELS[this.modelName].skinned) return;
+        // console.log('s');
+        this.mixer = new THREE.AnimationMixer(this.mainModel);
+        for (let animationName of MODELS[this.modelName].animationsSrc) {
+            console.log(animationName);
+
+            // console.log(animationName);
+            // console.log(MODELS[this.modelName].animations[animationName]);
+
+            this.actions[animationName] = this.mixer.clipAction(MODELS[this.modelName].animations[animationName])
+        }
+        console.log(this.actions);
+
+        this.action = "Walking"
+    }
+
+    onModelLoaded() {
+        console.log('juz');
+        this.createActions();
+
+    }
+    //..........
     getShopjQueryElement() {
         if (this.shopjQuery) return this.shopjQuery;
         var mainDiv = this.shopjQuery = $('<div class="tile">');
