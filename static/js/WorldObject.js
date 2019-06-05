@@ -37,14 +37,15 @@ class WorldObject extends THREE.Object3D {
         this.baseHP = 100;
         this.HP = 100; // Nie musisz ustawiać wszystkich HP ręcznie - wywołaj setter HP!
 
+        this.name = 'default'; //Nazwa jednostki wyświetlana w grze
+        this.cost = 10; //koszt jednostki
+
+
         this.meshInitScale = 1;//skala modelu w swiecie
         this.assetsManagerInitScale = 1;//skala modelu w Ass
         this.selectedMesh;//
         this.mainModel;//głowny model
-        /*  this._netPosition = [0, 0];
-         this.netId = this.uuid;
-         this.type = 'WorldObject';
-         this.className = this.constructor.toString().split(' ', 2)[1]; */
+
     }
     get netPosition() {//
         return this.net.position;
@@ -62,6 +63,9 @@ class WorldObject extends THREE.Object3D {
         this.onDataUpdate()
     }
 
+    /**
+     * @param {Number} v
+     */
     set HP(v) {
         this.baseHP = this.net.hp = v;
     }

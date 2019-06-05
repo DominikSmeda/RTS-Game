@@ -17,9 +17,6 @@ class SelectControl {
         );
         this.clickPlane.rotation.set(Math.PI / 2, 0, 0);
         this.parent.scene.add(this.clickPlane);
-
-        // this.x = parent.scene.canvas.width;
-        // this.y = parent.scene.canvas.height;
     }
     get x() {
         return this.parent.scene.canvas.width;
@@ -34,22 +31,6 @@ class SelectControl {
         else if (e.button == 2) this.issueAction(e);
     }
     mousemove(e) {
-        //ruch kamery - środkowy przycisk myszy
-        /* if (this.isPressed.mmb) {
-            if (this.isPressed.alt) {
-                this.angleH -= 0.005 * this.moveSpeed * (e.offsetX - this.prevPos[0]);
-                this.angleV += 0.005 * this.moveSpeed * (e.offsetY - this.prevPos[1]);
-                if (this.angleV > 1.5) this.angleV = 1.5;
-                if (this.angleV < 0.15) this.angleV = 0.15;
-            }
-            else {
-                this.pointPos[0] -= this.moveSpeed * this.R / this.initR * (Math.cos(this.angleH) * (e.offsetX - this.prevPos[0]) + Math.sin(this.angleH) * (e.offsetY - this.prevPos[1]));
-                this.pointPos[1] -= this.moveSpeed * this.R / this.initR * (Math.cos(this.angleH) * (e.offsetY - this.prevPos[1]) - Math.sin(this.angleH) * (e.offsetX - this.prevPos[0]));
-            }
-            this.prevPos[0] = e.offsetX;
-            this.prevPos[1] = e.offsetY;
-            this.refreshCamera();
-        } */
         if (this.isPressed.lmb) this.moveSelection(e);
     }
     mouseup(e) {
@@ -58,7 +39,6 @@ class SelectControl {
 
     // Wybieranie jednostek
     beginSelection(e) {
-        //this.selected = [];
         this.c_selBegin = [e.offsetX, e.offsetY];
 
         this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
@@ -67,7 +47,6 @@ class SelectControl {
         var inter1 = this.raycaster.intersectObject(this.clickPlane);
         if (inter1.length < 1) return;
         this.selBegin = [inter1[0].point.x, inter1[0].point.z];
-        //console.log(this.selBegin ? 1 : 0)
     }
 
     moveSelection(e) { // interaktywne zaznaczanie itp.
@@ -76,7 +55,6 @@ class SelectControl {
             this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
             this.raycaster.setFromCamera(this.mouseVector, this.camera);
             var inter2 = this.raycaster.intersectObject(this.clickPlane);
-            // console.log(inter2)
             if (inter2.length < 1) return;
 
             this.parent.mainTerrain.selectMouseArea(

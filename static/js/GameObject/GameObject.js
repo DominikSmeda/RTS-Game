@@ -21,8 +21,6 @@ class GameObject extends WorldObject {
         this.net.attackAnimTime = 0;//aktualny pozostały czas stania w miejscu przeliczany przez serwer
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
-
-        this.baseHP = this.net.hp;
     }
 
     onDataUpdate() {
@@ -47,6 +45,17 @@ class GameObject extends WorldObject {
                     this.net.attackMove = false;
                 }
             }
+        }
+    }
+
+    //kupienie jednostki
+    buy() {
+        if (game.gold > this.cost) {
+            game.gold -= this.cost;
+            game.net.update({ id: game.playerID, type: 'gold', cost: this.cost })
+            var obj = eval('new ' + this.net.className + '()');
+            obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
+            game.createObject(obj);
         }
     }
 }

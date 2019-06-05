@@ -66,7 +66,10 @@ class Player {
                 for (let i = 0; i < data.update.length; i++) {
                     var el = data.update[i];
                     if (!this.map[el.type]) continue;
-                    for (let j = 0; j < this.map[el.type].length; j++) {
+                    if (el.type == 'gold') {
+                        this.map.gold[el.id] -= el.cost;
+                    }
+                    else for (let j = 0; j < this.map[el.type].length; j++) {
                         if (this.map[el.type][j].id == el.id) {
                             var mapel = this.map[el.type][j];
                             for (let i = 0; i < Object.keys(el).length; i++) {

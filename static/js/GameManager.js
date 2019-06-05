@@ -15,6 +15,9 @@ class GameManager {
             characters: [],
             buildings: [],
         }
+        this.playerID;
+        this.playerColor;
+        this.gold = 0;
 
         this.mainTerrain;
         this.assetsManager;
@@ -74,6 +77,10 @@ class GameManager {
         // przy bardzo dużych obciążeniach odrzuca pakiety, gdy jeszcze nie przetworzył poprzedniego
         if (this.working) return;
         this.working = true;
+        //złoto
+        this.gold = map.gold[this.playerID];
+        //console.log(this.gold)
+        //Analizowanie mapy
         for (let i = 0; i < Object.keys(map).length; i++) {
             const type = Object.keys(map)[i]; //typ kontenera
             if (!this.objects[type]) this.objects[type] = [];

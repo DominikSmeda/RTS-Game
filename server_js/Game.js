@@ -1,7 +1,7 @@
 class Game {
     constructor() {
         this.map = {
-            //_: ['characters'],
+            gold: {},
             characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
         };
         this.players = [];

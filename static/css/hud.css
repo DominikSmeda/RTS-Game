@@ -1,0 +1,30 @@
+.hud * {
+    position: absolute;
+}
+
+/* SELECT */
+
+.hud .select {
+    left: 0;
+    bottom: 0;
+}
+
+/* SHOP */
+
+.hud .shop {
+    --hud-shopBackground: yellow;
+    right: 0;
+    bottom: 0;
+}
+
+.hud .shop .container {
+    background: var(--hud-shopBackground);
+    padding: 10px;
+}
+
+/* INFO */
+
+.hud .info {
+    right: 0;
+    top: 0;
+}

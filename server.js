@@ -47,7 +47,7 @@ socketio.on('connection', function (client) {
             }
         }
         game.players.push(new Player(game, client));
-
+        game.map.gold[client.id] = 0;
     });
     //game.players.push(new Player(game, client));
     //new Player(game, client);
@@ -58,6 +58,11 @@ socketio.on('connection', function (client) {
 var inter = null;
 async function gameTick() {
     if (!inter) inter = setInterval(function () {
+        //złoto
+        for (let i = 0; i < Object.keys(game.map.gold).length; i++) {
+            game.map.gold[Object.keys(game.map.gold)[i]] += Sett.gameTickLength / 1000;
+        }
+        //pozycje postaci
         for (let x = 0; x < game.map.characters.length; x++) {
             const el = game.map.characters[x];
             el.attackCooldownCounter -= Sett.gameTickLength / 1000;
