@@ -3,11 +3,20 @@
 class WorldObject extends THREE.Object3D {
 
     static getMeshModel(modelName) {
-        return MODELS[modelName].mesh.clone();
+        console.log(modelName);
+
+        if (MODELS[modelName].skinned) {
+            return THREE.SkeletonUtils.clone(MODELS[modelName].model);
+        }
+        else {
+            return MODELS[modelName].model.clone();
+        }
+
     }
 
     constructor(modelName = null) {
         super();
+        this.modelName = modelName;
         // if (modelName) {
         //     let mesh = WorldObject.getMeshModel(modelName);
         //     this.add(mesh);
@@ -121,8 +130,16 @@ class WorldObject extends THREE.Object3D {
 
     setMainModel() {
         this.mainModel = WorldObject.getMeshModel(this.net.modelName);
+        console.log(this.mainModel);
+
         this.add(this.mainModel);
         this.mainModel.scale.set(this.meshInitScale, this.meshInitScale, this.meshInitScale)
+
+        this.onModelLoaded()
+    }
+
+    onModelLoaded() {
+
     }
 
     selected(bool) {//pokazanie ze obiekt zostal zaznaczony 

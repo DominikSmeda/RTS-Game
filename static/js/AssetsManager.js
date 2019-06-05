@@ -77,6 +77,7 @@ class AssetsManager {
         this.createUI();
         this.addItemToCategory(new Item(Tree), 'Bulidings');
         this.addItemToCategory(new Item(Rock), 'Bulidings');
+        this.addItemToCategory(new Item(Soldier), 'Characters');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)

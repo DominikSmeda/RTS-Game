@@ -223,8 +223,11 @@ class TerrainEditor extends THREE.Mesh {
 
     addObjectToTerrain() {
         this.currentFunction = "None"
+        game.createObject('Test')
+        this.addedObject.selected(false);
         this.addedObject = null;
         this.activeSelection = false;
+
     }
 
     setObjectOnArea(positionVec) {
