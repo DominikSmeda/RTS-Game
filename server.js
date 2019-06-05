@@ -107,12 +107,19 @@ async function gameTick() {
                             if (el.attackCooldownCounter < 0 &&
                                 el.range > Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2))) {
                                 el2.hp -= el.damage;
-                                console.log('hp: ' + el2.hp);
+                                //console.log('hp: ' + el2.hp);
                                 el.attackCooldownCounter = el.attackCooldown;
                                 el.attackAnimTime = el.attackAnimLength;
                                 if (el2.hp <= 0) {
                                     el2.deleted = true;
                                     el2.ttl = 10;
+                                    for (let k = 0; k < game.map.characters.length; k++) {
+                                        if (el2.id == game.map.characters[k].attackDest) {
+                                            let el3 = game.map.characters[k];
+                                            el3.attackDest = null;
+                                            el3.destination = el3.position;
+                                        }
+                                    }
                                 }
                             }
                             break;

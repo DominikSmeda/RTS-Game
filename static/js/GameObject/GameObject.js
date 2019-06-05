@@ -21,6 +21,8 @@ class GameObject extends WorldObject {
         this.net.attackAnimTime = 0;//aktualny pozostały czas stania w miejscu przeliczany przez serwer
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
+
+        this.baseHP = this.net.hp;
     }
 
     onDataUpdate() {
@@ -42,6 +44,7 @@ class GameObject extends WorldObject {
                     this.edited = true;
                     this.net.attackDest = el.net.id;
                     this.net.destination = el.net.id;
+                    this.net.attackMove = false;
                 }
             }
         }

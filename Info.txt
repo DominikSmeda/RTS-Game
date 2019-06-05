@@ -40,10 +40,22 @@ ZAZNACZANIE OBSZARU:
      funkcja game.mainTerrain.selectMouseArea(startx, startz , endx, endz) !parametry funkcji mozesz mi
       przeslac w iny sposob jak jest Ci wygodniej  !Pozycja ze sceny, Dzięki :)
 
+Kierowanie kamerą:
+ > ŚPM - przesuwanie kamery
+ > Alt + ŚPM - obrót kamery
+ > Scroll - przybliżanie / oddalanie
 
+Komendy jednostek:
+ > kliknięcie LPM - wybranie jednostki
+ > przeciągnięcie LPM - wybranie grupy jednostek
+ > powyższe z wciśniętym Shift - dodanie do zaznaczenia
+     ### przy zaznaczonych jednostkach ###
+ > PPM na mapę - ruch jednostek
+ > PPM na przeciwniku - atak na przeciwnika
+ > Shift + PPM na mapę - przemieszczenie z atakiem przeciwników w pobliżu
+ ! jednostki same atakują, gdy stoją i nic nie robią
 
 
  ----------------------------------------------------------
  Aktualności:
- - do zrobienia: Mesh paska zdrowia z możliwością obsługi, 
-     (zabicie jednostki i jej usunięcie - ja robię)
+ - do zrobienia: 

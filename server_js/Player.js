@@ -1,12 +1,13 @@
 class Player {
     constructor(game, client) {
+        this.colors = [0x0000ff, 0xff0000, 0xffff00, 0x00ff00];
         this.connected = true;
         //this.playing = true;
         this.game = game;
         console.log(client.id + ": connected");
         this.client = client;
         this.playerID = client.id;
-        this.playerColor = 0xffff00;
+        this.playerColor = this.colors[game.players.length % this.colors.length];
 
         this.c = this.game.map.characters;
         this.map = this.game.map;
@@ -32,7 +33,7 @@ class Player {
         });
 
         this.client.on("action", (data) => {
-            console.log(data);
+            //console.log(data);
             try {
                 //if (!(data.id instanceof Array)) data.id = [data.id];
                 for (let i = 0; i < data.move.length; i++) {

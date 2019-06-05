@@ -78,18 +78,17 @@ class GameManager {
             if (!this.objects[type]) this.objects[type] = [];
             for (let j = 0; j < map[type].length; j++) {
                 const el = map[type][j]; //obiekt z mapy
-                if (el.dead) {
-                    map[type].splice(j--, 1);
-                    continue;
-                }
                 var flag = true;
                 for (let k = 0; k < this.objects[type].length; k++) {
                     if (this.objects[type][k].net.id == el.id) {
                         this.objects[type][k].sendEdit();
                         this.objects[type][k].netData = el;
                         // this.objects[type][k].onDataUpdate();
-                        //this.objects[type][k].onGameTick();
+                        this.objects[type][k].onGameTick();
                         flag = false;
+                        if (this.objects[type][k].dead) {
+                            this.objects[type].splice(k--, 1);
+                        };
                         break;
                     };
                 }
@@ -126,7 +125,7 @@ class GameManager {
             this.objects[data.type].push(n);
             this.scene.add(n);
             n.netData = data;
-            n.onDataUpdate();
+            n.onGameTick();
             n.justCreated = false;
         }
         catch (e) {

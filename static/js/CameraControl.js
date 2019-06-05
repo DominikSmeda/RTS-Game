@@ -124,8 +124,9 @@ class CameraControl {
             this.raycaster.setFromCamera(this.mouseVector, this.camera);
             var inter3 = this.raycaster.intersectObjects(this.parent.objects.characters, true);
             if (inter3.length < 1) return;
-            console.log(inter3[0].object.parent);
             var el = inter3[0].object.parent
+            if (!(el instanceof WorldObject)) el = el.parent;
+            console.log(el);
             if (/* el instanceof WorldObject &&  */this.canBeSelected(el)) {
                 el.selected(true);
                 this.selected.push(el);
@@ -202,6 +203,7 @@ class CameraControl {
 
         if (inter1.length > 0) {
             var el = inter1[0].object.parent;
+            if (!(el instanceof WorldObject)) el = el.parent;
             if (el instanceof GameObject && el.net.owner != this.parent.playerID) {
                 for (let i = 0; i < this.selected.length; i++) {
                     console.log('attack', el.net.owner, this.parent.playerID)
@@ -225,6 +227,7 @@ class CameraControl {
         for (let i = 0; i < this.selected.length; i++) {
             //this.parent.net.move(
             this.selected[i].edited = true;
+            if (this.isPressed.shift) this.selected[i].net.attackMove = true;
             this.selected[i].move(
                 pos[0] + i % l * this.spacing - off - 0.5,
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5

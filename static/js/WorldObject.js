@@ -31,8 +31,11 @@ class WorldObject extends THREE.Object3D {
             modelName: modelName,
             owner: 'ambient',//ambient -> neutralny obiekt
             canBeDamaged: false,
+            color: 0x444444,
             hp: 100,
         }
+        this.baseHP = 100;
+        this.HP = 100; // Nie musisz ustawiać wszystkich HP ręcznie - wywołaj setter HP!
 
         this.meshInitScale = 1;//skala modelu w swiecie
         this.assetsManagerInitScale = 1;//skala modelu w Ass
@@ -59,20 +62,25 @@ class WorldObject extends THREE.Object3D {
         this.onDataUpdate()
     }
 
+    set HP(v) {
+        this.baseHP = this.net.hp = v;
+    }
+
     // eventy: 
-    /*  onGameTick() { //z każdym tickiem od serwera
-         nieobsługiwany
-     } */
+    onGameTick() { } //z każdym tickiem od serwera
+
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
             if (this.net.owner == game.playerID) this.mine = true;
+            this.createHealthBar();
             this.setMainModel();
         }
         if (this.net.hp <= 0 && !this.dead) {
             this.dead = true;
             this.onDeath();
         }
+        this.updateHealthBar();
     }
     onRender() { } //co klatkę obrazu
 
@@ -139,8 +147,22 @@ class WorldObject extends THREE.Object3D {
         }
     }
 
+    updateHealthBar() {
+        this.hpBar.scale.x = 3.5 * this.net.hp / this.baseHP;
+        //this.hpBar.position.y += 0.1;
+    }
+
     createHealthBar() {
-        //TODO
+        console.log('created', this.net.hp, this.baseHP, this.justCreated)
+        this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color });
+        this.hpBar = new THREE.Sprite(this.hpSpriteMaterial);;
+        this.hpBar.position.x = -1.75;
+        this.hpBar.position.y += 4;
+        // this.hpBar.scale.x = 3.5;
+        this.hpBar.scale.x = 3.5 * this.net.hp / this.baseHP;
+        this.hpBar.scale.y = 0.6;
+        this.hpBar.center.x = 0;
+        this.add(this.hpBar);
     }
 }
 
