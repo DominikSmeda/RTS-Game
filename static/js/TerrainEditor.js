@@ -225,9 +225,14 @@ class TerrainEditor extends THREE.Mesh {
         this.currentFunction = "None"
         this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
         game.createObject(this.addedObject)
-        this.addedObject.selected(false);
-        this.addedObject = null;
-        this.activeSelection = false;
+
+        setTimeout(() => {
+            game.scene.remove(this.addedObject)
+            this.addedObject.selected(false);
+            this.addedObject = null;
+            this.activeSelection = false;
+        }, 150);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+
 
     }
 
