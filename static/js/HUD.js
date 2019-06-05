@@ -1,5 +1,6 @@
 class HUD {
-    /* constructor() {
+    constructor(parent) {
+        this.parent = parent;
         this.createHUD();
     }
     get DOMElement() {
@@ -9,6 +10,10 @@ class HUD {
         return this.mainDiv;
     }
 
+    updateGold() {
+        this.goldElement.text('Gold: ' + Math.floor(this.parent.gold));
+    }
+
     createHUD() {
         this.mainDiv = $('<div class="hud">');
 
@@ -16,7 +21,7 @@ class HUD {
         var shopDiv = $('<div class="shop">'); // prawy dolny róg, okno z postaciami do stworzenia + złoto
         var infoDiv = $('<div class="info">'); // prawy górny róg, okno z różnymi informacjami
 
-        mainDiv.append(selectDiv)
+        this.mainDiv.append(selectDiv)
             .append(shopDiv)
             .append(infoDiv);
 
@@ -25,9 +30,19 @@ class HUD {
 
         // SHOP DIV
         this.shopContainer = $('<div class="container">');
-        shopDiv.append(this.shopContainer)
+        shopDiv.append(this.shopContainer);
+        for (let i = 0; i < this.parent.shop.length; i++) {
+            let el = this.parent.shop[i];
+            let tile = el.getShopjQueryElement();
+            tile.click(() => { el.buy() })
+            this.shopContainer.append(tile);
+
+        }
+        this.shopContainer.css({ width: 'calc(' + this.parent.shop.length + ' * var(--hud-shopHeight) + 2 * var(--hud-shopPadding))' })
+        this.goldElement = $('<div class="gold">');
+        shopDiv.append(this.goldElement);
 
         // INFO DIV
         // jeszcze nie obsługiwany
-    } */
+    }
 }

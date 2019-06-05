@@ -30,6 +30,8 @@ class GameObject extends WorldObject {
         //!ABY zmienic animacje this.action = NAZWA_ANIMACJI np. 'Walking' 
 
 
+        this.imgSrc = "assets/thumbnails/default.jpg"; //Źródło pliku obrazu, który będzie wyświetlany jako miniaturka
+        this.shopjQuery = null;
     }
 
     onDataUpdate() {
@@ -61,7 +63,12 @@ class GameObject extends WorldObject {
     buy() {
         if (game.gold > this.cost) {
             game.gold -= this.cost;
-            game.net.update({ id: game.playerID, type: 'gold', cost: this.cost })
+            game.net.update({
+                id: game.playerID,
+                type: 'gold',
+                cost: this.cost,
+                className: this.className,
+            })
             var obj = eval('new ' + this.net.className + '()');
             obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
             game.createObject(obj);
@@ -115,4 +122,19 @@ class GameObject extends WorldObject {
 
     }
     //..........
+    getShopjQueryElement() {
+        if (this.shopjQuery) return this.shopjQuery;
+        var mainDiv = this.shopjQuery = $('<div class="tile">');
+
+        var name = $('<div class="name">');
+        name.text(this.name);
+        var img = $('<img src="' + this.imgSrc + '">');
+        var cost = $('<div class="cost">');
+        cost.text(this.cost + 'g');
+
+        mainDiv.append(img)
+            .append(name)
+            .append(cost);
+        return mainDiv;
+    }
 }

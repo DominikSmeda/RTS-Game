@@ -5,6 +5,8 @@ class Game {
             characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
         };
         this.players = [];
+        this.length = 0;
+        this.totalGold = 0;
     }
 
     gameTick() {
