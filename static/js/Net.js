@@ -31,6 +31,20 @@ class Net {
         });
     }
 
+    getStats(callback) {
+        this.client.on('myStats', callback)
+        this.client.emit('myStats', {});
+    }
+
+    saveStats(nick) {
+        this.client.emit('saveStats', { name: nick });
+    }
+
+    getAllStats(callback) {
+        this.client.on('getStats', callback);
+        this.client.emit('getStats', {});
+    }
+
     // zmiana częstotliwości odpowiedzi serwera: patrz ./server_js/Settings.js
     send() {
         if (!this.toSend) return;

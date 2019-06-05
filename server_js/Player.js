@@ -1,9 +1,10 @@
 class Player {
-    constructor(game, client) {
+    constructor(game, client, dbFunc) {
         this.colors = [0x0000ff, 0xff0000, 0xffff00, 0x00ff00];
         this.connected = true;
         //this.playing = true;
         this.game = game;
+        this.dbFunc = dbFunc;
         console.log(client.id + ": connected");
         this.client = client;
         this.playerID = client.id;
@@ -51,12 +52,12 @@ class Player {
         this.client.on('saveStats', (data) => {
             //zapisuje statystyki gracza - trzeba przesłać nick gracza
             this.stats.name = data.name;
-            insertStats(this.stats);
+            this.dbFunc.insertStats(this.stats);
         });
         this.client.on('getStats', (data) => {
             //wysyła wszystkie statystyki z bazy
-            getStats((data) => {
-                client.emit('getStats', data);
+            this.dbFunc.getStats((data) => {
+                this.client.emit('getStats', data);
             });
         });
 
