@@ -48,7 +48,7 @@ class GameObject extends WorldObject {
         if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest && !this.net.destinationID && !this.net.attackMove && this.net.attackAnimTime < 0)
             this.findEnemyInRange();
         if (this.net.action != this.netCurrentAction) {
-            //console.log(this.mainModel)
+            console.log(this.net.action)
             this.netCurrentAction = this.net.action;
             if (this.netActions[this.net.action]) this.action = this.netActions[this.net.action];
         }
@@ -58,6 +58,7 @@ class GameObject extends WorldObject {
                 if (bu.net.id == this.net.destinationID) {
                     // tutaj możesz zrobić raycasta do budynku
                     // bu - obiekt klasy Building
+                    //to poniżej prócz break możesz usunąć
                     this.edited = true;
                     console.log(Math.max(bu.net.size, this.net.range))
                     if (Math.sqrt(

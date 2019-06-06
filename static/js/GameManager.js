@@ -15,6 +15,7 @@ class GameManager {
             characters: [],
             buildings: [],
         }
+        this.specialRender = {};
 
         this.playerID;
         this.playerColor;
@@ -78,6 +79,10 @@ class GameManager {
         const dt = this.clock.getDelta();
         for (let i = 0; i < this.objects.characters.length; i++) {
             this.objects.characters[i].onRender(dt);
+        }
+        for (let i = 0; i < Object.keys(this.specialRender).length; i++) {
+            const k = Object.keys(this.specialRender)[i];
+            this.specialRender[k].onRender(dt);
         }
     }
 

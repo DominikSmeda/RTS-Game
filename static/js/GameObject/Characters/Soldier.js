@@ -31,4 +31,9 @@ class Soldier extends Character {
 
 
     }
+
+    onDeathTimer() {
+        // wykonuje się tuż po onDeath
+        setTimeout(this.onDeathEnd.bind(this), 4000)
+    }
 }
