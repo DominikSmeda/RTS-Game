@@ -279,8 +279,6 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     selectMouseArea(startX, startZ, endX, endZ) {
-        console.log(endX);
-
         let start = new THREE.Vector3(startX, 0, startZ)
         let end = new THREE.Vector3(endX, 0, endZ)
         this.selectArea(start, 'Rectangle', end)

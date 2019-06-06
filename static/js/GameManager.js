@@ -1,4 +1,4 @@
-
+let spotLight
 //Gówna klasa gry. 
 class GameManager {
     constructor() {
@@ -52,7 +52,7 @@ class GameManager {
         //this.camera.lookAt(this.scene.position);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
-        let spotLight = new THREE.PointLight(0xffffff, 1);
+        spotLight = new THREE.PointLight(0xffffff, 1);
         spotLight.position.set(30, 50, 10);
         spotLight.castShadow = true;
         this.scene.add(spotLight);
