@@ -16,9 +16,6 @@ class Character extends GameObject {
         this.barHeightOffset = 1.3;
 
 
-        this.mixer;
-        this.actions = [];
-
     }
 
     // override - inny sposób wyliczania pozycji mesha!
@@ -59,6 +56,8 @@ class Character extends GameObject {
     onRender(delta) {
         super.onRender(delta); // gdyby coś się pojawiło !JHHSDHSDFSDFHSDFHSD nie przekazałes deltyyyyyyyyyyyyyyyyyyyyyyyy!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         this.calculatePosition(delta);
+
+        this.checkColision();
     }
 
     // prostsza funkcja do poruszania
@@ -66,7 +65,40 @@ class Character extends GameObject {
         this.edited = true;
         this.net.destination = [x, z];
         // return this.net;
+        console.log('m');
+
     }
 
+    checkColision() {
+        // console.log('ss');
 
+        var raycasterC = new THREE.Raycaster();
+
+        var ray = new THREE.Ray(this.position, this.mainModel.getWorldDirection(new THREE.Vector3(1, 1, 1)))
+        raycasterC.ray = ray
+        // console.log(game.objects.buildings);
+
+        var intersects = raycasterC.intersectObjects(game.objects.buildings, true);
+        // console.log(intersects);
+
+        if (intersects[0]) {
+
+            // console.log(intersects[0].distance) // odległość od vertex-a na wprost, zgodnie z kierunkiem ruchu
+            // console.log(intersects[0].point)
+            if (intersects[0].distance < 1) {
+                this.net.obstacle = true;
+            }
+        }
+
+    }
+
+    onDeath() {
+        console.log('dead');
+
+        // this.action = "Dying"
+        // this.mixer.addEventListener('finished', (e) => {
+        //     console.log(e);
+
+        // });
+    }
 }
