@@ -204,6 +204,7 @@ class SelectControl {
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5
             );
             this.selected[i].net.attackDest = null;
+            this.selected[i].net.destinationID = null;
             //);
         }
 

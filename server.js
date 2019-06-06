@@ -80,17 +80,20 @@ async function gameTick() {
 
             //ruch do celu
             if (el.attackAnimTime <= 0) { //gdy nie wykonuje ataku
-                if (el.destinationID ) {
+                if (el.destinationID) {
                     stop = el.range;
                     var dest = el.position;
+                    var f = true;
                     for (let i = 0; i < game.map.characters.length; i++) {
                         const el2 = game.map.characters[i];
                         //console.log(el2.id, el.destination)
                         if (el2.id == el.destinationID) {
                             dest = el2.position;
+                            f = false;
                             break;
                         }
                     }
+                    if (f) el.destinationID = null;
                 } else
                     var dest = el.destination;
                 //ruch
@@ -101,7 +104,7 @@ async function gameTick() {
                     el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
                     el.position[1] += r > 1 ? (dest[1] - el.position[1]) / r : (dest[1] - el.position[1]);
                 }
-                else{
+                else {
                     el.action = 'idle';
                 }
             }
