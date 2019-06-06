@@ -21,6 +21,7 @@ class GameObject extends WorldObject {
         this.net.attackAnimTime = 0;//aktualny pozostały czas stania w miejscu przeliczany przez serwer
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
+        this.net.closeEnough = false;
 
         this.net.action = null;
 
@@ -51,12 +52,23 @@ class GameObject extends WorldObject {
             this.netCurrentAction = this.net.action;
             if (this.netActions[this.net.action]) this.action = this.netActions[this.net.action];
         }
-        if (this.net.action != 'idle') {
-            var angle = Math.atan2(
-                this.net.position[0] - this.net.destination[0],
-                this.net.position[1] - this.net.destination[1]
-            )
-            this.mainModel.rotation.y = angle  - Math.PI; 
+        if (this.net.destinationType == 'buildings') {
+            for (let i = 0; i < game.objects.buildings.length; i++) {
+                const bu = game.objects.buildings[i];
+                if (bu.net.id == this.net.destinationID) {
+                    // tutaj możesz zrobić raycasta do budynku
+                    // bu - obiekt klasy Building
+                    this.edited = true;
+                    if (Math.sqrt(
+                        Math.pow(bu.net.position[0] - this.net.position[0], 2) +
+                        Math.pow(bu.net.position[1] - this.net.position[1], 2)
+                    ) < bu.net.size) {
+                        this.net.closeEnough = true;
+                    }else{
+                        this.net.closeEnough = false;
+                    }
+                }
+            }
         }
         /* this.mainModel.rotation.set(
 
@@ -110,7 +122,7 @@ class GameObject extends WorldObject {
 
     set action(actionName) {
         this.currentAction = this.actions[actionName];
-        if(!this.currentAction) return;
+        if (!this.currentAction) return;
         this.mixer.stopAllAction();
 
         this.currentAction.time = 0;

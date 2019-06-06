@@ -11,7 +11,6 @@ class Character extends GameObject {
         this.net.destinationID = null;
         this.net.destinationType = null;
         this.net.attackMove = false;
-        this.net.closeEnough = false;
 
 
         this.mixer;
@@ -36,7 +35,13 @@ class Character extends GameObject {
     }
     onDataUpdate() {
         super.onDataUpdate();
-
+        if (this.net.action != 'idle') {
+            var angle = Math.atan2(
+                this.net.position[0] - this.net.destination[0],
+                this.net.position[1] - this.net.destination[1]
+            )
+            this.mainModel.rotation.y = angle - Math.PI;
+        }
     }
     onGameTick() {
         super.onGameTick();

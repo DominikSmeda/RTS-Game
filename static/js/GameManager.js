@@ -152,6 +152,13 @@ class GameManager {
         }
     }
 
+    won(){
+        this.showMyStats();
+    }
+    lost(){
+        this.showMyStats();
+    }
+
 
     events() {
         $(document).on('contextmenu', (e) => {

@@ -148,8 +148,10 @@ async function gameTick() {
                                             const el5 = game.players[c];
                                             if (el5.playerID == pl) {
                                                 el5.lost();
+                                                console.log(el5.playerID + ': lost the game')
                                             } else {
                                                 el5.won();
+                                                console.log(el5.playerID + ': won the game')
                                             }
                                         }
                                         game.finished = true;

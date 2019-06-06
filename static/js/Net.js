@@ -23,6 +23,12 @@ class Net {
             Cookies.set('playerID', data.playerID, { path: '/' });
             this.parent.playerColor = data.playerColor;
         });
+        this.client.on("lost", (data, err) => {
+            this.parent.lost();
+        });
+        this.client.on("won", (data, err) => {
+            this.parent.won();
+        });
 
         // co 100ms serwer będzie wysyłał info ze zmianami
         this.client.on("gameTick", (data) => {
