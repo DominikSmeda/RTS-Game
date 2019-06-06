@@ -1,15 +1,15 @@
 
 class Base extends Building {
     constructor() {
-        let modelName = "tree1";
+        let modelName = "castle";
         super(modelName)
 
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
         this.brushName = "Square";
         this.brushSize = 3;
 
-        this.meshInitScale = 1;
-        this.assetsManagerInitScale = 1;
+        this.meshInitScale = 0.5;
+        this.assetsManagerInitScale = 0.09;
         this.init()
     }
 

@@ -14,8 +14,8 @@ class Item {
     }
 
     init() {
-         let i = new this.className();
-         console.log(i);
+        let i = new this.className();
+        console.log(i);
 
         this.createItemCanvas();
     }
@@ -29,7 +29,7 @@ class Item {
         renderer.setClearColor(0x000000, 0);
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        camera.position.set(3, 0.1, 0);
+        camera.position.set(0, 0.1, 3);
         camera.lookAt(scene.position)
         // var axesHelper = new THREE.AxesHelper(1000);
         // scene.add(axesHelper);
@@ -69,7 +69,7 @@ class AssetsManager {
         this.addItemToCategory(new Item(Rock), 'Nature');
         this.addItemToCategory(new Item(Soldier), 'Characters');
         // jak to zrobić?
-        //this.addItemToCategory(new Item(Base), 'Buildings');
+        this.addItemToCategory(new Item(Base), 'Buildings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)

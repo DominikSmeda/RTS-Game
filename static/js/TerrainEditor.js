@@ -247,6 +247,7 @@ class TerrainEditor extends THREE.Mesh {
     addObjectToTerrain() {
         this.currentFunction = "None"
         this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
+        this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
         game.createObject(this.addedObject)
 
         setTimeout(() => {
