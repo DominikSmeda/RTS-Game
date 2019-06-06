@@ -19,13 +19,29 @@
 
 /* SHOP */
 
-.hud .shop {
+.hud .shop, .hud .gold {
     --hud-shopBackground: yellow;
     --hud-shopPadding: 10px;
     --hud-shopHeight: 80px;
     /* left: 0; */
     /* bottom: calc(var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding)); */
 }
+
+/* TUTAJ ZMIEŃ */
+
+.hud .gold {
+    position: absolute;
+    background: #cccccc;
+    /* height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding)); */
+    padding: var(--hud-shopPadding);
+    overflow: hidden;
+    left: 0;
+    bottom: 0;
+    /* bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding))); */
+    /* bottom: var(--hud-vOffset); */
+}
+
+/* ZMIEŃ POWYŻEJ */
 
 .hud .shop .container {
     position: fixed;
@@ -66,15 +82,23 @@
     box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
 }
 
-.hud .shop .gold {
-    position: fixed;
-    background: #cccccc;
-    /* height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding)); */
-    padding: var(--hud-shopPadding);
-    /* overflow: hidden; */
-    left: 0;
-    bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding)));
-}
+/* .hud .shop .gold { */
+
+/* position: fixed; */
+
+/* background: #cccccc; */
+
+/* height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding)); */
+
+/* padding: var(--hud-shopPadding); */
+
+/* overflow: hidden; */
+
+/* left: 0; */
+
+/* bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding))); */
+
+/* } */
 
 /* INFO */
 
