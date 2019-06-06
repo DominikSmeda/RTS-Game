@@ -24,8 +24,8 @@ class Soldier extends Character {
         this.netActions = {
             walk:'Walking',
             attack: 'Attack1',
-            idle: null,
-            die: null,
+            idle: 'Soldier1',
+            die: 'Dying',
         }
     }
 }

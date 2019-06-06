@@ -3,10 +3,12 @@ class Game {
         this.map = {
             gold: {},
             characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
+            buildings: [],
         };
         this.players = [];
         this.length = 0;
         this.totalGold = 0;
+        this.finished = false;
     }
 
     gameTick() {

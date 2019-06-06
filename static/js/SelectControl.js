@@ -3,7 +3,7 @@ class SelectControl {
         this.parent = parent;
         this.camera = parent.camera;
         this.isPressed = parent.isPressed;
-        this.spacing = 5;
+        this.spacing = 2;
 
         this.raycaster = new THREE.Raycaster();
         this.mouseVector = new THREE.Vector2();
@@ -184,6 +184,7 @@ class SelectControl {
                     this.selected[i].net.attackDest = el.net.id;
                     this.selected[i].net.destination = el.net.position;
                     this.selected[i].net.destinationID = el.net.id;
+                    this.selected[i].net.destinationType = el.net.type;
                 }
                 return;
             }
@@ -208,6 +209,7 @@ class SelectControl {
             );
             this.selected[i].net.attackDest = null;
             this.selected[i].net.destinationID = null;
+            this.selected[i].net.destinationType = null;
             //);
         }
 

@@ -25,6 +25,15 @@ class Player {
         this.map = this.game.map;
         this.defineSocket();
     }
+    lost() {
+        //gdy przegra
+        //this.stats.moneyGained = 
+        this.client.emit("lost", {});
+    }
+    won() {
+        //gdy wygra
+        this.client.emit("won", {});
+    }
     reconnect(client) {
         this.client = client;
         this.defineSocket();

@@ -88,6 +88,7 @@ class WorldObject extends THREE.Object3D {
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
+            //console.log(this.justCreated)
             //if (this.net.owner == game.playerID) this.mine = true;
             this.createHealthBar();
             this.setMainModel();
@@ -167,7 +168,7 @@ class WorldObject extends THREE.Object3D {
     }
 
     createHealthBar() {
-        console.log('created', this.net.hp, this.baseHP, this.justCreated)
+        //console.log('created', this.net.hp, this.baseHP, this.justCreated)
         this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color });
         this.hpBar = new THREE.Sprite(this.hpSpriteMaterial);;
         this.hpBar.position.x = -1.5;

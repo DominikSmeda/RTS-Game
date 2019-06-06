@@ -9,7 +9,9 @@ class Character extends GameObject {
         this.net.type = 'characters';
         this.net.destination = [0, 0];
         this.net.destinationID = null;
+        this.net.destinationType = null;
         this.net.attackMove = false;
+        this.net.closeEnough = false;
 
 
         this.mixer;
