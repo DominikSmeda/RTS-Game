@@ -52,9 +52,9 @@ class CameraControl {
 
 
     wheel(e) {
-        e.originalEvent.deltaY > 0 ?
-            this.R *= e.originalEvent.deltaY * 0.012 * this.moveSpeed :
-            this.R /= e.originalEvent.deltaY * -0.012 * this.moveSpeed;
+        Math.sign(e.originalEvent.deltaY) > 0 ?
+            this.R *= 1.1 * this.moveSpeed :
+            this.R /= 1.1 * this.moveSpeed;
         this.refreshCamera();
         //console.log(this.R)
     }

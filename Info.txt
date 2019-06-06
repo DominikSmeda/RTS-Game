@@ -60,6 +60,9 @@ Stawianie jednostek
 >PPM obrót jednostki o 90 stopni zgodnie ze wskazowkami zegara
 >ESC wyjscie z trybu dodawania 
 
+PS: chciałbym, aby edytor nie wychodził z trybu dodawania tylko, jeśli
+jest trzymany klawisz shift - w innym przypadku po postawieniu jednostki
+automatycznie wychodzi z tego trybu
 
  ----------------------------------------------------------
  Aktualności:

@@ -40,10 +40,11 @@ class SelectControl {
 
     // Wybieranie jednostek
     beginSelection(e) {
-        this.c_selBegin = [e.offsetX, e.offsetY];
+        e = e.originalEvent;
+        this.c_selBegin = [e.layerX, e.layerY];
 
-        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter1 = this.raycaster.intersectObject(this.clickPlane);
         if (inter1.length < 1) return;
@@ -51,9 +52,10 @@ class SelectControl {
     }
 
     moveSelection(e) { // interaktywne zaznaczanie itp.
+        e = e.originalEvent;
         if (this.selBegin) {
-            this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-            this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+            this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+            this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
             this.raycaster.setFromCamera(this.mouseVector, this.camera);
             var inter2 = this.raycaster.intersectObject(this.clickPlane);
             if (inter2.length < 1) return;
@@ -75,6 +77,7 @@ class SelectControl {
     }
 
     endSelection(e) {
+        e = e.originalEvent;
         if (!this.selBegin) return;
         this.parent.mainTerrain.deselectArea();
         console.log('ENDDD');
@@ -90,10 +93,10 @@ class SelectControl {
             add = false;
             this.selected = [];
         }
-        if (Math.abs(this.c_selBegin[0] - e.offsetX) < 3 && Math.abs(this.c_selBegin[1] - e.offsetY) < 3) {
+        if (Math.abs(this.c_selBegin[0] - e.layerX) < 3 && Math.abs(this.c_selBegin[1] - e.layerY) < 3) {
             //pojedyncze kliknięcie
-            this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-            this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+            this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+            this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
             this.raycaster.setFromCamera(this.mouseVector, this.camera);
             var inter3 = this.raycaster.intersectObjects(this.parent.objects.characters, true);
             if (inter3.length < 1) return;
@@ -107,13 +110,13 @@ class SelectControl {
             return;
         }
 
-        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter2 = this.raycaster.intersectObject(this.clickPlane);
         if (inter2.length < 1) return;
 
-        /* if (Math.abs(this.selBegin[0] - e.offsetX) < 3 && Math.abs(this.selBegin[1] - e.offsetY) < 3) {
+        /* if (Math.abs(this.selBegin[0] - e.layerX) < 3 && Math.abs(this.selBegin[1] - e.layerY) < 3) {
             //pojedyncze kliknięcie
             var points = [
                 inter2[0].point.x - 2,
@@ -166,13 +169,18 @@ class SelectControl {
 
 
     issueAction(e) {
+        e = e.originalEvent;
         if (this.selected.length < 1) return;
 
         // czy jest kliknięty wróg
-        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter1 = this.raycaster.intersectObjects(this.parent.objects.characters, true);
+        if (inter1.length < 1) {
+            inter1 = this.raycaster.intersectObjects(this.parent.objects.buildings, true);
+            //if (inter3.length < 1) return;
+        }
 
         if (inter1.length > 0) {
             var el = inter1[0].object.parent;
@@ -190,8 +198,8 @@ class SelectControl {
             }
         }
         // 
-        this.mouseVector.x = (e.offsetX / this.x) * 2 - 1;
-        this.mouseVector.y = -(e.offsetY / this.y) * 2 + 1;
+        this.mouseVector.x = (e.layerX / this.x) * 2 - 1;
+        this.mouseVector.y = -(e.layerY / this.y) * 2 + 1;
         this.raycaster.setFromCamera(this.mouseVector, this.camera);
         var inter1 = this.raycaster.intersectObject(this.clickPlane);
         if (inter1.length < 1) return;
@@ -203,10 +211,12 @@ class SelectControl {
             //this.parent.net.move(
             this.selected[i].edited = true;
             if (this.isPressed.shift) this.selected[i].net.attackMove = true;
-            this.selected[i].move(
+            this.selected[i].net.destination = [
                 pos[0] + i % l * this.spacing - off - 0.5,
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5
-            );
+            ];
+            //console.log(this.selected[i].net.destination, e)
+            //tmp[0][1]=3;
             this.selected[i].net.attackDest = null;
             this.selected[i].net.destinationID = null;
             this.selected[i].net.destinationType = null;

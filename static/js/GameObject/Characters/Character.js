@@ -12,6 +12,9 @@ class Character extends GameObject {
         this.net.destinationType = null;
         this.net.attackMove = false;
 
+        this.barScale = 0.5;
+        this.barHeightOffset = 1.3;
+
 
         this.mixer;
         this.actions = [];

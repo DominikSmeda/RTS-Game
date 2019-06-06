@@ -49,6 +49,15 @@ class WorldObject extends THREE.Object3D {
         this.name = 'Entity'; //Nazwa jednostki wyświetlana w grze
         this.cost = 10; //koszt jednostki
 
+        this.barHeightOffset = 2;
+        this.barScale = 1;
+
+        // this.assetsManagerData = {
+        //     name: 'default',    // JAKBYSMY TAK ZROBILI TO MOGLBYM WYSWIETLAC WSZYSKIW DANE KTORE BY SIE TU WPISALO
+        //     cost: 10,
+        //     blabla: 0,
+        //     blabla2: 0,
+        // }
         this.assetsManagerData = {//inne dane w assets Managerze
             blabla: 0,
             blabla2: 0,
@@ -60,6 +69,22 @@ class WorldObject extends THREE.Object3D {
         this.mainModel;//głowny model
 
     }
+
+    // get name() {
+    //     return this.assetsManagerData.name;
+    // }
+    // set name(v) {
+    //     this.assetsManagerData.name = v;
+    // }
+
+    // get cost() {
+    //     return this.assetsManagerData.name;
+    // }
+    // set cost(v) {
+    //     this.assetsManagerData.name = v;
+    // }
+
+
     get netPosition() {//
         return this.net.position;
     }
@@ -94,8 +119,8 @@ class WorldObject extends THREE.Object3D {
         this.calculatePosition();
         if (this.justCreated) {
             this.rotation.y = this.net.rotation;
-            this.createHealthBar();
             this.setMainModel();
+            this.createHealthBar();
         }
         if (this.net.hp <= 0 && !this.dead) {
             this.dead = true;
@@ -167,20 +192,27 @@ class WorldObject extends THREE.Object3D {
     }
 
     updateHealthBar() {
-        this.hpBar.scale.x = 3 * this.net.hp / this.baseHP;
+        this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
         //this.hpBar.position.y += 0.1;
     }
 
     createHealthBar() {
         //console.log('created', this.net.hp, this.baseHP, this.justCreated)
-        this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color });
+        this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color, transparent: true, opacity: 0.6 });
         this.hpBar = new THREE.Sprite(this.hpSpriteMaterial);;
-        this.hpBar.position.x = -1.5;
-        this.hpBar.position.y += 2;
+
+        //this.hpBar.position.x = -1.5 * this.barScale;
+        // this.hpBar.position.y += this.barHeightOffset;
+
+        var boxSize = new THREE.Box3().setFromObject(this.mainModel).getSize()
+        this.hpBar.position.x = 0//boxSize.x / 32;
+        //this.hpBar.position.z += boxSize.z / 2;
+        this.hpBar.position.y = boxSize.y;
+
         // this.hpBar.scale.x = 3.5;
-        this.hpBar.scale.x = 3 * this.net.hp / this.baseHP;
-        this.hpBar.scale.y = 0.4;
-        this.hpBar.center.x = 0;
+        this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
+        this.hpBar.scale.y = this.barScale * 0.4;
+        //this.hpBar.center.x = 0;
         this.add(this.hpBar);
     }
 }

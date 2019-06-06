@@ -3,6 +3,10 @@ class Palisade extends Building {
         let modelName = "palisade";
         super(modelName)
 
+        this.net.size = 0;
+        this.barScale = 0.8;
+        this.barHeightOffset = 2.5;
+
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
         this.brushName = "Square";
         this.brushSize = 9;

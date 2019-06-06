@@ -112,7 +112,7 @@ async function gameTick() {
                     var dest = el.destination;
                 //ruch
                 var r = (Math.sqrt(Math.pow(dest[0] - el.position[0], 2) + Math.pow(dest[1] - el.position[1], 2))); //od teraz px na sekundę
-                if (r - stop > 0 && !el.obstacle) {
+                if (r - stop > 0 && !el.obstacle && !el.closeEnough) {
                     el.action = 'walk';
                     r *= 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength);
                     el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
@@ -143,19 +143,41 @@ async function gameTick() {
                                     // jednostka nie żyje
                                     if (el2.hp <= 0) {
                                         // KONIEC GRY
-                                        var pl = el2.owner;
-                                        for (let c = 0; c < game.players.length; c++) {
-                                            const el5 = game.players[c];
-                                            if (el5.playerID == pl) {
-                                                el5.lost();
-                                                console.log(el5.playerID + ': lost the game')
-                                            } else {
-                                                el5.won();
-                                                console.log(el5.playerID + ': won the game')
+                                        if (el2.base) {
+                                            var pl = el2.owner;
+                                            for (let c = 0; c < game.players.length; c++) {
+                                                const el5 = game.players[c];
+                                                if (el5.playerID == pl) {
+                                                    el5.lost();
+                                                    console.log(el5.playerID + ': lost the game')
+                                                } else {
+                                                    el5.won();
+                                                    console.log(el5.playerID + ': won the game')
+                                                }
+                                            }
+                                            game.finished = true;
+                                            return;
+                                        }
+                                        for (let k = 0; k < game.players.length; k++) {
+                                            let p = game.players[k];
+                                            if (p.playerID == el.owner) {
+                                                p.stats.unitsKilled._total++;
+                                                if (!p.stats.unitsKilled[el2.className]) p.stats.unitsKilled[el2.className] = 1;
+                                                else p.stats.unitsKilled[el2.className]++;
+                                                break;
                                             }
                                         }
-                                        game.finished = true;
-                                        return;
+                                        el2.deleted = true;
+                                        el2.ttl = 10;
+                                        el2.action = 'die';
+                                        for (let k = 0; k < game.map.characters.length; k++) {
+                                            if (el2.id == game.map.characters[k].attackDest) {
+                                                let el3 = game.map.characters[k];
+                                                el3.attackDest = null;
+                                                el3.destination = el3.position;
+                                                el3.destinationID = null;
+                                            }
+                                        }
                                     }
                                 }
                                 break;

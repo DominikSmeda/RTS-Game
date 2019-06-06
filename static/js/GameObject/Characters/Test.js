@@ -3,5 +3,6 @@ class Test extends Character {
         super("tree1");
         this.net.speed = 25;
         this.net.damage = 10;
+        this.name = "Ent";
     }
 }

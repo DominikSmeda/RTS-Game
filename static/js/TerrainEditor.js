@@ -311,8 +311,8 @@ class TerrainEditor extends THREE.Mesh {
                 this.addedObject.setMainModel();
                 this.addedObject.rotation.y = this.currentRotation;
             }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
-
         }
+
     }
 
     setObjectOnArea(positionVec) {
