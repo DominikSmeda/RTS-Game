@@ -152,10 +152,10 @@ class GameManager {
         }
     }
 
-    won(){
+    won() {
         this.showMyStats();
     }
-    lost(){
+    lost() {
         this.showMyStats();
     }
 
@@ -163,7 +163,9 @@ class GameManager {
     events() {
         $(document).on('contextmenu', (e) => {
             e.preventDefault();
+            this.mainTerrain.contextmenu();
         })
+
         $('#canvas').on('mousedown', (e) => {
             e.preventDefault();
             this.isPressed.mousedown(e);

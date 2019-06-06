@@ -55,6 +55,11 @@ Komendy jednostek:
  > Shift + PPM na mapę - przemieszczenie z atakiem przeciwników w pobliżu
  ! jednostki same atakują, gdy stoją i nic nie robią
 
+Stawianie jednostek
+>LPM wybranie jednostki, postawienie jednostki na terenie
+>PPM obrót jednostki o 90 stopni zgodnie ze wskazowkami zegara
+>ESC wyjscie z trybu dodawania 
+
 
  ----------------------------------------------------------
  Aktualności:
