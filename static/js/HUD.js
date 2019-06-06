@@ -121,6 +121,7 @@ class HUD {
             this.showStatistics(data);
             return;
         }
+        data = data.reverse();
 
         var ind = 0;
         console.log(data)
