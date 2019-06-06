@@ -104,6 +104,7 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     contextmenu() {
+        if (this.currentFunction != "AddWorldObject") return;
         this.currentRotation -= Math.PI / 2;
         this.addedObject.rotation.y = this.currentRotation;
     }

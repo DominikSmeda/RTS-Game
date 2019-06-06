@@ -5,7 +5,7 @@ class Tower extends Building {
 
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
         this.brushName = "Square";
-        this.brushSize = 9;
+        this.brushSize = 5;
 
         this.meshInitScale = 0.5;
         this.assetsManagerInitScale = 0.09;
