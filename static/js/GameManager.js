@@ -52,14 +52,37 @@ class GameManager {
         //this.camera.position.set(0, 500, 40)
         //this.camera.lookAt(this.scene.position);
 
-        this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
-        spotLight = new THREE.PointLight(0xffffff, 1);
-        spotLight.position.set(30, 50, 10);
+        this.scene.add(new THREE.AmbientLight(0xffffff, 0.4))
+        spotLight = new THREE.DirectionalLight(0xffffff, 0.1);
+        spotLight.position.set(0, 100, 60);
         spotLight.castShadow = true;
         this.scene.add(spotLight);
 
+        let pointLight = new THREE.PointLight(0xffffff, 0.6);
+        pointLight.position.set(0, 350, 0);
+        pointLight.castShadow = true;
+        this.scene.add(pointLight);
+
         this.mainTerrain = new TerrainEditor(this.scene);
         this.scene.add(this.mainTerrain);
+
+
+        let farTerrain = new THREE.Mesh(new THREE.PlaneGeometry(2500, 2500, 1, 1), SETTINGS.materials.terrain1.clone());
+        farTerrain.material.color.setHex(0x777777);
+        farTerrain.position.y -= 1;
+        farTerrain.rotation.x -= Math.PI / 2
+        this.scene.add(farTerrain)
+
+        var skyGeo = new THREE.SphereGeometry(1000, 25, 25);
+
+        var loader = new THREE.TextureLoader();
+        let texture = loader.load("assets/textures/sky.jpg");
+        var material = new THREE.MeshPhongMaterial({
+            map: texture,
+        });
+        var sky = new THREE.Mesh(skyGeo, material);
+        sky.material.side = THREE.BackSide;
+        this.scene.add(sky);
 
         this.assetsManager = new AssetsManager();
         this.events();
