@@ -103,6 +103,7 @@ class GameObject extends WorldObject {
         super.onRender(delta);
 
         if (this.mixer) this.mixer.update(delta);
+
     }
 
 
