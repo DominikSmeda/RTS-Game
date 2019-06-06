@@ -50,22 +50,10 @@ class Character extends GameObject {
 
     // prostsza funkcja do poruszania
     move(x, z) {
-        this.rotate(x, z)
-        // console.log('asds');
-        // this.rotation.y += Math.PI / 10
-
         this.edited = true;
         this.net.destination = [x, z];
         // return this.net;
     }
 
-    rotate(x, z) {
-        var angle = Math.atan2(
-            this.position.x - x,
-            this.position.z - z
-        )
 
-        this.mainModel.rotation.y = angle + Math.PI
-
-    }
 }
