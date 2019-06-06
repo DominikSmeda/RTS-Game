@@ -32,6 +32,12 @@ var MODELS = {
         model: null,
         animations: null,
         rawMesh: null
+    },
+    castle: {
+        type: 'fbx',
+        path: MODELS_PATH + 'buildings/' + 'Castle/',
+        modelSrc: 'Castle_Part_10',
+        model: null
     }
 }
 
