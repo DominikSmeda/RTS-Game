@@ -64,7 +64,7 @@ class GameObject extends WorldObject {
                         Math.pow(bu.net.position[1] - this.net.position[1], 2)
                     ) < bu.net.size) {
                         this.net.closeEnough = true;
-                    }else{
+                    } else {
                         this.net.closeEnough = false;
                     }
                 }
@@ -105,10 +105,12 @@ class GameObject extends WorldObject {
                 cost: this.cost,
                 className: this.className,
             })
-            var obj = eval('new ' + this.net.className + '()');
-            obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
-            game.createObject(obj);
+            // var obj = eval('new ' + this.net.className + '()');
+            // obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
+            game.createObject(this);
+            return true;
         }
+        return false;
     }
 
     onRender(delta) {

@@ -6,6 +6,7 @@ class Item {
             name: name
         }
         this.canvasElement;
+        this.domElement;
         this.canvasSize = {
             width: 100,
             height: 100
@@ -14,13 +15,13 @@ class Item {
     }
 
     init() {
-        let i = new this.className();
-        console.log(i);
 
-        this.createItemCanvas();
+        this.domElement = $('<div class="item-container">');
+        this.createDomElement();
+
     }
 
-    createItemCanvas() {
+    createDomElement() {
         let scene = new THREE.Scene();
         let camera = new THREE.PerspectiveCamera(80, this.canvasSize.width / this.canvasSize.height, 0.1, 10000);
 
@@ -29,8 +30,10 @@ class Item {
         renderer.setClearColor(0x000000, 0);
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        camera.position.set(0, 0.1, 3);
-        camera.lookAt(scene.position)
+        camera.position.set(0, 0.2, 3);
+        let spos = scene.position.clone();
+        spos.y += 0.6
+        camera.lookAt(spos)
         // var axesHelper = new THREE.AxesHelper(1000);
         // scene.add(axesHelper);
 
@@ -47,7 +50,21 @@ class Item {
         this.canvasElement.onclick = (e) => {
             game.mainTerrain.startAddObjectFunction(this.className);
         }
+        this.domElement.append(this.canvasElement)
 
+        let infoDiv = $('<div class="information">')
+        for (let [key, value] of Object.entries(mesh.assetsManagerData)) {
+            infoDiv.html(infoDiv.html() + `<b>${key}</b>: ${value}<br/>`)
+        }
+        this.domElement.append(infoDiv);
+
+        let goldDiv = $('<div class="gold">')
+        goldDiv.text(mesh.cost + 'g')
+        this.domElement.append(goldDiv)
+
+        let nameDiv = $('<div class="name">')
+        nameDiv.text(mesh.name)
+        this.domElement.append(nameDiv)
     }
 }
 
@@ -132,7 +149,7 @@ class AssetsManager {
         catItemsDiv.empty();
 
         for (let item of items) {
-            catItemsDiv.append(item.canvasElement);
+            catItemsDiv.append(item.domElement);
         }
 
 

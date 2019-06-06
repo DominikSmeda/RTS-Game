@@ -45,9 +45,9 @@ class GameManager {
         this.selectControl = new SelectControl(this);
         document.getElementById('canvas').appendChild(this.scene.canvas);
 
-        var axesHelper = new THREE.AxesHelper(1000);
+        // var axesHelper = new THREE.AxesHelper(1000);
 
-        this.scene.add(axesHelper);
+        // this.scene.add(axesHelper);
         //this.camera.position.set(0, 500, 40)
         //this.camera.lookAt(this.scene.position);
 
@@ -205,7 +205,7 @@ class GameManager {
             this.isPressed.mousemove(e);
 
             let dt = Date.now() - mouseMovelastUpdate;
-            if (dt > 20) {
+            if (dt > 30) {
                 mouseMovelastUpdate = Date.now();
 
 

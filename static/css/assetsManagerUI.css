@@ -3,7 +3,7 @@
     position: absolute;
     bottom:0;
     width: 50vw;
-    height: 145px;
+    height: 150px;
     background: rgba(223, 223, 223, 0.856);
     right:0;
     z-index: 10;
@@ -32,9 +32,16 @@
     overflow-y: hidden;
     overflow-x: scroll;
     min-height: 120px;
+    font-weight: 800;
 }
 
 #assetsManager #categories-items .item{
+
+}
+
+#assetsManager #categories-items .item-container{
+    display: inline-block;
+    position: relative;
     cursor: pointer;
     margin-right: 10px;
     border-radius: 5px;
@@ -42,12 +49,47 @@
     background: rgba(240, 240, 240, 0.856);
 }
 
-#assetsManager #categories-items .item:hover{
-    cursor: pointer;
-    margin-right: 10px;
-    border-radius: 5px;
-    overflow: hidden;
+#assetsManager #categories-items .item-container:hover{
     background: rgba(22, 112, 214, 0.856);
 }
+
+#assetsManager #categories-items .information{
+    position: absolute;
+    width:100%;
+    height: 35px;
+    background: rgba(0, 0, 0, 0.746);
+    color:white;
+    bottom:0;
+    z-index: 30;
+    font-size:10px;
+    padding: 5px;
+}   
+
+#assetsManager #categories-items .gold{
+    position: absolute;
+    width:100%;
+    height: 10px;
+    color:rgb(209, 189, 6);
+    top:0;
+    right:0;
+    text-align: right;
+    z-index: 30;
+    padding: 2px;
+    font-weight: 800;
+}   
+
+#assetsManager #categories-items .name{
+    position: absolute;
+    width:100%;
+    height: 10px;
+    color: black;
+    top:0;
+    left:0;
+    text-align: left;
+    z-index: 30;
+    padding: 2px;
+    font-weight: 800;
+    font-size:14px;
+} 
 
 
