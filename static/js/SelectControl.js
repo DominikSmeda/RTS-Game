@@ -3,7 +3,7 @@ class SelectControl {
         this.parent = parent;
         this.camera = parent.camera;
         this.isPressed = parent.isPressed;
-        this.spacing = 5;
+        this.spacing = 2;
 
         this.raycaster = new THREE.Raycaster();
         this.mouseVector = new THREE.Vector2();

@@ -53,8 +53,8 @@ class CameraControl {
 
     wheel(e) {
         e.originalEvent.deltaY > 0 ?
-            this.R *= e.originalEvent.deltaY * 0.2 * this.moveSpeed :
-            this.R /= e.originalEvent.deltaY * -0.2 * this.moveSpeed;
+            this.R *= e.originalEvent.deltaY * 0.012 * this.moveSpeed :
+            this.R /= e.originalEvent.deltaY * -0.012 * this.moveSpeed;
         this.refreshCamera();
         console.log(this.R)
     }
