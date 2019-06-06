@@ -5,7 +5,7 @@ class Building extends GameObject {
         super(modelName)//Poprawione
         this.net.type = "buildings";
         this.net.size = 1.2;
-        this.barScale = 4;
+        this.barScale = 1.5;
         this.barHeightOffset = 5;
     }
 }

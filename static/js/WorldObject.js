@@ -93,8 +93,8 @@ class WorldObject extends THREE.Object3D {
         if (this.justCreated) {
             //console.log(this.justCreated)
             //if (this.net.owner == game.playerID) this.mine = true;
-            this.createHealthBar();
             this.setMainModel();
+            this.createHealthBar();
         }
         if (this.net.hp <= 0 && !this.dead) {
             this.dead = true;
@@ -174,12 +174,19 @@ class WorldObject extends THREE.Object3D {
         //console.log('created', this.net.hp, this.baseHP, this.justCreated)
         this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color, transparent: true, opacity: 0.6 });
         this.hpBar = new THREE.Sprite(this.hpSpriteMaterial);;
-        this.hpBar.position.x = -1.5 * this.barScale;
-        this.hpBar.position.y += this.barHeightOffset;
+
+        //this.hpBar.position.x = -1.5 * this.barScale;
+        // this.hpBar.position.y += this.barHeightOffset;
+
+        var boxSize = new THREE.Box3().setFromObject(this.mainModel).getSize()
+        this.hpBar.position.x = 0//boxSize.x / 32;
+        //this.hpBar.position.z += boxSize.z / 2;
+        this.hpBar.position.y = boxSize.y;
+
         // this.hpBar.scale.x = 3.5;
         this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
         this.hpBar.scale.y = this.barScale * 0.4;
-        this.hpBar.center.x = 0;
+        //this.hpBar.center.x = 0;
         this.add(this.hpBar);
     }
 }

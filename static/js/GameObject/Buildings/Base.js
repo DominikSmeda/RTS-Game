@@ -4,6 +4,8 @@ class Base extends Building {
         let modelName = "castle";
         super(modelName)
 
+        this.barScale = 3;
+        this.barHeightOffset = 4.8;
         this.net.size = 10;
         this.net.base = true;
         this.name = "Baza";
