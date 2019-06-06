@@ -146,23 +146,14 @@ class WorldObject extends THREE.Object3D {
 
     selected(bool) {//pokazanie ze obiekt zostal zaznaczony 
         if (bool) {
-            // this.updateMatrix()
-            // this.selectedMesh = this.mainModel.clone();
-            this.selectedMesh = this.mainModel.children[0].clone();
-            // this.selectedMesh.scale.set(1, 1, 1)
-            // console.log(this.selectedMesh);
-            // this.selectedMesh.scale.copy(this.selectedMesh.scale)
-            // this.selectedMesh.scale.set(1., 1.05, 1.5);
-            // this.selectedMesh.scale.set(this.meshInitScale, this.meshInitScale, this.meshInitScale)
-            //narazie nie równe ma pozycje ale to prowdopodobnie przez przsuniety model pracuje nad tym...
-            this.selectedMesh.material = SETTINGS.materials.selectedObject;
-            // console.log(this.selectedMesh.scale.copy(this.scale));
-            this.selectedMesh.scale.y += 0.0005;
-            this.selectedMesh.scale.x += 0.0005;
-            this.selectedMesh.scale.z += 0.0005;
 
-            //console.log(this.selectedMesh);
+            var box = new THREE.Box3().setFromObject(this.mainModel);
+            let x = box.getSize().x;
+            var geometry = new THREE.RingGeometry(x * 0.7, x * 1.2, 6);
 
+            this.selectedMesh = new THREE.Mesh(geometry, SETTINGS.materials.selectedObject);
+            this.selectedMesh.rotation.x = Math.PI / 2
+            this.selectedMesh.position.y += 0.001;
             this.add(this.selectedMesh);
         }
         else {

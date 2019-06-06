@@ -19,10 +19,8 @@ var SETTINGS = {
         }),
         selectedObject: new THREE.MeshBasicMaterial({
             color: 0xffff00,
-            wireframe: false,
-            transparent: true,
-            opacity: 0.3
-        }),
+            side: THREE.DoubleSide
+        })
     },
     unitSpeed: 0.01 * 100 /* * 100 - bez ticków! */, //ma być takie samo na serwerze
     gameTickLength: 100,
