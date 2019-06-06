@@ -8,6 +8,7 @@ class Character extends GameObject {
         this.net.speed = 10; //piksele na /tick/ -> na sekundę
         this.net.type = 'characters';
         this.net.destination = [0, 0];
+        this.net.destinationID = null;
         this.net.attackMove = false;
 
 

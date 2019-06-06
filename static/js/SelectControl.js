@@ -182,7 +182,8 @@ class SelectControl {
                     console.log('attack', el.net.owner, this.parent.playerID)
                     this.selected[i].edited = true;
                     this.selected[i].net.attackDest = el.net.id;
-                    this.selected[i].net.destination = el.net.id;
+                    this.selected[i].net.destination = el.net.position;
+                    this.selected[i].net.destinationID = el.net.id;
                 }
                 return;
             }
