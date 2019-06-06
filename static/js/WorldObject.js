@@ -41,6 +41,7 @@ class WorldObject extends THREE.Object3D {
             canBeDamaged: false,
             color: 0x444444,
             hp: 100,
+            rotation: 0
         }
         this.baseHP = 100;
         this.HP = 100; // Nie musisz ustawiać wszystkich HP ręcznie - wywołaj setter HP!
@@ -51,6 +52,12 @@ class WorldObject extends THREE.Object3D {
         this.barHeightOffset = 2;
         this.barScale = 1;
 
+        // this.assetsManagerData={
+        //     name: 0,    // JAKBYSMY TAK ZROBILI TO MOGLBYM WYSWIETLAC WSZYSKIW DANE KTORE BY SIE TU WPISALO
+        //     cost: 0,
+        //     blabla:0,
+        //     blabla2:0,
+        // }
 
         this.meshInitScale = 1;//skala modelu w swiecie
         this.assetsManagerInitScale = 1;//skala modelu w Ass
@@ -91,8 +98,14 @@ class WorldObject extends THREE.Object3D {
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
+            console.log('just');
+
             //console.log(this.justCreated)
             //if (this.net.owner == game.playerID) this.mine = true;
+            console.log(this.net.rotation);
+
+            this.rotation.y = this.net.rotation;
+            this.createHealthBar();
             this.setMainModel();
             this.createHealthBar();
         }

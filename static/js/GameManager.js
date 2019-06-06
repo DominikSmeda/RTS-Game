@@ -152,10 +152,10 @@ class GameManager {
         }
     }
 
-    won(){
+    won() {
         this.showMyStats();
     }
-    lost(){
+    lost() {
         this.showMyStats();
     }
 
@@ -163,7 +163,9 @@ class GameManager {
     events() {
         $(document).on('contextmenu', (e) => {
             e.preventDefault();
+            this.mainTerrain.contextmenu();
         })
+
         $('#canvas').on('mousedown', (e) => {
             e.preventDefault();
             this.isPressed.mousedown(e);
@@ -197,23 +199,34 @@ class GameManager {
             this.selectControl.mouseup(e);
         })
 
+
+        let mouseMovelastUpdate = Date.now();
         $('#canvas').on('mousemove', (e) => {
             this.isPressed.mousemove(e);
-            var raycaster = new THREE.Raycaster();
-            var mouseVector = new THREE.Vector2();
 
-            mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
-            mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
-            raycaster.setFromCamera(mouseVector, this.camera);
+            let dt = Date.now() - mouseMovelastUpdate;
+            if (dt > 20) {
+                mouseMovelastUpdate = Date.now();
 
-            var intersects = raycaster.intersectObjects([this.mainTerrain], false);
 
-            if (intersects.length > 0) {
-                if (intersects[0].object instanceof TerrainEditor) {
-                    intersects[0].object.mouseMove(intersects[0].point);
+                var raycaster = new THREE.Raycaster();
+                var mouseVector = new THREE.Vector2();
+
+                mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
+                mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
+                raycaster.setFromCamera(mouseVector, this.camera);
+
+                var intersects = raycaster.intersectObjects([this.mainTerrain], false);
+
+                if (intersects.length > 0) {
+                    if (intersects[0].object instanceof TerrainEditor) {
+                        intersects[0].object.mouseMove(intersects[0].point);
+                    }
+
                 }
-
             }
+
+
             this.cameraControl.mousemove(e);
             this.selectControl.mousemove(e);
         })

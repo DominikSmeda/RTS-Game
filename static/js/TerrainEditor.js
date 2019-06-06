@@ -46,7 +46,7 @@ class TerrainEditor extends THREE.Mesh {
 
         this.addedObject = null;
         this.addedObjectClass = null;
-
+        this.currentRotation = 0;
         this.activeSelection;
         this.currentFunction = "None";
         this.init()
@@ -65,13 +65,16 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     startAddObjectFunction(jsClass) {
+        this.currentRotation = 0;
         this.addedObjectClass = jsClass;
         if (this.addedObject) {
             this.scene.remove(this.addedObject)
         }
         this.currentFunction = "AddWorldObject";
         this.addedObject = new this.addedObjectClass();
+        this.addedObject.rotation.y = this.currentRotation;
         this.addedObject.setMainModel();
+
         // this.addedObject.selected(true);
     }
 
@@ -98,6 +101,12 @@ class TerrainEditor extends THREE.Mesh {
             this.setObjectOnArea(positionVec);
             this.scene.add(this.addedObject)
         }
+    }
+
+    contextmenu() {
+        if (this.currentFunction != "AddWorldObject") return;
+        this.currentRotation -= Math.PI / 2;
+        this.addedObject.rotation.y = this.currentRotation;
     }
 
     adjustHeightByPoint(centerVec) {//mozna uzyc podczas klikniecia argument to intersects[0].point
@@ -276,6 +285,7 @@ class TerrainEditor extends THREE.Mesh {
     addObjectToTerrain() {
         this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
         this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
+        this.addedObject.net.rotation = this.addedObject.rotation.y;
         game.createObject(this.addedObject)
 
         setTimeout(() => {
@@ -285,6 +295,7 @@ class TerrainEditor extends THREE.Mesh {
             this.activeSelection = false;
             this.addedObject = new this.addedObjectClass();
             this.addedObject.setMainModel();
+            this.addedObject.rotation.y = this.currentRotation;
         }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
 
 
@@ -300,6 +311,7 @@ class TerrainEditor extends THREE.Mesh {
         $(window).on('keydown', (e) => {
             if (e.code == "Escape") {
                 this.currentFunction = "None";
+                this.currentRotation = 0;
                 this.activeSelection = false;
                 if (this.addedObject) {
                     this.scene.remove(this.addedObject)
