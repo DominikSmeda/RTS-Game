@@ -3,7 +3,7 @@ class Palisade extends Building {
         let modelName = "palisade";
         super(modelName)
 
-        this.net.size = 0;
+        this.net.size = 3;
         this.barScale = 0.8;
         this.barHeightOffset = 2.5;
 

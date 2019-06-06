@@ -215,6 +215,7 @@ class SelectControl {
                 pos[0] + i % l * this.spacing - off - 0.5,
                 pos[1] + parseInt(i / l) * this.spacing - off + 0.5
             ];
+            console.log(this.selected[i].net)
             //tmp[0][1]=3;
             this.selected[i].net.attackDest = null;
             this.selected[i].net.destinationID = null;
