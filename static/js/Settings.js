@@ -20,6 +20,12 @@ var SETTINGS = {
         selectedObject: new THREE.MeshBasicMaterial({
             color: 0xffff00,
             side: THREE.DoubleSide
+        }),
+        cantSelect: new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            wireframe: false,
+            transparent: true,
+            opacity: 0.5
         })
     },
     unitSpeed: 0.01 * 100 /* * 100 - bez ticków! */, //ma być takie samo na serwerze

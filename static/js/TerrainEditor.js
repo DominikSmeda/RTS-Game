@@ -101,6 +101,13 @@ class TerrainEditor extends THREE.Mesh {
             this.selectArea(positionVec, this.addedObject.brushName, this.addedObject.brushSize);
             this.setObjectOnArea(positionVec);
             this.scene.add(this.addedObject)
+            if (game.gold < this.addedObject.cost) {
+                this.selectAreaMesh.material = SETTINGS.materials.cantSelect;
+            }
+            else {
+
+                this.selectAreaMesh.material = SETTINGS.materials.select;
+            }
         }
     }
 
