@@ -22,13 +22,20 @@ class GameObject extends WorldObject {
         //hp jest w klasie wyżej
         this.net.sightRange = 50;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
 
+        this.net.action = null;
 
 
         this.mixer;
         this.actions = {};//wszystkie akcje postaci
         this.currentAction;
         //!ABY zmienic animacje this.action = NAZWA_ANIMACJI np. 'Walking' 
-
+        this.netActions = {
+            walk: null,
+            attack: null,
+            idle: null,
+            die: null,
+        }
+        this.netCurrentAction = null;
 
         this.imgSrc = "assets/thumbnails/default.jpg"; //Źródło pliku obrazu, który będzie wyświetlany jako miniaturka
         this.shopjQuery = null;
@@ -39,6 +46,21 @@ class GameObject extends WorldObject {
         //console.log(Math.random() * 4 % 4);
         if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest && !this.net.attackMove)
             this.findEnemyInRange();
+        if (this.net.action != this.netCurrentAction) {
+            //console.log(this.mainModel)
+            this.netCurrentAction = this.net.action;
+            if (this.netActions[this.net.action]) this.action = this.netActions[this.net.action];
+        }
+        if (this.net.action != 'idle') {
+            var angle = Math.atan2(
+                this.net.position[0] - this.net.destination[0],
+                this.net.position[1] - this.net.destination[1]
+            )
+            this.mainModel.rotation.y = angle  - Math.PI; 
+        }
+        /* this.mainModel.rotation.set(
+
+        ); */
     }
 
     //Po pierwszym zabójstwie zacina się - trzeba zresetować net.attackDest
@@ -52,7 +74,8 @@ class GameObject extends WorldObject {
                 if (Math.sqrt(Math.pow(this.net.position[0] - el.net.position[0], 2) + Math.pow(this.net.position[1] - el.net.position[1], 2)) < this.net.sightRange) {
                     this.edited = true;
                     this.net.attackDest = el.net.id;
-                    this.net.destination = el.net.id;
+                    this.net.destination = el.net.position;
+                    this.net.destinationID = el.net.id;
                     this.net.attackMove = false;
                 }
             }
@@ -93,6 +116,7 @@ class GameObject extends WorldObject {
 
         this.currentAction.fadeIn(0.5);
         this.currentAction.play();
+        //console.log(this.actions)
     }
 
     get action() {

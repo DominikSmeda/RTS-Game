@@ -80,13 +80,13 @@ async function gameTick() {
 
             //ruch do celu
             if (el.attackAnimTime <= 0) { //gdy nie wykonuje ataku
-                if (typeof el.destination == 'string') {
+                if (el.destinationID ) {
                     stop = el.range;
                     var dest = el.position;
                     for (let i = 0; i < game.map.characters.length; i++) {
                         const el2 = game.map.characters[i];
                         //console.log(el2.id, el.destination)
-                        if (el2.id == el.destination) {
+                        if (el2.id == el.destinationID) {
                             dest = el2.position;
                             break;
                         }
@@ -96,9 +96,13 @@ async function gameTick() {
                 //ruch
                 var r = (Math.sqrt(Math.pow(dest[0] - el.position[0], 2) + Math.pow(dest[1] - el.position[1], 2))); //od teraz px na sekundę
                 if (r - stop > 0) {
+                    el.action = 'walk';
                     r *= 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength);
                     el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
                     el.position[1] += r > 1 ? (dest[1] - el.position[1]) / r : (dest[1] - el.position[1]);
+                }
+                else{
+                    el.action = 'idle';
                 }
             }
         }
@@ -118,6 +122,7 @@ async function gameTick() {
                                 //console.log('hp: ' + el2.hp);
                                 el.attackCooldownCounter = el.attackCooldown;
                                 el.attackAnimTime = el.attackAnimLength;
+                                el.action = 'attack';
                                 // jednostka nie żyje
                                 if (el2.hp <= 0) {
                                     // dodanie do statystyki
@@ -132,11 +137,13 @@ async function gameTick() {
                                     }
                                     el2.deleted = true;
                                     el2.ttl = 10;
+                                    el2.action = 'die';
                                     for (let k = 0; k < game.map.characters.length; k++) {
                                         if (el2.id == game.map.characters[k].attackDest) {
                                             let el3 = game.map.characters[k];
                                             el3.attackDest = null;
                                             el3.destination = el3.position;
+                                            el3.destinationID = null;
                                         }
                                     }
                                 }

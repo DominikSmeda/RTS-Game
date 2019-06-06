@@ -10,7 +10,7 @@ class CameraControl {
         this.selected = [];
 
         this.pointPos = [0, 0];
-        this.R = 100;
+        this.R = 30;
         this.initR = 400;
         this.angleV = Math.PI / 3;
         this.angleH = 0;
@@ -53,9 +53,10 @@ class CameraControl {
 
     wheel(e) {
         e.originalEvent.deltaY > 0 ?
-            this.R *= e.originalEvent.deltaY * 0.012 * this.moveSpeed :
-            this.R /= e.originalEvent.deltaY * -0.012 * this.moveSpeed;
+            this.R *= e.originalEvent.deltaY * 0.2 * this.moveSpeed :
+            this.R /= e.originalEvent.deltaY * -0.2 * this.moveSpeed;
         this.refreshCamera();
+        console.log(this.R)
     }
     refreshCamera() {
         this.camera.position.x = this.R * Math.cos(this.angleV) * Math.sin(this.angleH) + this.pointPos[0];
