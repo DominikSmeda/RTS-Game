@@ -3,7 +3,6 @@
 class WorldObject extends THREE.Object3D {
 
     static getMeshModel(modelName) {
-        console.log(modelName);
 
         if (MODELS[modelName].skinned) {
             return THREE.SkeletonUtils.clone(MODELS[modelName].model);
@@ -134,7 +133,6 @@ class WorldObject extends THREE.Object3D {
 
     setMainModel() {
         this.mainModel = WorldObject.getMeshModel(this.net.modelName);
-        console.log(this.mainModel);
 
         this.add(this.mainModel);
         this.mainModel.scale.set(this.meshInitScale, this.meshInitScale, this.meshInitScale)
@@ -143,7 +141,7 @@ class WorldObject extends THREE.Object3D {
     }
 
     onModelLoaded() {
-
+        //funkcje pusta -> mogą nadpisywac potomkowie
     }
 
     selected(bool) {//pokazanie ze obiekt zostal zaznaczony 

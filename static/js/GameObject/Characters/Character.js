@@ -54,4 +54,6 @@ class Character extends GameObject {
         this.net.destination = [x, z];
         // return this.net;
     }
+
+
 }

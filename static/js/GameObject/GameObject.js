@@ -128,20 +128,15 @@ class GameObject extends WorldObject {
         // console.log('s');
         this.mixer = new THREE.AnimationMixer(this.mainModel);
         for (let animationName of MODELS[this.modelName].animationsSrc) {
-            console.log(animationName);
-
-            // console.log(animationName);
-            // console.log(MODELS[this.modelName].animations[animationName]);
 
             this.actions[animationName] = this.mixer.clipAction(MODELS[this.modelName].animations[animationName])
         }
-        console.log(this.actions);
+
 
         this.action = "Walking"
     }
 
     onModelLoaded() {
-        console.log('juz');
         this.createActions();
 
     }

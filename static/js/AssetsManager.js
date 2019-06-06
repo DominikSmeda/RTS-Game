@@ -7,8 +7,8 @@ class Item {
         }
         this.canvasElement;
         this.canvasSize = {
-            width: 150,
-            height: 150
+            width: window.innerHeight / 10,
+            height: window.innerHeight / 10
         }
         this.init();
     }
@@ -24,9 +24,9 @@ class Item {
         let scene = new THREE.Scene();
         let camera = new THREE.PerspectiveCamera(80, this.canvasSize.width / this.canvasSize.height, 0.1, 10000);
 
-        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(this.canvasSize.width, this.canvasSize.height);
-        renderer.setClearColor(0xcecece);
+        renderer.setClearColor(0x000000, 0);
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         camera.position.set(3, 0.1, 0);
@@ -53,21 +53,8 @@ class Item {
 
 class AssetsManager {
     constructor() {
-        this.categories = [
-            {
-                name: 'Bulidings',
-                items: [
+        this.categories = []
 
-                ]
-            },
-            {
-                name: 'Characters',
-                items: [
-
-                ]
-            }
-
-        ]
 
         this.init();
         this.clicks();
@@ -75,8 +62,11 @@ class AssetsManager {
 
     init() {
         this.createUI();
-        this.addItemToCategory(new Item(Tree), 'Bulidings');
-        this.addItemToCategory(new Item(Rock), 'Bulidings');
+        this.createCategory('Buildings')
+        this.createCategory('Characters')
+        this.createCategory('Nature')
+        this.addItemToCategory(new Item(Tree), 'Buildings');
+        this.addItemToCategory(new Item(Rock), 'Buildings');
         this.addItemToCategory(new Item(Soldier), 'Characters');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
@@ -92,6 +82,7 @@ class AssetsManager {
 
     createCategory(name) {
         this.categories.push({ name, items: [] })
+        this.updateCategoriesView();
     }
 
     addItemToCategory(item, category) {

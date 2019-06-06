@@ -23,7 +23,7 @@ var game;
 
 $(document).ready(() => {
     game = new GameManager();
-
+    // showAssetsManager();
 });
 
 //Funkcje developerskie :3
@@ -31,7 +31,7 @@ $(document).ready(() => {
 
 function addTestObject(count = 1) {
     for (let i = 0; i < count; i++) {
-        var obj = new Test();
+        var obj = new Soldier();//zmienilem na nowo klase
         game.createObject(obj);
     }
 }
