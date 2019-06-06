@@ -1,7 +1,6 @@
-
-class Base extends Building {
+class Tower extends Building {
     constructor() {
-        let modelName = "castle";
+        let modelName = "tower";
         super(modelName)
 
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie

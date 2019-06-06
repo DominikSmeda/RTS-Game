@@ -38,6 +38,18 @@ var MODELS = {
         path: MODELS_PATH + 'buildings/' + 'Castle/',
         modelSrc: 'Castle_Part_10',
         model: null
+    },
+    palisade: {
+        type: 'fbx',
+        path: MODELS_PATH + 'buildings/' + 'Palisade/',
+        modelSrc: 'Wood_Wall_03',
+        model: null
+    },
+    tower: {
+        type: 'fbx',
+        path: MODELS_PATH + 'buildings/' + 'Tower/',
+        modelSrc: 'Castle_Part_08',
+        model: null
     }
 }
 

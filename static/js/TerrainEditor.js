@@ -45,6 +45,8 @@ class TerrainEditor extends THREE.Mesh {
         this.scene.add(this.selectAreaMesh);
 
         this.addedObject = null;
+        this.addedObjectClass = null;
+
         this.activeSelection;
         this.currentFunction = "None";
         this.init()
@@ -54,7 +56,7 @@ class TerrainEditor extends THREE.Mesh {
         // this.selectAreaMesh.visible = false
         this.activeSelection = false;
 
-        // this.showUISettings() POTEM ODKOMENTOWAC
+        this.createUISettings();
         this.keyboard();
     }
 
@@ -62,12 +64,13 @@ class TerrainEditor extends THREE.Mesh {
         this.currentFunction = "EditTerrain";
     }
 
-    startAddObjectFunction(object) {
+    startAddObjectFunction(jsClass) {
+        this.addedObjectClass = jsClass;
         if (this.addedObject) {
             this.scene.remove(this.addedObject)
         }
         this.currentFunction = "AddWorldObject";
-        this.addedObject = object;
+        this.addedObject = new this.addedObjectClass();
         this.addedObject.setMainModel();
         // this.addedObject.selected(true);
     }
@@ -197,25 +200,45 @@ class TerrainEditor extends THREE.Mesh {
         return false;
     }
 
-    showUISettings() {
+    createUISettings() {
+
         let div = $('<div class="terrainEditor">');
         div.html(`
         <input type="range" id="brush-size" value="1" min="1" max="20">Size</br>
         `)
 
+        div.css({ display: 'none' })
         let select = $('<select id="brush-name">');
         for (let name of this.brushesNames) {
             let option = $(`<option>${name}</option>`)
             select.append(option);
         }
         div.append(select);
-        $('body').append(div);
+
+        let hideButton = $('<button id="hide-terrainEditor">');
+        hideButton.text("hide");
+
+        div.append(hideButton)
+
+        $('#hud').append(div);
+
+
+
+        let startButton = $('<button id="start-terrainEditor">');
+        startButton.text('Edit Terrain')
+        $('#hud').append(startButton);
+
+        $('body').on('click', '#start-terrainEditor', (e) => {
+            div.fadeIn('fast');
+            this.startEditTerrainFunction();
+        })
 
         $('body').on('input', '#brush-size', (e) => {
 
             this.brushSize = e.target.value;
             this.startEditTerrainFunction();
         })
+
         $('body').on('input', '#brush-name', (e) => {
 
             this.brushIndex = 0;
@@ -226,7 +249,13 @@ class TerrainEditor extends THREE.Mesh {
                 this.brushIndex++;
 
             }
+            this.startEditTerrainFunction();
         })
+
+        $('body').on('click', '#hide-terrainEditor', (e) => {
+            div.fadeOut('fast');
+        })
+
         // div.draggable();
     }
 
@@ -245,7 +274,6 @@ class TerrainEditor extends THREE.Mesh {
 
 
     addObjectToTerrain() {
-        this.currentFunction = "None"
         this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
         this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
         game.createObject(this.addedObject)
@@ -255,7 +283,9 @@ class TerrainEditor extends THREE.Mesh {
             this.addedObject.selected(false);
             this.addedObject = null;
             this.activeSelection = false;
-        }, 150);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+            this.addedObject = new this.addedObjectClass();
+            this.addedObject.setMainModel();
+        }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
 
 
     }

@@ -1,7 +1,6 @@
-
-class Base extends Building {
+class Palisade extends Building {
     constructor() {
-        let modelName = "castle";
+        let modelName = "palisade";
         super(modelName)
 
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
@@ -9,7 +8,7 @@ class Base extends Building {
         this.brushSize = 9;
 
         this.meshInitScale = 0.5;
-        this.assetsManagerInitScale = 0.09;
+        this.assetsManagerInitScale = 0.3;
         this.init()
     }
 
