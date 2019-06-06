@@ -6,6 +6,7 @@ class Soldier extends Character {
 
         this.net.speed = 25;
         this.net.damage = 10;
+        this.name = "Wojownik";
 
         this.meshInitScale = 0.005;
         this.assetsManagerInitScale = 0.01;

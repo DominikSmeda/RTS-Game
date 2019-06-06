@@ -48,6 +48,9 @@ class WorldObject extends THREE.Object3D {
         this.name = 'default'; //Nazwa jednostki wyświetlana w grze
         this.cost = 10; //koszt jednostki
 
+        this.barHeightOffset = 2;
+        this.barScale = 1;
+
 
         this.meshInitScale = 1;//skala modelu w swiecie
         this.assetsManagerInitScale = 1;//skala modelu w Ass
@@ -163,19 +166,19 @@ class WorldObject extends THREE.Object3D {
     }
 
     updateHealthBar() {
-        this.hpBar.scale.x = 3 * this.net.hp / this.baseHP;
+        this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
         //this.hpBar.position.y += 0.1;
     }
 
     createHealthBar() {
         //console.log('created', this.net.hp, this.baseHP, this.justCreated)
-        this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color });
+        this.hpSpriteMaterial = new THREE.SpriteMaterial({ color: this.net.color, transparent: true, opacity: 0.6 });
         this.hpBar = new THREE.Sprite(this.hpSpriteMaterial);;
-        this.hpBar.position.x = -1.5;
-        this.hpBar.position.y += 2;
+        this.hpBar.position.x = -1.5 * this.barScale;
+        this.hpBar.position.y += this.barHeightOffset;
         // this.hpBar.scale.x = 3.5;
-        this.hpBar.scale.x = 3 * this.net.hp / this.baseHP;
-        this.hpBar.scale.y = 0.4;
+        this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
+        this.hpBar.scale.y = this.barScale * 0.4;
         this.hpBar.center.x = 0;
         this.add(this.hpBar);
     }
