@@ -82,7 +82,6 @@ async function gameTick() {
             //ruch do celu
             if (el.attackAnimTime <= 0) { //gdy nie wykonuje ataku
                 if (el.destinationID) {
-                    stop = el.range;
                     var dest = el.position;
                     var f = true;
                     if (el.destinationType == 'buildings') {
@@ -97,9 +96,10 @@ async function gameTick() {
                         }
                     }
                     else {
+                        stop = el.range;
                         for (let i = 0; i < game.map.characters.length; i++) {
                             const el2 = game.map.characters[i];
-                            //console.log(el2.id, el.destination)
+                            console.log(el2.id, el.destination, el.destinationID)
                             if (el2.id == el.destinationID) {
                                 dest = el2.position;
                                 f = false;

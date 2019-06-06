@@ -143,19 +143,18 @@ class WorldObject extends THREE.Object3D {
 
     sendEdit() { // wyślij tylko wyedytowane dane
         if (!this.edited) return;
-        var toSend = {
+        let toSend = {
             id: this.net.id,
             type: this.net.type,
         };
         for (let i = 0; i < Object.keys(this.net).length; i++) {
             const k = Object.keys(this.net)[i];
-            if (!this.lastNet[k]) toSend[k] = this.net[k];
-            else {
-                if (this.lastNet[k] == this.net[k]) continue;
-                if (JSON.stringify(this.lastNet[k]) == JSON.stringify(this.net[k])) continue;
-                toSend[k] = this.net[k];
-            }
+            //console.log(k, Object.keys(this.lastNet), this.lastNet[k] == this.net[k], JSON.stringify(this.lastNet[k]) == JSON.stringify(this.net[k]))
+            if (this.lastNet[k] == this.net[k]) continue;
+            if (JSON.stringify(this.lastNet[k]) == JSON.stringify(this.net[k])) continue;
+            toSend[k] = this.net[k];
         }
+        // console.log(toSend)
         if (Object.keys(toSend).length > 2) game.net.update(toSend);
         this.edited = false;
     }

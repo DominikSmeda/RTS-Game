@@ -81,7 +81,7 @@ class Player {
         });
 
         this.client.on("action", (data) => {
-            //console.log(data);
+            console.log(data);
             try {
                 //if (!(data.id instanceof Array)) data.id = [data.id];
                 for (let i = 0; i < data.move.length; i++) {

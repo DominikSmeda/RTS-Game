@@ -39,8 +39,11 @@ class Character extends GameObject {
             var angle = Math.atan2(
                 this.net.position[0] - this.net.destination[0],
                 this.net.position[1] - this.net.destination[1]
-            )
-            this.mainModel.rotation.y = angle - Math.PI;
+            );
+            // console.log(angle, this.net.position, this.net.destination)
+            if (this.net.position[0] - this.net.destination[0] != 0 ||
+                this.net.position[1] - this.net.destination[1] != 0)
+                this.mainModel.rotation.y = angle - Math.PI;
         }
     }
     onGameTick() {

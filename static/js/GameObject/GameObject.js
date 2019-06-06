@@ -13,7 +13,7 @@ class GameObject extends WorldObject {
         //wszelkie czasy podano w sekundach
         this.net.attackDest = null; //cel ataku (net.id)
         this.net.canBeDamaged = true; //czy może być zaatakowany (nie zaimplementowano)
-        this.net.range = 10; // zasięg ataku
+        this.net.range = 15; // zasięg ataku
         this.net.damage = 1; // obrażenia
         this.net.attackCooldown = 1;//czas przygotowania przed następnym atakiem
         this.net.attackCooldownCounter = 1;//aktualny pozostały czas przygotowania przeliczany przez serwer
@@ -59,19 +59,21 @@ class GameObject extends WorldObject {
                     // tutaj możesz zrobić raycasta do budynku
                     // bu - obiekt klasy Building
                     this.edited = true;
+                    console.log(Math.max(bu.net.size, this.net.range))
                     if (Math.sqrt(
                         Math.pow(bu.net.position[0] - this.net.position[0], 2) +
                         Math.pow(bu.net.position[1] - this.net.position[1], 2)
-                    ) < bu.net.size) {
+                    ) <= Math.max(bu.net.size, this.net.range)) {
                         this.net.closeEnough = true;
-                        if (this.net.destinationType) this.net.obstacle = true;
+                        this.net.obstacle = true;
                     } else {
                         this.net.closeEnough = false;
                         this.net.obstacle = false;
                     }
+                    break;
                 }
             }
-        }
+        } else { this.net.obstacle = false; this.edited = true; }
         /* this.mainModel.rotation.set(
 
         ); */
