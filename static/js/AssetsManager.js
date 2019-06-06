@@ -14,8 +14,8 @@ class Item {
     }
 
     init() {
-        // let i = new this.class();
-        // console.log(i);
+         let i = new this.className();
+         console.log(i);
 
         this.createItemCanvas();
     }
@@ -65,9 +65,11 @@ class AssetsManager {
         this.createCategory('Buildings')
         this.createCategory('Characters')
         this.createCategory('Nature')
-        this.addItemToCategory(new Item(Tree), 'Buildings');
-        this.addItemToCategory(new Item(Rock), 'Buildings');
+        this.addItemToCategory(new Item(Tree), 'Nature');
+        this.addItemToCategory(new Item(Rock), 'Nature');
         this.addItemToCategory(new Item(Soldier), 'Characters');
+        // jak to zrobić?
+        //this.addItemToCategory(new Item(Base), 'Buildings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)
