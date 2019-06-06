@@ -55,6 +55,10 @@ function createModelByData(modelName) {
 
             if (child.isSkinnedMesh) {
                 model.rawMesh = child;
+
+            }
+            if (child.isMesh) {
+                child.castShadow = true;
             }
         })
     })

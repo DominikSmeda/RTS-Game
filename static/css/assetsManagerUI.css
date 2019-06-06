@@ -2,9 +2,10 @@
 #assetsManager{
     position: absolute;
     bottom:0;
-    width: 100vw;
-    height: 20vh;
-    background: rgba(255, 255, 255, 0.849);
+    width: 50vw;
+    height: 145px;
+    background: rgba(223, 223, 223, 0.856);
+    right:0;
     z-index: 10;
 }
 
@@ -16,11 +17,37 @@
     float: left;
     cursor: pointer;
     text-align: center;
-    margin:0 2.5px;
+    border:1px solid rgba(255, 255, 255, 0);
+    border-top:none;
+    border-bottom: none;
+     
+}
+#assetsManager .category-name:hover{
+    background: white;
+    color:orange;
+}
+
+#assetsManager #categories-items{
+    padding:10px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    min-height: 120px;
 }
 
 #assetsManager #categories-items .item{
-    border: 2px solid black;
-    margin:0 20px;
     cursor: pointer;
+    margin-right: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: rgba(240, 240, 240, 0.856);
 }
+
+#assetsManager #categories-items .item:hover{
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: rgba(22, 112, 214, 0.856);
+}
+
+

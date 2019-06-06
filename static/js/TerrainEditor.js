@@ -40,13 +40,13 @@ class TerrainEditor extends THREE.Mesh {
         // }));//obszar pokazujacy gdzie zmienimy wysokosc terenu
 
         this.brushIndex = 0;//ktory z tablicy brushesNames
-        this.brushesNames = ["Circle", "Rectangle", "Ring", "Mountain"];
+        this.brushesNames = ["Circle", "Square", "Rectangle", "Mountain"];
         this.selectAreaMesh = new THREE.Mesh(TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments));
         this.scene.add(this.selectAreaMesh);
 
         this.addedObject = null;
         this.activeSelection;
-        this.currentFunction;
+        this.currentFunction = "None";
         this.init()
     }
 
@@ -69,7 +69,7 @@ class TerrainEditor extends THREE.Mesh {
         this.currentFunction = "AddWorldObject";
         this.addedObject = object;
         this.addedObject.setMainModel();
-        this.addedObject.selected(true);
+        // this.addedObject.selected(true);
     }
 
     mouseClick(positionVec) {
@@ -116,7 +116,7 @@ class TerrainEditor extends THREE.Mesh {
     }
 
 
-    selectArea(centerVec, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize) {
+    selectArea(centerVec, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize, endVec = null) {
 
         this.activeSelection = true;
         //mozna uzyc podczas mousemove argument to intersects[0].point
@@ -131,7 +131,7 @@ class TerrainEditor extends THREE.Mesh {
 
         for (let i = 0; i < this.selectAreaMesh.geometry.vertices.length; i++) {
 
-            if (this.isVertexInArea(vertices[i], point, brushName, brushSize)) {
+            if (this.isVertexInArea(vertices[i], point, brushName, brushSize, endVec)) {
                 this.selectAreaMesh.geometry.vertices[i].copy(vertices[i]);
             }
             else {
@@ -149,7 +149,7 @@ class TerrainEditor extends THREE.Mesh {
 
     }
 
-    isVertexInArea(vert, point, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize) {
+    isVertexInArea(vert, point, brushName = this.brushesNames[this.brushIndex], brushSize = this.brushSize, endVec = null) {
 
         switch (brushName) {
             case 'Circle': {
@@ -159,7 +159,7 @@ class TerrainEditor extends THREE.Mesh {
                 break;
             }
 
-            case 'Rectangle': {
+            case 'Square': {
                 if (point.x - brushSize / 2 < vert.x &&
                     point.x + brushSize / 2 > vert.x &&
                     point.z - brushSize / 2 < vert.z &&
@@ -169,6 +169,29 @@ class TerrainEditor extends THREE.Mesh {
 
                 break;
             }
+
+            //brushSize koniec zaznaczenia
+            case 'Rectangle': {
+
+                function inRange(x, min, max) {
+                    return ((x - min) * (x - max) <= 0);
+                }
+
+                let end = brushSize;
+                let width = Math.abs(end.x - point.x);
+                let height = Math.abs(end.z - point.z);
+                // console.log(width, height);
+
+                // if (Math.abs(vert.x - point.x) < width && Math.abs(vert.z - point.z) < height) {
+                //     return true;
+                // }
+                if (inRange(vert.x, point.x, end.x) && inRange(vert.z, point.z, end.z)) {
+                    return true;
+                }
+
+                break;
+            }
+
         }
 
         return false;
@@ -256,8 +279,16 @@ class TerrainEditor extends THREE.Mesh {
     }
 
     selectMouseArea(startX, startZ, endX, endZ) {
+        console.log(endX);
+
+        let start = new THREE.Vector3(startX, 0, startZ)
+        let end = new THREE.Vector3(endX, 0, endZ)
+        this.selectArea(start, 'Rectangle', end)
         //console.log(startX, startZ, endX, endZ);
         //tutaj moge zrobic pokazanie na terenie gdy ktoś zaznacza jednostki myszka
     }
 
+    deselectArea() {
+        this.activeSelection = false;
+    }
 }

@@ -26,6 +26,8 @@ class GameManager {
 
     resourcesLoaded() {//po załadowaniu assetów rozpoczynamy inicjalizacje gry
         this.init();
+
+        showAssetsManager()
     }
 
     init() {
@@ -50,7 +52,7 @@ class GameManager {
         //this.camera.lookAt(this.scene.position);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
-        let spotLight = new THREE.SpotLight(0xffffff, 1);
+        let spotLight = new THREE.PointLight(0xffffff, 1);
         spotLight.position.set(30, 50, 10);
         spotLight.castShadow = true;
         this.scene.add(spotLight);
@@ -197,7 +199,7 @@ class GameManager {
             mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
             raycaster.setFromCamera(mouseVector, this.camera);
 
-            var intersects = raycaster.intersectObjects([this.mainTerrain], true);
+            var intersects = raycaster.intersectObjects([this.mainTerrain], false);
 
             if (intersects.length > 0) {
                 if (intersects[0].object instanceof TerrainEditor) {

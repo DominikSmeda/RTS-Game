@@ -76,6 +76,9 @@ class SelectControl {
 
     endSelection(e) {
         if (!this.selBegin) return;
+        this.parent.mainTerrain.deselectArea();
+        console.log('ENDDD');
+
         var endSel = this.selBegin;
         this.selBegin = null;
         var add = true;
