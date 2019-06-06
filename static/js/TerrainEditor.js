@@ -287,6 +287,7 @@ class TerrainEditor extends THREE.Mesh {
         this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
         this.addedObject.net.rotation = this.addedObject.rotation.y;
         game.createObject(this.addedObject)
+        this.addedObject.buy();
 
         setTimeout(() => {
             game.scene.remove(this.addedObject)

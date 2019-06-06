@@ -22,7 +22,7 @@ class CameraControl {
         this.isPressed = parent.isPressed;
 
         this.axesHelper = new THREE.AxesHelper(10);
-        parent.scene.add(this.axesHelper);
+        // parent.scene.add(this.axesHelper);
 
         this.refreshCamera();
     }

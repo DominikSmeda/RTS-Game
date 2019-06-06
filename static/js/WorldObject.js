@@ -46,7 +46,7 @@ class WorldObject extends THREE.Object3D {
         this.baseHP = 100;
         this.HP = 100; // Nie musisz ustawiać wszystkich HP ręcznie - wywołaj setter HP!
 
-        this.name = 'default'; //Nazwa jednostki wyświetlana w grze
+        this.name = 'Entity'; //Nazwa jednostki wyświetlana w grze
         this.cost = 10; //koszt jednostki
 
         this.barHeightOffset = 2;
@@ -58,6 +58,10 @@ class WorldObject extends THREE.Object3D {
         //     blabla: 0,
         //     blabla2: 0,
         // }
+        this.assetsManagerData = {//inne dane w assets Managerze
+            blabla: 0,
+            blabla2: 0,
+        }
 
         this.meshInitScale = 1;//skala modelu w swiecie
         this.assetsManagerInitScale = 1;//skala modelu w Ass
@@ -114,12 +118,6 @@ class WorldObject extends THREE.Object3D {
     onDataUpdate() { //jeśli zmienią się dane
         this.calculatePosition();
         if (this.justCreated) {
-            console.log('just');
-
-            //console.log(this.justCreated)
-            //if (this.net.owner == game.playerID) this.mine = true;
-            console.log(this.net.rotation);
-
             this.rotation.y = this.net.rotation;
             this.setMainModel();
             this.createHealthBar();
