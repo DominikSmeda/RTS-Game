@@ -284,21 +284,27 @@ class TerrainEditor extends THREE.Mesh {
 
 
     addObjectToTerrain() {
-        this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
-        this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
-        this.addedObject.net.rotation = this.addedObject.rotation.y;
-        game.createObject(this.addedObject)
-        this.addedObject.buy();
+        if (!this.addedObject.buy()) {
+            return;
+        }
+        else {
 
-        setTimeout(() => {
-            game.scene.remove(this.addedObject)
-            this.addedObject.selected(false);
-            this.addedObject = null;
-            this.activeSelection = false;
-            this.addedObject = new this.addedObjectClass();
-            this.addedObject.setMainModel();
-            this.addedObject.rotation.y = this.currentRotation;
-        }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+            this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
+            this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
+            this.addedObject.net.rotation = this.addedObject.rotation.y;
+
+            game.createObject(this.addedObject);
+
+            setTimeout(() => {
+                game.scene.remove(this.addedObject)
+                this.addedObject.selected(false);
+                this.addedObject = null;
+                this.activeSelection = false;
+                this.addedObject = new this.addedObjectClass();
+                this.addedObject.setMainModel();
+                this.addedObject.rotation.y = this.currentRotation;
+            }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+        }
 
     }
 
