@@ -44,9 +44,9 @@ function addTestPlane() {
     game.scene.add(plane);
 }
 
-function showTerrainBrush() {
-    game.mainTerrain.showUISettings();
-}
+// function showTerrainBrush() {
+//     game.mainTerrain.showUISettings();
+// }
 
 function showAssetsManager() {
     $("#assetsManager").css({ display: 'block' });

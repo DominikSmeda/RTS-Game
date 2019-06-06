@@ -7,8 +7,8 @@ class Item {
         }
         this.canvasElement;
         this.canvasSize = {
-            width: window.innerHeight / 10,
-            height: window.innerHeight / 10
+            width: 100,
+            height: 100
         }
         this.init();
     }
@@ -45,7 +45,7 @@ class Item {
         renderer.render(scene, camera);
 
         this.canvasElement.onclick = (e) => {
-            game.mainTerrain.startAddObjectFunction(new this.className());
+            game.mainTerrain.startAddObjectFunction(this.className);
         }
 
     }
@@ -70,6 +70,8 @@ class AssetsManager {
         this.addItemToCategory(new Item(Soldier), 'Characters');
         // jak to zrobić?
         this.addItemToCategory(new Item(Base), 'Buildings');
+        this.addItemToCategory(new Item(Palisade), 'Buildings');
+        this.addItemToCategory(new Item(Tower), 'Buildings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)
