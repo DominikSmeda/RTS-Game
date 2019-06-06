@@ -27,12 +27,20 @@ class Player {
     }
     lost() {
         //gdy przegra
-        //this.stats.moneyGained = 
+        this.stats.moneyGained = Math.floor(this.game.totalGold);
+        this.stats.moneySaved = Math.floor(this.game.totalGold - this.stats.moneySpent);
+        this.stats.duration = this.game.length.toPrecision(2);
         this.client.emit("lost", {});
+        console.log(this.playerID, this.stats)
     }
     won() {
         //gdy wygra
+        this.stats.moneyGained = Math.floor(this.game.totalGold);
+        this.stats.moneySaved = Math.floor(this.game.totalGold - this.stats.moneySpent);
+        this.stats.duration = this.game.length.toPrecision(2);
+        this.stats.won = true;
         this.client.emit("won", {});
+        console.log(this.playerID, this.stats)
     }
     reconnect(client) {
         this.client = client;

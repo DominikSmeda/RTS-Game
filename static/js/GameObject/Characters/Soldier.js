@@ -22,10 +22,12 @@ class Soldier extends Character {
 
 
         this.netActions = {
-            walk:'Walking',
+            walk: 'Walking',
             attack: 'Attack1',
             idle: 'Soldier1',
             die: 'Dying',
         }
+
+
     }
 }

@@ -69,7 +69,7 @@ class AssetsManager {
         this.addItemToCategory(new Item(Rock), 'Nature');
         this.addItemToCategory(new Item(Soldier), 'Characters');
         // jak to zrobić?
-        //this.addItemToCategory(new Item(Base), 'Buildings');
+        this.addItemToCategory(new Item(Base), 'Buildings');
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
         this.updateItemsView(this.categories[0].name)
