@@ -59,6 +59,7 @@ socketio.on('connection', function (client) {
 var inter = null;
 async function gameTick() {
     if (!inter) inter = setInterval(function () {
+        if (game.finished == true) { clearInterval(inter); return; }
         game.length += Sett.gameTickLength / 1000;
         //złoto
         game.totalGold += Sett.gameTickLength / 1000;
@@ -84,13 +85,26 @@ async function gameTick() {
                     stop = el.range;
                     var dest = el.position;
                     var f = true;
-                    for (let i = 0; i < game.map.characters.length; i++) {
-                        const el2 = game.map.characters[i];
-                        //console.log(el2.id, el.destination)
-                        if (el2.id == el.destinationID) {
-                            dest = el2.position;
-                            f = false;
-                            break;
+                    if (el.destinationType == 'buildings') {
+                        for (let i = 0; i < game.map.buildings.length; i++) {
+                            const el2 = game.map.buildings[i];
+                            //console.log(el2.id, el.destination)
+                            if (el2.id == el.destinationID) {
+                                dest = el2.position;
+                                f = false;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        for (let i = 0; i < game.map.characters.length; i++) {
+                            const el2 = game.map.characters[i];
+                            //console.log(el2.id, el.destination)
+                            if (el2.id == el.destinationID) {
+                                dest = el2.position;
+                                f = false;
+                                break;
+                            }
                         }
                     }
                     if (f) el.destinationID = null;
@@ -98,7 +112,7 @@ async function gameTick() {
                     var dest = el.destination;
                 //ruch
                 var r = (Math.sqrt(Math.pow(dest[0] - el.position[0], 2) + Math.pow(dest[1] - el.position[1], 2))); //od teraz px na sekundę
-                if (r - stop > 0) {
+                if (r - stop > 0 && !el.obstacle) {
                     el.action = 'walk';
                     r *= 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength);
                     el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
@@ -113,47 +127,81 @@ async function gameTick() {
             //atak
             const el = game.map.characters[x];
             if (el.attackDest && !el.deleted) {
-                if (el.attackAnimTime <= 0)
-                    for (let j = 0; j < game.map.characters.length; j++) {
-                        const el2 = game.map.characters[j];
-                        //console.log(el2.id, el.destination)
-                        if (!el2.deleted && el2.id == el.attackDest) {
-                            //console.log(Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2)))
-                            if (el.attackCooldownCounter < 0 &&
-                                el.range > Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2))) {
-                                el2.hp -= el.damage;
-                                //console.log('hp: ' + el2.hp);
-                                el.attackCooldownCounter = el.attackCooldown;
-                                el.attackAnimTime = el.attackAnimLength;
-                                el.action = 'attack';
-                                // jednostka nie żyje
-                                if (el2.hp <= 0) {
-                                    // dodanie do statystyki
-                                    for (let k = 0; k < game.players.length; k++) {
-                                        let p = game.players[k];
-                                        if (p.playerID == el.owner) {
-                                            p.stats.unitsKilled._total++;
-                                            if (!p.stats.unitsKilled[el2.className]) p.stats.unitsKilled[el2.className] = 1;
-                                            else p.stats.unitsKilled[el2.className]++;
-                                            break;
+                if (el.attackAnimTime <= 0) {
+                    if (el.destinationType == 'buildings') {
+                        for (let j = 0; j < game.map.buildings.length; j++) {
+                            const el2 = game.map.buildings[j];
+                            //console.log(el2.id, el.destination)
+                            if (!el2.deleted && el2.id == el.attackDest) {
+                                if (el.attackCooldownCounter < 0 &&
+                                    el.closeEnough) {
+                                    el2.hp -= el.damage;
+                                    //console.log('hp: ' + el2.hp);
+                                    el.attackCooldownCounter = el.attackCooldown;
+                                    el.attackAnimTime = el.attackAnimLength;
+                                    el.action = 'attack';
+                                    // jednostka nie żyje
+                                    if (el2.hp <= 0) {
+                                        // KONIEC GRY
+                                        var pl = el2.owner;
+                                        for (let c = 0; c < game.players.length; c++) {
+                                            const el5 = game.players[c];
+                                            if (el5.playerID == pl) {
+                                                el5.lost();
+                                            } else {
+                                                el5.won();
+                                            }
                                         }
+                                        game.finished = true;
+                                        return;
                                     }
-                                    el2.deleted = true;
-                                    el2.ttl = 10;
-                                    el2.action = 'die';
-                                    for (let k = 0; k < game.map.characters.length; k++) {
-                                        if (el2.id == game.map.characters[k].attackDest) {
-                                            let el3 = game.map.characters[k];
-                                            el3.attackDest = null;
-                                            el3.destination = el3.position;
-                                            el3.destinationID = null;
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        for (let j = 0; j < game.map.characters.length; j++) {
+                            const el2 = game.map.characters[j];
+                            //console.log(el2.id, el.destination)
+                            if (!el2.deleted && el2.id == el.attackDest) {
+                                //console.log(Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2)))
+                                if (el.attackCooldownCounter < 0 &&
+                                    el.range > Math.sqrt(Math.pow(el2.position[0] - el.position[0], 2) + Math.pow(el2.position[1] - el.position[1], 2))) {
+                                    el2.hp -= el.damage;
+                                    //console.log('hp: ' + el2.hp);
+                                    el.attackCooldownCounter = el.attackCooldown;
+                                    el.attackAnimTime = el.attackAnimLength;
+                                    el.action = 'attack';
+                                    // jednostka nie żyje
+                                    if (el2.hp <= 0) {
+                                        // dodanie do statystyki
+                                        for (let k = 0; k < game.players.length; k++) {
+                                            let p = game.players[k];
+                                            if (p.playerID == el.owner) {
+                                                p.stats.unitsKilled._total++;
+                                                if (!p.stats.unitsKilled[el2.className]) p.stats.unitsKilled[el2.className] = 1;
+                                                else p.stats.unitsKilled[el2.className]++;
+                                                break;
+                                            }
+                                        }
+                                        el2.deleted = true;
+                                        el2.ttl = 10;
+                                        el2.action = 'die';
+                                        for (let k = 0; k < game.map.characters.length; k++) {
+                                            if (el2.id == game.map.characters[k].attackDest) {
+                                                let el3 = game.map.characters[k];
+                                                el3.attackDest = null;
+                                                el3.destination = el3.position;
+                                                el3.destinationID = null;
+                                            }
                                         }
                                     }
                                 }
+                                break;
                             }
-                            break;
                         }
                     }
+                }
             }
         }
         // Wyślij dane

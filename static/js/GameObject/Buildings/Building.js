@@ -1,7 +1,8 @@
 
 //KLASA z której dziedziczą wszystkie budynki
 class Building extends GameObject {
-    constructor() {
-        super()
+    constructor(className) {
+        super(className)
+        this.net.type = "buildings";
     }
 }

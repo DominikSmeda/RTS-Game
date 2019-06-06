@@ -76,6 +76,7 @@ class GameObject extends WorldObject {
                     this.net.attackDest = el.net.id;
                     this.net.destination = el.net.position;
                     this.net.destinationID = el.net.id;
+                    this.net.destinationType = el.net.type;
                     this.net.attackMove = false;
                 }
             }
@@ -109,6 +110,7 @@ class GameObject extends WorldObject {
 
     set action(actionName) {
         this.currentAction = this.actions[actionName];
+        if(!this.currentAction) return;
         this.mixer.stopAllAction();
 
         this.currentAction.time = 0;

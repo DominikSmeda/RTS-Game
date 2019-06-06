@@ -28,7 +28,7 @@ var MODELS = {
         skinned: true,
         path: MODELS_PATH + 'characters/' + 'Soldier1/',
         modelSrc: 'Soldier1',
-        animationsSrc: ['Walking', 'Attack1'],
+        animationsSrc: ['Walking', 'Attack1', 'Soldier1', 'Dying'],
         model: null,
         animations: null,
         rawMesh: null

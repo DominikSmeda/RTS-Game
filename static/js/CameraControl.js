@@ -56,7 +56,7 @@ class CameraControl {
             this.R *= e.originalEvent.deltaY * 0.012 * this.moveSpeed :
             this.R /= e.originalEvent.deltaY * -0.012 * this.moveSpeed;
         this.refreshCamera();
-        console.log(this.R)
+        //console.log(this.R)
     }
     refreshCamera() {
         this.camera.position.x = this.R * Math.cos(this.angleV) * Math.sin(this.angleH) + this.pointPos[0];
