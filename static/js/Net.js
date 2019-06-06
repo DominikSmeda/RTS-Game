@@ -29,6 +29,9 @@ class Net {
         this.client.on("won", (data, err) => {
             this.parent.won();
         });
+        this.client.on("start", (data, err) => {
+            this.parent.onGameStart();
+        });
 
         // co 100ms serwer będzie wysyłał info ze zmianami
         this.client.on("gameTick", (data) => {

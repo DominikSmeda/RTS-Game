@@ -89,6 +89,8 @@ class GameManager {
         this.render();
 
         this.net = new Net(this);
+
+        this.hud.helpNextStage();
     }
 
     render() {
@@ -166,6 +168,8 @@ class GameManager {
         }
     }
     createObjectFromNet(data) {
+        if (data.base && data.owner == this.playerID)
+            this.hud.helpNextStage();
         try {
             var n = eval('new ' + data.className + '("' + data.modelName + '")');
             this.objects[data.type].push(n);
@@ -181,10 +185,15 @@ class GameManager {
     }
 
     won() {
+        this.hud.helpNextStage();
         this.showMyStats();
     }
     lost() {
+        this.hud.helpNextStage();
         this.showMyStats();
+    }
+    onGameStart() {
+        this.hud.helpNextStage();
     }
 
 

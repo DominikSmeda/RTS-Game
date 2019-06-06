@@ -12,6 +12,57 @@ class HUD {
             won: "Wygrał", //czy wygrał
             name: "Nick", //nick
         }
+        this.stage = -1;
+        this.helpStages = [
+            {
+                stage: 0,
+                header: 'Pomoc',
+                description: 'Kliknij poszczególne okienka pomocy, aby je zamknąć.'
+            },
+            {
+                stage: 0,
+                header: 'Rozpoczęcie gry',
+                description: 'Kliknij na kafelek z bazą, a następnie umieść ją na planszy klikając LPM. <br>Wciśnij Esc, aby zakończyć budowę. <br>Gdy wszyscy gracze postawią swoje bazy, gra się rozpocznie.',
+            },
+            {
+                stage: 0,
+                header: 'Poruszanie kamerą',
+                description: 'Wciśnięcie ŚPM - poruszanie kamerą,<br>Alt + ŚPM - obrót kamerą,<br>Kółko myszy - przybliżanie / oddalanie widoku.',
+            },
+            {
+                stage: 1,
+                header: 'Cel gry',
+                description: 'Zniszcz wrogą bazę!',
+            },
+            {
+                stage: 2,
+                header: 'Tworzenie jednostek',
+                description: 'Wybierz zakładkę "Characters" i postaw żołnierza tak samo jak bazę.<br>Dodatkowo niektóre budynki podczas stawiania możesz obracać wciskając PPM.',
+            },
+            {
+                stage: 2,
+                delay: 10000,
+                header: 'Pieniądze',
+                description: 'Każda jednostka wymaga pieniędzy. Zdobywasz je wraz z upływem czasu.',
+            },
+            {
+                stage: 2,
+                delay: 14000,
+                header: 'Kierowanie jednostkami',
+                description: 'Kliknięcie LPM na własnej jednostce - zaznaczenie jej,<br>Kliknięcie LPM i przeciągnięcie - zaznaczenie jednostek w kwadracie,<br>Shift + zaznaczenie - dodanie do aktualnego zaznaczenia,<br>PPM na mapie - przejście zaznaczonych jednostek w dane miejsce,<br>PPM na wrogu - polecenie ataku,<br>Shift + PPM na mapie - przejście zaznaczonych jednostek w dane miejsce i atakowanie napotkanych wrogów.',
+            },
+            {
+                stage: 2,
+                delay: 20000,
+                header: 'AI',
+                description: 'Gdy jednostki nic nie robią, to same będą atakować wrogów w pobliżu.',
+            },
+            {
+                stage: 3,
+                header: 'Koniec gry',
+                description: 'Oto Twoje statystyki. Aby je zapisać, wpisz swój nick.',
+            },
+        ]
         this.createHUD();
     }
     get DOMElement() {
@@ -61,12 +112,34 @@ class HUD {
         // jeszcze nie obsługiwany
 
         // HELP DIV
-
+        this.helpDiv = $('<div class="help">');
+        this.helpTilesContainer = $('<div class="container">');
+        this.helpDiv.html('<h3 style="text-align:center;">Pomoc</h3>');
+        this.helpDiv.append(this.helpTilesContainer);
+        this.mainDiv.append(this.helpDiv);
     }
-    addHelpTile() {
-
+    helpNextStage() {
+        this.stage++;
+        for (let i = 0; i < this.helpStages.length; i++) {
+            const el = this.helpStages[i];
+            if (el.stage != this.stage) continue;
+            if (el.delay) setTimeout(this.addHelpTile.bind(this, el), el.delay);
+            else this.addHelpTile(el);
+        }
     }
-
+    addHelpTile(element) {
+        let tile = $('<div class="tile">');
+        var header = $('<h4 class="header">').html(element.header);
+        var description = $('<p class="description">').html(element.description);
+        tile.append(header).append(description);
+        tile.click(() => {
+            tile.remove();
+            if (this.helpTilesContainer.children('.tile').length < 1)
+                this.helpDiv.css('display', 'none');
+        });
+        this.helpDiv.css('display', 'block');
+        this.helpTilesContainer.append(tile);
+    }
 
     showStatistics(data, clear = true) {
         if (this.stats && clear) {

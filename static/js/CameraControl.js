@@ -10,7 +10,7 @@ class CameraControl {
         this.selected = [];
 
         this.pointPos = [0, 0];
-        this.R = 30;
+        this.R = 90;
         this.initR = 400;
         this.angleV = Math.PI / 3;
         this.angleH = 0;

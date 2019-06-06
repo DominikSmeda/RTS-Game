@@ -99,7 +99,7 @@ async function gameTick() {
                         stop = el.range;
                         for (let i = 0; i < game.map.characters.length; i++) {
                             const el2 = game.map.characters[i];
-                            console.log(el2.id, el.destination, el.destinationID)
+                            //console.log(el2.id, el.destination, el.destinationID)
                             if (el2.id == el.destinationID) {
                                 dest = el2.position;
                                 f = false;
@@ -138,7 +138,7 @@ async function gameTick() {
                             if (!el2.deleted && el2.id == el.attackDest) {
                                 if (el.attackCooldownCounter < 0 &&
                                     el.closeEnough) {
-                                    console.log(el)
+                                    //console.log(el)
                                     el2.hp -= el.damage;
                                     //console.log('hp: ' + el2.hp);
                                     el.attackCooldownCounter = el.attackCooldown;

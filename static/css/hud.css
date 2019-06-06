@@ -10,6 +10,50 @@
     --hud-vOffset: 4px;
 }
 
+/* HELP */
+
+.help {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    /* height: 500px; */
+    padding: 10px;
+    background: rgba(192, 255, 0, 0.5);
+    display: none;
+}
+
+.help * {
+    position: relative;
+}
+
+.help .container * {
+    /* float: left */
+}
+
+.help h4 {}
+
+.help .tile {
+    display: block;
+    width: 100%;
+    height: fit-content;
+    float: left;
+    overflow: hidden;
+    border: 1px solid black;
+    border-bottom: none;
+    padding: 5px
+}
+
+.help .tile:first-child {
+    margin-top: 5px;
+    border-radius: 10px 10px 0 0;
+}
+
+.help .tile:last-child {
+    border-radius: 0 0 10px 10px;
+    border-bottom: 1px solid black;
+}
+
 /* SELECT */
 
 .hud .select {
@@ -37,6 +81,7 @@
     overflow: hidden;
     left: 0;
     bottom: 0;
+    z-index: 1;
     /* bottom: calc((var(--hud-shopHeight) + var(--hud-vOffset) + 2 * var(--hud-shopPadding))); */
     /* bottom: var(--hud-vOffset); */
 }

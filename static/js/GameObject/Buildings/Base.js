@@ -8,6 +8,7 @@ class Base extends Building {
         this.barHeightOffset = 4.8;
         this.net.size = 10;
         this.net.base = true;
+        this.HP = 300;
         this.name = "Baza";
 
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
