@@ -21,6 +21,8 @@ class Player {
             won: false, //czy wygrał
         }
 
+        //this.game.map.gold[this.playerID] = 10; - to samo jest w server.js
+
         this.c = this.game.map.characters;
         this.map = this.game.map;
         this.defineSocket();
@@ -29,7 +31,7 @@ class Player {
         //gdy przegra
         this.stats.moneyGained = Math.floor(this.game.totalGold);
         this.stats.moneySaved = Math.floor(this.game.totalGold - this.stats.moneySpent);
-        this.stats.duration = this.game.length.toPrecision(2);
+        this.stats.duration = Math.round(this.game.length * 100) / 100;
         this.client.emit("lost", {});
         console.log(this.playerID, this.stats)
     }
@@ -37,7 +39,7 @@ class Player {
         //gdy wygra
         this.stats.moneyGained = Math.floor(this.game.totalGold);
         this.stats.moneySaved = Math.floor(this.game.totalGold - this.stats.moneySpent);
-        this.stats.duration = this.game.length.toPrecision(2);
+        this.stats.duration = Math.round(this.game.length * 100) / 100;
         this.stats.won = true;
         this.client.emit("won", {});
         console.log(this.playerID, this.stats)
@@ -93,6 +95,7 @@ class Player {
                 }
                 for (let i = 0; i < data.spawn.length; i++) {
                     var el = data.spawn[i];
+                    if (el.base) this.game.bases++;
                     if (!this.map[el.type]) {
                         this.map[el.type] = [];
                     }

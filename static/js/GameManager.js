@@ -253,8 +253,18 @@ class GameManager {
     showMyStats() {
         this.net.getStats((data) => {
             this.hud.showStatistics(data);
+
+            var inp = $('<input type="text" placeholder="Wpisz swój nick">');
+            var but = $('<input type="button" value="Zapisz wyniki">');
+            but.click(() => {
+                if (inp.val() != '') {
+                    this.saveStats(inp.val())
+                    this.showAllStats();
+                }
+            })
+            this.hud.stats.append(inp).append(but);
+            $('#overlay').css('display', 'block');
         });
-        $('#overlay').css('display', 'block');
     }
     showAllStats() {
         this.net.getAllStats((data) => {

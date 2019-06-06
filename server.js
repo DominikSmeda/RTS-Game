@@ -31,7 +31,7 @@ var rooms = [];
         characters: [],//[{ id: 0, type:'characters', position: [0, 0], destination: [0, 0], speed: 10 }],
     },
 }; */
-var game = new Game();
+var game = new Game(socketio, Sett);
 // Sokety
 socketio.on('connection', function (client) {
     client.emit("onconnect", {
@@ -48,12 +48,12 @@ socketio.on('connection', function (client) {
             }
         }
         game.players.push(new Player(game, client, dbFunc));
-        game.map.gold[client.id] = 0;
+        game.map.gold[client.id] = 10.1;
     });
     //game.players.push(new Player(game, client));
     //new Player(game, client);
     //console.log(game);
-    gameTick();
+    game.init();
 });
 
 var inter = null;
@@ -107,12 +107,15 @@ async function gameTick() {
                             }
                         }
                     }
-                    if (f) el.destinationID = null;
+                    if (f) {
+                        el.destinationID = null;
+                        el.destinationType = null;
+                    }
                 } else
                     var dest = el.destination;
                 //ruch
                 var r = (Math.sqrt(Math.pow(dest[0] - el.position[0], 2) + Math.pow(dest[1] - el.position[1], 2))); //od teraz px na sekundę
-                if (r - stop > 0 && !el.obstacle && !el.closeEnough) {
+                if (r - stop > 0 && !el.obstacle /* && !el.closeEnough */) {
                     el.action = 'walk';
                     r *= 1000 / (el.speed * Sett.unitSpeed * Sett.gameTickLength);
                     el.position[0] += r > 1 ? (dest[0] - el.position[0]) / r : (dest[0] - el.position[0]);
@@ -135,6 +138,7 @@ async function gameTick() {
                             if (!el2.deleted && el2.id == el.attackDest) {
                                 if (el.attackCooldownCounter < 0 &&
                                     el.closeEnough) {
+                                    console.log(el)
                                     el2.hp -= el.damage;
                                     //console.log('hp: ' + el2.hp);
                                     el.attackCooldownCounter = el.attackCooldown;
@@ -176,6 +180,7 @@ async function gameTick() {
                                                 el3.attackDest = null;
                                                 el3.destination = el3.position;
                                                 el3.destinationID = null;
+                                                el3.destinationType = null;
                                             }
                                         }
                                     }
@@ -217,6 +222,7 @@ async function gameTick() {
                                                 el3.attackDest = null;
                                                 el3.destination = el3.position;
                                                 el3.destinationID = null;
+                                                el3.destinationType = null;
                                             }
                                         }
                                     }

@@ -159,6 +159,23 @@ class WorldObject extends THREE.Object3D {
         if (Object.keys(toSend).length > 2) game.net.update(toSend);
         this.edited = false;
     }
+    //kupienie jednostki
+    buy() {
+        if (game.gold > this.cost) {
+            game.gold -= this.cost;
+            game.net.update({
+                id: game.playerID,
+                type: 'gold',
+                cost: this.cost,
+                className: this.net.className,
+            });
+            // var obj = eval('new ' + this.net.className + '()');
+            // obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
+            // game.createObject(this);
+            return true;
+        }
+        return false;
+    }
 
 
     setMainModel() {

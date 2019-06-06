@@ -45,7 +45,7 @@ class GameObject extends WorldObject {
     onDataUpdate() {
         super.onDataUpdate();
         //console.log(Math.random() * 4 % 4);
-        if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest && !this.net.attackMove)
+        if (Math.random() * 4 % 4 < 1 && this.moving < 0.1 && !this.net.attackDest && !this.net.destinationID && !this.net.attackMove && this.net.attackAnimTime < 0)
             this.findEnemyInRange();
         if (this.net.action != this.netCurrentAction) {
             //console.log(this.mainModel)
@@ -64,8 +64,10 @@ class GameObject extends WorldObject {
                         Math.pow(bu.net.position[1] - this.net.position[1], 2)
                     ) < bu.net.size) {
                         this.net.closeEnough = true;
+                        if (this.net.destinationType) this.net.obstacle = true;
                     } else {
                         this.net.closeEnough = false;
+                        this.net.obstacle = false;
                     }
                 }
             }
@@ -95,23 +97,7 @@ class GameObject extends WorldObject {
         }
     }
 
-    //kupienie jednostki
-    buy() {
-        if (game.gold > this.cost) {
-            game.gold -= this.cost;
-            game.net.update({
-                id: game.playerID,
-                type: 'gold',
-                cost: this.cost,
-                className: this.className,
-            })
-            // var obj = eval('new ' + this.net.className + '()');
-            // obj.net.position = game.base ? game.base.spawnPosition : [0, 0];
-            // game.createObject(this);
-            return true;
-        }
-        return false;
-    }
+
 
     onRender(delta) {
         super.onRender(delta);
