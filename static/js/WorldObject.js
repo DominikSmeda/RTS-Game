@@ -132,6 +132,15 @@ class WorldObject extends THREE.Object3D {
 
     onDeath() { //raz przy śmierci
         console.log(this.net.id + ' zginął');
+        game.specialRender[this.net.id] = this;
+        //game.scene.remove(this);
+        this.onDeathTimer();
+    }
+    onDeathTimer() {
+        this.onDeathEnd();
+    }
+    onDeathEnd() {
+        delete game.specialRender[this.net.id];
         game.scene.remove(this);
     }
 
@@ -209,6 +218,7 @@ class WorldObject extends THREE.Object3D {
 
     updateHealthBar() {
         this.hpBar.scale.x = this.barScale * 3 * this.net.hp / this.baseHP;
+        if (this.hpBar.scale.x <= 0) this.hpBar.scale.x = 0.000001;
         //this.hpBar.position.y += 0.1;
     }
 
