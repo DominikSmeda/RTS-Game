@@ -78,7 +78,7 @@ class GameManager {
         this.scene.add(this.mainTerrain);
 
 
-        let farTerrain = new THREE.Mesh(new THREE.PlaneGeometry(2500, 2500, 1, 1), SETTINGS.materials.terrain1.clone());
+        let farTerrain = new THREE.Mesh(new THREE.PlaneGeometry(2500, 2500, 1, 1), SETTINGS.materials.terrainFar);
         farTerrain.material.color.setHex(0xeeeeee);
         farTerrain.position.y -= 1;
         farTerrain.rotation.x -= Math.PI / 2
@@ -257,7 +257,7 @@ class GameManager {
             this.isPressed.mousemove(e);
 
             let dt = Date.now() - mouseMovelastUpdate;
-            if (dt > 30) {
+            if (dt > 50) {
                 mouseMovelastUpdate = Date.now();
 
 

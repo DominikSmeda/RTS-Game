@@ -4,12 +4,17 @@
 // var MODELS={}
 var SETTINGS = {
     texturesSrc: {
-        terrain1: "assets/textures/terrain1.jpg"
+        terrain1: "assets/textures/ground.png"
     },
     materials: {
         terrain1: new THREE.MeshLambertMaterial({
             wireframe: false,
-            map: getTexture("assets/textures/terrain1.jpg", 50, 50),
+            map: getTexture("assets/textures/ground.png", 120, 120),
+
+        }),
+        terrainFar: new THREE.MeshLambertMaterial({
+            wireframe: false,
+            map: getTexture("assets/textures/ground.png", 1500, 1500),
 
         }),
         select: new THREE.MeshBasicMaterial({

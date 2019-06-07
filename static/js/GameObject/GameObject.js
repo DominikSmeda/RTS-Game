@@ -59,7 +59,9 @@ class GameObject extends WorldObject {
                     // tutaj możesz zrobić raycasta do budynku
                     // bu - obiekt klasy Building
                     //to poniżej prócz break możesz usunąć
-                    this.edited = true;
+
+
+
                     console.log(Math.max(bu.net.size, this.net.range))
                     if (Math.sqrt(
                         Math.pow(bu.net.position[0] - this.net.position[0], 2) +
@@ -78,6 +80,30 @@ class GameObject extends WorldObject {
         /* this.mainModel.rotation.set(
 
         ); */
+        // console.log('ss');
+
+        var raycasterC = new THREE.Raycaster();
+
+        var ray = new THREE.Ray(this.position, this.mainModel.getWorldDirection(new THREE.Vector3(1, 1, 1)))
+        raycasterC.ray = ray
+        // console.log(game.objects.buildings);
+
+        var intersects = raycasterC.intersectObjects(game.objects.buildings, true);
+        // console.log(intersects);
+
+        if (intersects[0]) {
+            console.log(intersects[0]);
+
+            // console.log(intersects[0].distance) // odległość od vertex-a na wprost, zgodnie z kierunkiem ruchu
+            // console.log(intersects[0].point)
+            if (intersects[0].distance < 1) {
+                console.log('kolizja');
+
+                this.net.obstacle = true;
+                this.edited = true;
+            }
+        }
+
     }
 
     //Po pierwszym zabójstwie zacina się - trzeba zresetować net.attackDest

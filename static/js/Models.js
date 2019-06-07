@@ -37,6 +37,7 @@ var MODELS = {
         type: 'fbx',
         path: MODELS_PATH + 'buildings/' + 'Castle/',
         modelSrc: 'Castle_Part_10',
+        textures: 'muro_02.jpg',
         model: null
     },
     palisade: {
@@ -79,6 +80,28 @@ function createModelByData(modelName) {
                 child.castShadow = true;
             }
         })
+        if (model.textures) {
+            console.log(model.textures);
+
+            const tLoader = new THREE.TextureLoader(loadingManager);
+            tLoader.load(model.path + model.textures, texture => {
+                object.traverse(function (child) {
+                    // console.log(child);
+                    console.log(texture);
+
+                    if (child.isMesh) {
+
+                        console.log(child);
+
+                        child.material[0].map = texture
+                        child.material[1].map = texture
+                        child.material[2].map = texture
+                        child.material[3].map = texture
+
+                    }
+                })
+            })
+        }
     })
 
     if (model.animationsSrc) {
