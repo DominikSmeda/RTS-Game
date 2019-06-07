@@ -68,7 +68,7 @@
 #assetsManager #categories-items .gold{
     position: absolute;
     width:100%;
-    height: 10px;
+    /* height: 10px; */
     color:rgb(209, 189, 6);
     top:0;
     right:0;
@@ -81,7 +81,7 @@
 #assetsManager #categories-items .name{
     position: absolute;
     width:100%;
-    height: 10px;
+    /* height: 10px; */
     color: black;
     top:0;
     left:0;
@@ -92,4 +92,19 @@
     font-size:14px;
 } 
 
+
+#assetsManager #categories-items .amount{
+    position: absolute;
+    width:100%;
+    /* height: 10px; */
+    color:rgb(14, 131, 226);
+    bottom:0;
+    right:0;
+    text-align: right;
+    z-index: 40;
+    padding: 2px;
+    font-weight: 800;
+    font-size: 20px;
+  
+}
 

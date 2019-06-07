@@ -10,7 +10,9 @@ class Base extends Building {
         this.net.base = true;
         this.HP = 300;
         this.name = "Baza";
-
+        this.assetsManagerData = {//inne dane w assets Managerze
+            typ: 'unikalna'
+        }
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
         this.brushName = "Square";
         this.brushSize = 9;

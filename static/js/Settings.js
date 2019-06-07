@@ -7,9 +7,10 @@ var SETTINGS = {
         terrain1: "assets/textures/terrain1.jpg"
     },
     materials: {
-        terrain1: new THREE.MeshPhongMaterial({
+        terrain1: new THREE.MeshLambertMaterial({
             wireframe: false,
-            map: getTexture("assets/textures/terrain1.jpg", 50, 50)
+            map: getTexture("assets/textures/terrain1.jpg", 50, 50),
+
         }),
         select: new THREE.MeshBasicMaterial({
             color: 0x0000ff,

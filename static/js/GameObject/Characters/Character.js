@@ -92,13 +92,5 @@ class Character extends GameObject {
 
     }
 
-    onDeath() {
-        console.log('dead');
 
-        // this.action = "Dying"
-        // this.mixer.addEventListener('finished', (e) => {
-        //     console.log(e);
-
-        // });
-    }
 }

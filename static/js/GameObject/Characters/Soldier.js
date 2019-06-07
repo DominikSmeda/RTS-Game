@@ -20,7 +20,10 @@ class Soldier extends Character {
         this.net.attackAnimLength = 0.7;//długość stania w miejscu w czasie wykonywania ataku (by skończyć animację)
         this.HP = 50;
         this.net.sightRange = 20;//zasięg widzenia - jeśli przeciwnik jest bliżej, a jednostka nic nie robi, to zacznie go ścigać
-
+        this.assetsManagerData = {//inne dane w assets Managerze
+            szybkosc: 10,
+            obrazenia: 20
+        }
 
         this.netActions = {
             walk: 'Walking',

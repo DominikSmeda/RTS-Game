@@ -75,7 +75,13 @@
 
 .hud .gold {
     position: absolute;
-    background: #cccccc;
+    background: #ddc80a;
+    color:white;
+    font-weight: 800;
+    width:120px;
+    text-align: center;
+    font-family: 30px;
+
     /* height: calc(var(--hud-shopHeight) + 2 * var(--hud-shopPadding)); */
     padding: var(--hud-shopPadding);
     overflow: hidden;

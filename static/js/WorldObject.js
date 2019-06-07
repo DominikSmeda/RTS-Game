@@ -59,8 +59,7 @@ class WorldObject extends THREE.Object3D {
         //     blabla2: 0,
         // }
         this.assetsManagerData = {//inne dane w assets Managerze
-            blabla: 0,
-            blabla2: 0,
+
         }
 
         this.meshInitScale = 1;//skala modelu w swiecie

@@ -80,7 +80,6 @@ class SelectControl {
         e = e.originalEvent;
         if (!this.selBegin) return;
         this.parent.mainTerrain.deselectArea();
-        console.log('ENDDD');
 
         var endSel = this.selBegin;
         this.selBegin = null;

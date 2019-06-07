@@ -1,4 +1,4 @@
-let spotLight
+
 //Gówna klasa gry. 
 class GameManager {
     constructor() {
@@ -52,23 +52,34 @@ class GameManager {
         //this.camera.position.set(0, 500, 40)
         //this.camera.lookAt(this.scene.position);
 
-        this.scene.add(new THREE.AmbientLight(0xffffff, 0.4))
-        spotLight = new THREE.DirectionalLight(0xffffff, 0.1);
-        spotLight.position.set(0, 100, 60);
-        spotLight.castShadow = true;
-        this.scene.add(spotLight);
+        this.scene.add(new THREE.AmbientLight(0xffffff, 0.7))
 
-        let pointLight = new THREE.PointLight(0xffffff, 0.6);
-        pointLight.position.set(0, 350, 0);
+        // let spotLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        // spotLight.position.set(0, 50, 60);
+        // spotLight.castShadow = true;
+        // this.scene.add(spotLight);
+
+        // let spotLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+        // spotLight2.position.set(0, 50, -60);
+        // spotLight2.castShadow = true;
+        // this.scene.add(spotLight2);
+
+        let pointLight = new THREE.PointLight(0xffffff, 0.5);
+        pointLight.position.set(-70, 100, -70);
         pointLight.castShadow = true;
         this.scene.add(pointLight);
+
+        let pointLight2 = new THREE.PointLight(0xffffff, 0.3);
+        pointLight2.position.set(70, 100, 70);
+        pointLight2.castShadow = true;
+        this.scene.add(pointLight2);
 
         this.mainTerrain = new TerrainEditor(this.scene);
         this.scene.add(this.mainTerrain);
 
 
         let farTerrain = new THREE.Mesh(new THREE.PlaneGeometry(2500, 2500, 1, 1), SETTINGS.materials.terrain1.clone());
-        farTerrain.material.color.setHex(0x777777);
+        farTerrain.material.color.setHex(0xeeeeee);
         farTerrain.position.y -= 1;
         farTerrain.rotation.x -= Math.PI / 2
         this.scene.add(farTerrain)
@@ -76,7 +87,10 @@ class GameManager {
         var skyGeo = new THREE.SphereGeometry(1000, 25, 25);
 
         var loader = new THREE.TextureLoader();
-        let texture = loader.load("assets/textures/sky.jpg");
+        let texture = loader.load("assets/textures/sky3.jpg");
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1, 1);
         var material = new THREE.MeshPhongMaterial({
             map: texture,
         });
@@ -194,6 +208,7 @@ class GameManager {
     }
     onGameStart() {
         this.hud.helpNextStage();
+        this.assetsManager.onGameStart();
     }
 
 

@@ -20,7 +20,7 @@ class TerrainEditor extends THREE.Mesh {
     }
 
 
-    constructor(scene, width = 150, heigt = 150, wSegments = 300, hSegments = 300) {
+    constructor(scene, width = 150, heigt = 150, wSegments = 250, hSegments = 250) {
         let material = SETTINGS.materials.terrain1;
         let geometry = TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments)
 
@@ -49,6 +49,7 @@ class TerrainEditor extends THREE.Mesh {
         this.currentRotation = 0;
         this.activeSelection;
         this.currentFunction = "None";
+        this.item;
         this.init()
     }
 
@@ -64,7 +65,8 @@ class TerrainEditor extends THREE.Mesh {
         this.currentFunction = "EditTerrain";
     }
 
-    startAddObjectFunction(jsClass) {
+    startAddObjectFunction(jsClass, item) {
+        this.item = item;
         this.currentRotation = 0;
         this.addedObjectClass = jsClass;
         if (this.addedObject) {
@@ -87,7 +89,7 @@ class TerrainEditor extends THREE.Mesh {
         if (this.currentFunction == "AddWorldObject") {
             this.addObjectToTerrain();
         }
-        // this.selectArea(positionVec);
+
     }
 
     mouseMove(positionVec) {
@@ -101,7 +103,7 @@ class TerrainEditor extends THREE.Mesh {
             this.selectArea(positionVec, this.addedObject.brushName, this.addedObject.brushSize);
             this.setObjectOnArea(positionVec);
             this.scene.add(this.addedObject)
-            if (game.gold < this.addedObject.cost) {
+            if (game.gold < this.addedObject.cost || this.item.amount == 0) {
                 this.selectAreaMesh.material = SETTINGS.materials.cantSelect;
             }
             else {
@@ -291,26 +293,30 @@ class TerrainEditor extends THREE.Mesh {
 
 
     addObjectToTerrain() {
-        if (!this.addedObject.buy()) {
+        console.log(this.item.amount);
+
+        if ((!this.addedObject.buy())) {
             return;
         }
         else {
+            if (this.item.amount == 0) return;
+            else {
+                this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
+                this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
+                this.addedObject.net.rotation = this.addedObject.rotation.y;
 
-            this.addedObject.netPosition = [this.addedObject.position.x, this.addedObject.position.z];
-            this.addedObject.net.destination = [this.addedObject.position.x, this.addedObject.position.z];
-            this.addedObject.net.rotation = this.addedObject.rotation.y;
-
-            game.createObject(this.addedObject);
-
-            setTimeout(() => {
-                game.scene.remove(this.addedObject)
-                this.addedObject.selected(false);
-                this.addedObject = null;
-                this.activeSelection = false;
-                this.addedObject = new this.addedObjectClass();
-                this.addedObject.setMainModel();
-                this.addedObject.rotation.y = this.currentRotation;
-            }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+                game.createObject(this.addedObject);
+                this.item.buy();
+                setTimeout(() => {
+                    game.scene.remove(this.addedObject)
+                    this.addedObject.selected(false);
+                    this.addedObject = null;
+                    this.activeSelection = false;
+                    this.addedObject = new this.addedObjectClass();
+                    this.addedObject.setMainModel();
+                    this.addedObject.rotation.y = this.currentRotation;
+                }, 50);//opoznienie by nie było znikniecia i pojawienia sie po czasie dodanego obiektu
+            }
         }
 
     }
@@ -324,12 +330,7 @@ class TerrainEditor extends THREE.Mesh {
 
         $(window).on('keydown', (e) => {
             if (e.code == "Escape") {
-                this.currentFunction = "None";
-                this.currentRotation = 0;
-                this.activeSelection = false;
-                if (this.addedObject) {
-                    this.scene.remove(this.addedObject)
-                }
+                this.resetAddFunction();
             }
         })
 
@@ -345,5 +346,14 @@ class TerrainEditor extends THREE.Mesh {
 
     deselectArea() {
         this.activeSelection = false;
+    }
+
+    resetAddFunction() {
+        this.currentFunction = "None";
+        this.currentRotation = 0;
+        this.activeSelection = false;
+        if (this.addedObject) {
+            this.scene.remove(this.addedObject)
+        }
     }
 }

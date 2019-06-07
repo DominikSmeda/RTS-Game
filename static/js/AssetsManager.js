@@ -1,6 +1,6 @@
 
 class Item {
-    constructor(className) {
+    constructor(className, amount = -1) {
         this.className = className;
         this.info = {
             name: name
@@ -11,6 +11,8 @@ class Item {
             width: 100,
             height: 100
         }
+        this.amount = amount;
+        this.amountDiv;
         this.init();
     }
 
@@ -47,8 +49,13 @@ class Item {
 
         renderer.render(scene, camera);
 
+
+        let amountDiv = $('<div class="amount">');
+        amountDiv.html(this.amount == -1 ? '&infin;' : this.amount);
+        this.amountDiv = amountDiv;
+
         this.canvasElement.onclick = (e) => {
-            game.mainTerrain.startAddObjectFunction(this.className);
+            game.mainTerrain.startAddObjectFunction(this.className, this);
         }
         this.domElement.append(this.canvasElement)
 
@@ -58,6 +65,9 @@ class Item {
         }
         this.domElement.append(infoDiv);
 
+        // amountDiv.text('asdddddddddddd')
+        this.domElement.append(amountDiv);
+
         let goldDiv = $('<div class="gold">')
         goldDiv.text(mesh.cost + 'g')
         this.domElement.append(goldDiv)
@@ -65,6 +75,21 @@ class Item {
         let nameDiv = $('<div class="name">')
         nameDiv.text(mesh.name)
         this.domElement.append(nameDiv)
+
+
+    }
+
+    buy() {
+
+        if (this.amount > 0) {
+            this.amount--;
+            this.amountDiv.html(this.amount)
+        }
+        if (this.amount == 0) {
+
+            this.domElement.css({ background: '#ff0000' })
+            return;
+        }
     }
 }
 
@@ -82,15 +107,21 @@ class AssetsManager {
         this.createCategory('Buildings')
         this.createCategory('Characters')
         this.createCategory('Nature')
-        this.addItemToCategory(new Item(Tree), 'Nature');
-        this.addItemToCategory(new Item(Rock), 'Nature');
-        this.addItemToCategory(new Item(Soldier), 'Characters');
-        // jak to zrobić?
-        this.addItemToCategory(new Item(Base), 'Buildings');
-        this.addItemToCategory(new Item(Palisade), 'Buildings');
-        this.addItemToCategory(new Item(Tower), 'Buildings');
+        this.addItemToCategory(new Item(Base, 1), 'Buildings');
+
         // this.addItemToCategory(new Item('Tree2'), 'Bulidings');
 
+        this.updateItemsView(this.categories[0].name)
+    }
+
+    onGameStart() {
+        this.addItemToCategory(new Item(Tree, 50), 'Nature');
+        this.addItemToCategory(new Item(Rock, 41), 'Nature');
+        this.addItemToCategory(new Item(Soldier), 'Characters');
+        // jak to zrobić?
+
+        this.addItemToCategory(new Item(Palisade), 'Buildings');
+        this.addItemToCategory(new Item(Tower, 3), 'Buildings');
         this.updateItemsView(this.categories[0].name)
     }
 

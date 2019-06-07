@@ -7,7 +7,10 @@ class Palisade extends Building {
         this.barScale = 0.8;
         this.barHeightOffset = 2.5;
         this.name = "Palisada";
-
+        // }
+        this.assetsManagerData = {//inne dane w assets Managerze
+            drewno: 20
+        }
         //seter getter w WorldObject;// wartosc która dostosuje model do wielkosci jaki powinnien miec w naszym swiecie
         this.brushName = "Square";
         this.brushSize = 9;
