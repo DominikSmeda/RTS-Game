@@ -20,7 +20,7 @@ class TerrainEditor extends THREE.Mesh {
     }
 
 
-    constructor(scene, width = 150, heigt = 150, wSegments = 250, hSegments = 250) {
+    constructor(scene, width = 150, heigt = 150, wSegments = 750, hSegments = 750) {
         let material = SETTINGS.materials.terrain1;
         let geometry = TerrainEditor.getTerrainGeometry(width, heigt, wSegments, hSegments)
 

@@ -34,8 +34,8 @@ var SETTINGS = {
             opacity: 0.5
         })
     },
-    unitSpeed: 0.01 * 100 /* * 100 - bez ticków! */, //ma być takie samo na serwerze
-    gameTickLength: 100,
+    unitSpeed: 0.01 * 30 /* * 100 - bez ticków! */, //ma być takie samo na serwerze
+    gameTickLength: 30,
 }
 
 function getTexture(path, repeatX, repeatY) {

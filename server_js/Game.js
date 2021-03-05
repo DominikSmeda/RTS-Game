@@ -35,7 +35,7 @@ class Game {
             //złoto
             game.totalGold += Sett.gameTickLength / 1000;
             for (let i = 0; i < Object.keys(game.map.gold).length; i++) {
-                game.map.gold[Object.keys(game.map.gold)[i]] += Sett.gameTickLength / 1000;
+                game.map.gold[Object.keys(game.map.gold)[i]] += Sett.gameTickLength / 1;//<-gold speed
             }
             //pozycje postaci
             for (let x = 0; x < game.map.characters.length; x++) {
